@@ -1,10 +1,5 @@
-<p>dashboard works!</p>
-<button (click)="logout()" class="btn btn-danger">Log out</button>
-<ul *ngFor="let user of users">
-  <li>{{user.username}}</li>
-</ul>
-<!-- <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Hello <h3>{{fullName}}</h3></a>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Hello <h3>{{username}}</h3></a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -21,7 +16,7 @@
 
 <div class="container-fluid">
   <div class="row">
-      <ng-container *ngIf="role === 'Admin'">
+      <ng-container *ngIf="role === 'User'">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
           <div class="position-sticky pt-3 sidebar-sticky">
               <ul class="nav flex-column">
@@ -118,8 +113,6 @@
                   <thead>
                       <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Firstname</th>
-                          <th scope="col">Lastname</th>
                           <th scope="col">Username</th>
                           <th scope="col">Email</th>
                       </tr>
@@ -127,8 +120,6 @@
                   <tbody>
                       <tr *ngFor="let user of users; let i= index">
                           <td>{{i+1}}</td>
-                          <td>{{user.firstName}}</td>
-                          <td>{{user.lastName}}</td>
                           <td>{{user.username}}</td>
                           <td>{{user.email}}</td>
                       </tr>
@@ -138,4 +129,4 @@
           </div>
       </main>
   </div>
-</div> -->
+</div>

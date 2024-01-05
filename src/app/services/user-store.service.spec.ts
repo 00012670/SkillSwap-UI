@@ -1,16 +1,16 @@
-// /* tslint:disable:no-unused-variable */
+/* tslint:disable:no-unused-variable */
 
-// import { TestBed, async, inject } from '@angular/core/testing';
-// import { UserStoreService } from './user-store.service';
+import { TestBed, async, inject } from '@angular/core/testing';
+import { UserStoreService } from './user-store.service';
 
-// describe('Service: UserStore', () => {
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({
-//       providers: [UserStoreService]
-//     });
-//   });
+describe('Service: UserStore', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [UserStoreService]
+    });
+  });
 
-//   it('should ...', inject([UserStoreService], (service: UserStoreService) => {
-//     expect(service).toBeTruthy();
-//   }));
-// });
+  it('should ...', inject([UserStoreService], (service: UserStoreService) => {
+    expect(service).toBeTruthy();
+  }));
+});

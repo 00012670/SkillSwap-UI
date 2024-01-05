@@ -3,8 +3,8 @@ import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
-//import { UserStoreService } from 'src/app/services/user-store.service';
 import ValidateForm from 'src/app/helpers/validateForm';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private toast: NgToastService,
-   // private userStore: UserStoreService
-  ) {}
+    private userStore: UserStoreService
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -45,14 +45,14 @@ export class LoginComponent implements OnInit {
           this.loginForm.reset();
           this.auth.storeToken(res.token);
           this.auth.storeRefreshToken(res.refreshToken);
-        //  const tokenPayload = this.auth.decodedToken();
-       //   this.userStore.setFullNameForStore(tokenPayload.name);
-        //  this.userStore.setRoleForStore(tokenPayload.role);
-          this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
+          const tokenPayload = this.auth.decodedToken();
+          this.userStore.setUsernameForStore(tokenPayload.name);
+          this.userStore.setRoleForStore(tokenPayload.role);
+          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 5000 });
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
-          this.toast.error({detail:"ERROR", summary:"Something when wrong!", duration: 5000});
+          this.toast.error({ detail: "ERROR", summary: "Something when wrong!", duration: 5000 });
           console.log(err);
         },
       });
