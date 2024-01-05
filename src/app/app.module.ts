@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgToastModule } from 'ng-angular-popup';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-//import { TokenInterceptor } from './interceptors/token.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     HttpClientModule,
     NgToastModule
   ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:TokenInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
