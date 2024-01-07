@@ -10,13 +10,19 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgToastModule } from 'ng-angular-popup';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { SkillsListComponent } from './components/skills/skills-list/skills-list.component';
+import { AddSkillComponent } from './components/skills/add-skill/add-skill.component';
+import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    SkillsListComponent,
+    AddSkillComponent,
+    EditSkillComponent,
   ],
   imports: [
     BrowserModule,
