@@ -35,8 +35,8 @@ export class SignupComponent {
 
   hideShowPass() {
     this.isText = !this.isText;
-    this.isText ? this.eyeIcon = "fa-eye" : this.eyeIcon = 'fa-eye-slash';
-    this.isText ? this.type = "text" : this.type = "password";
+    this.isText ? (this.eyeIcon = 'fa-eye') : (this.eyeIcon = 'fa-eye-slash');
+    this.isText ? (this.type = 'text') : (this.type = 'password');
   }
 
   onSignup() {
@@ -46,19 +46,18 @@ export class SignupComponent {
       .subscribe({
         next:(res=>{
           this.auth.storeToken(res.token);
-          this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
           this.router.navigate(['dashboard'])
+          this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
         })
         ,error:(err=>{
-         // this.toast.error({detail:"ERROR", summary:"Something went wrong!", duration: 5000});
-          alert(err?.error.message)
+        console.error('Error:', err);
+         alert(err?.error.message);
         })
     })
 
-    console.log(this.signUpForm.value);
     }else {
       ValidateForm.validateAllFormFileds(this.signUpForm)
-      //alert("Your form is invalid");
+       alert("Your form is invalid");
     }
   }
 }

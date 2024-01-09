@@ -1,57 +1,61 @@
 <div class="outer">
   <div class="container">
     <div class="row">
-      <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+      <div class="panel">
         <div class="panel border bg-white">
           <div class="panel-heading">
-            <h2 class="pt-5 font-weight-bold">Welcom to Skill Swap</h2>
+            <h2 class="pt-5 font-weight-bold">Welcome to Skill Swap</h2>
             <p class="pt-1 text-muted">Please enter your details</p>
           </div>
           <div class="panel-body p-3">
-            <form [formGroup]="signUpForm">
+            <form [formGroup]="signUpForm" (ngSubmit)="onSignup()">
               <div class="form-group">
                 <div class="input-field">
                   <span class="fa fa-user fa-lg p-2"></span>
                   <input formControlName="username" type="text" placeholder="Username">
                 </div>
+                <small *ngIf="signUpForm.get('username')?.hasError('required') && signUpForm.get('username')?.dirty">
+                  *Username is required
+                </small>
               </div>
-              <small *ngIf="signUpForm.controls['username'].dirty && signUpForm.hasError('required', 'username')" class="text-dang">
-                *Username is required
-              </small>
+
               <div class="form-group pt-3">
                 <div class="input-field">
                   <span class="fa fa-envelope p-2"></span>
                   <input formControlName="email" type="text" placeholder="Email">
                 </div>
+                <small *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.dirty">
+                  *Email is required
+                </small>
+                <small *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.dirty">
+                  *Invalid email format
+                </small>
               </div>
-              <small *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.dirty" class="text-dang">
-                *Email is required
-              </small>
-              <small *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.dirty" class="text-dang">
-                *Invalid email format
-              </small>
-              <div class="form-group fa-lg pt-3">
+
+              <div class="form-group pt-3">
                 <div class="input-field">
-                  <span class="fa fa-lock p-2"></span>
+                  <span class="fa fa-lock fa-lg p-2"></span>
                   <input formControlName="password" [type]="type" placeholder="Password">
                   <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
                 </div>
+                <small *ngIf="signUpForm.controls['password'].dirty && signUpForm.hasError('required', 'password')">
+                  *Password is required
+                </small>
               </div>
-              <small *ngIf="signUpForm.controls['password'].dirty && signUpForm.hasError('required', 'password')" class="text-dang">
-                *Password is required
-              </small>
+
               <div class="form-inline fr mt-4">
                 <a id="forget" class="font-weight-bold">Forgot password?</a>
               </div>
-              <button (click)="onSignup()" type="submit" class="btn btn-orange btn-block mt-4 w-100">Sign up</button>
-              <button type="submit" class="btn btn-white btn-block mt-4 w-100 text-muted">
-                <a href="http://www.google.com" target="_blank">
-                  <img src="https://static.cdnlogo.com/logos/g/38/google-icon.svg" class="google-icon" alt="Google Icon">
-                </a>
+
+              <button type="submit" class="btn btn-orange btn-block mt-4 w-100">Sign up</button>
+              <button type="button" class="btn btn-white btn-block mt-4 w-100 text-muted">
+                <img src="https://static.cdnlogo.com/logos/g/38/google-icon.svg" class="google-icon" alt="Google Icon">
                 Sign in with Google
               </button>
-              <div class="text-center pt-4 text-muted account-text">Don't have an account? <a id="forget"
-                  routerLink="/login">Login</a></div>
+
+              <div class="text-center pt-4 text-muted account-text">
+                Don't have an account? <a id="forget" routerLink="/login">Login</a>
+              </div>
             </form>
           </div>
         </div>

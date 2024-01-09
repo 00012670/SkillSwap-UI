@@ -1,10 +1,21 @@
 .outer {
+  background-color: #F4F8FF;
+  height: 100vh;
+  display: flex;
+}
+
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #F4F8FF;
+}
 
+.panel {
+  width: 500px;
+}
+
+.panel-heading {
+  text-align: center;
 }
 
 .p-3 {
@@ -12,11 +23,8 @@
   padding-right: 3rem !important;
 }
 
-.panel-heading {
-  text-align: center;
-}
-
 .form-inline label {
+
   padding-left: 10px;
   margin: 0;
   cursor: pointer;

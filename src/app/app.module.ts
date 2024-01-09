@@ -13,6 +13,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SkillsListComponent } from './components/skills/skills-list/skills-list.component';
 import { AddSkillComponent } from './components/skills/add-skill/add-skill.component';
 import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.co
     SkillsListComponent,
     AddSkillComponent,
     EditSkillComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.co
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    NgToastModule
+    NgToastModule,
+    NgbModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,
