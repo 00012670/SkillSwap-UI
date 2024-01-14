@@ -12,14 +12,40 @@ import { Observable } from 'rxjs';
 export class ProfileService {
 
   baseApiUrl: string = environment.baseApiUrl
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getProfile(id: string): Observable<Profile> {
-    return this.http.get<Profile>(this.baseApiUrl + '/api/profile/' + id);
+  getAllProfiles(): Observable<Profile[]> {
+    return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Profile`);
   }
 
-  updateProfile(id: string, updateSkillRequest: Profile): Observable<Profile> {
-    return this.http.put<Profile>(this.baseApiUrl + '/api/profile/' + id, updateSkillRequest);
+  getProfileById(userId: string): Observable<Profile> {
+    return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
   }
 
+  updateProfile(userId: string, updateProfileRequest: Profile): Observable<Profile> {
+    return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`, updateProfileRequest);
+  }
+
+  // getAllAuthentications() {
+  //   return this.http.get(this.baseApiUrl + "/api/Authentication/");
+  // }
+
+  // getProfileById(userId: any): Observable<Profile> {
+  //   return this.http.get<Profile>(this.baseApiUrl + "/api/Profile/" + userId);
+  // }
+
+  // updateProfile(userId: string, updateProfileRequest: Profile): Observable<Profile> {
+  //   return this.http.put<Profile>(this.baseApiUrl + '/api/Profile/' + userId, updateProfileRequest);
+  // }
+
+  uploadImage(inpudata: any) {
+    return this.http.post(this.baseApiUrl + '/api/Profile/UploadImage', inpudata, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
+
+  removeImage(code: any) {
+    return this.http.get(this.baseApiUrl + '/api/Profile/RemoveImage/' + code);
+  }
 }

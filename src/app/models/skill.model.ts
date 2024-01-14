@@ -4,6 +4,6 @@ export interface Skill {
   description: string;
   category: string;
   level: string;
-  prerequisites: string;
+  prerequisity: string;
   picture: string;
 }

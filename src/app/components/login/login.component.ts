@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.isText ? (this.type = 'text') : (this.type = 'password');
   }
 
-  
+
   onSubmit() {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
-          this.toast.error({ detail: "ERROR", summary: "Something when wrong!", duration: 5000 });
+          this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
           console.log(err);
         },
       });

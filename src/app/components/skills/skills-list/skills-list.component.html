@@ -11,7 +11,7 @@
         <th scope="col">Description</th>
         <th scope="col">Category</th>
         <th scope="col">Level</th>
-        <th scope="col">Prerequisites</th>
+        <th scope="col">Prerequisity</th>
         <th scope="col">Picture</th>
         <th scope="col">Action</th>
       </tr>
@@ -23,7 +23,7 @@
         <td>{{ skill.description }}</td>
         <td>{{ skill.category }}</td>
         <td>{{ skill.level }}</td>
-        <td>{{ skill.prerequisites }}</td>
+        <td>{{ skill.prerequisity }}</td>
         <td>{{ skill.picture }}</td>
         <td><a [routerLink]="['/skills', 'edit', skill.id]">Veiw</a></td>
       </tr>

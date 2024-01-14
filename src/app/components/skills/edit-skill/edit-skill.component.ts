@@ -9,7 +9,6 @@ import { SkillsService } from 'src/app/services/skills.service';
   styleUrls: ['./edit-skill.component.scss']
 })
 
-
 export class EditSkillComponent {
 
   skillDetails: Skill ={
@@ -18,7 +17,7 @@ export class EditSkillComponent {
     description: '',
     category: '',
     level: '',
-    prerequisites: '',
+    prerequisity: '',
     picture: ''
   }
 

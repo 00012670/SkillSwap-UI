@@ -17,13 +17,14 @@ export class SignupComponent {
   isText: boolean = false;
   eyeIcon: string = 'fa-eye-slash';
   signUpForm!: FormGroup;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private auth : AuthService,
+    private auth: AuthService,
     private router: Router,
     private toast: NgToastService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -41,23 +42,27 @@ export class SignupComponent {
 
   onSignup() {
     if (this.signUpForm.valid) {
-      //send object to database
       this.auth.signUp(this.signUpForm.value)
-      .subscribe({
-        next:(res=>{
-          this.auth.storeToken(res.token);
-          this.router.navigate(['dashboard'])
-          this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
+        .subscribe({
+          next: (res => {
+            this.auth.storeToken(res.token);
+            this.router.navigate(['dashboard'])
+            this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 5000 });
+          }),
+          error: (err => {
+            this.toast.error({detail:"ERROR", summary: err, duration: 5000});
+           // alert(err);
+          })
         })
-        ,error:(err=>{
-        console.error('Error:', err);
-         alert(err?.error.message);
-        })
-    })
 
-    }else {
+      console.log(this.signUpForm.value);
+    } else {
       ValidateForm.validateAllFormFileds(this.signUpForm)
-       alert("Your form is invalid");
+      alert("Your form is invalid");
     }
   }
 }
+
+
+
+

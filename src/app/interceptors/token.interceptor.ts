@@ -40,7 +40,7 @@ export class TokenInterceptor implements HttpInterceptor {
           // Log the actual error for debugging
           console.error('HTTP error occurred:', err);
           // Return the specific error message from the server if available
-          return throwError(() => err.error ? err.error.message : 'Some other error occurred');
+          return throwError(() => err.error?.message || 'Some other error occurred');
         }
         // If it's not an HttpErrorResponse, return a generic error message
         return throwError(() => 'Some other error occurred');
@@ -50,27 +50,6 @@ export class TokenInterceptor implements HttpInterceptor {
 }
 
 
-//   handleUnAuthorizedError(req: HttpRequest<any>, next: HttpHandler){
-//     let tokeApiModel = new TokenApiModel();
-//     tokeApiModel.accessToken = this.auth.getToken()!;
-//     tokeApiModel.refreshToken = this.auth.getRefreshToken()!;
-//     return this.auth.renewToken(tokeApiModel)
-//     .pipe(
-//       switchMap((data:TokenApiModel)=>{
-//         this.auth.storeRefreshToken(data.refreshToken);
-//         this.auth.storeToken(data.accessToken);
-//         req = req.clone({
-//           setHeaders: {Authorization:`Bearer ${data.accessToken}`}  // "Bearer "+myToken
-//         })
-//         return next.handle(req);
-//       }),
-//       catchError((err)=>{
-//         return throwError(()=>{
-//           this.toast.warning({detail:"Warning", summary:"Token is expired, Please Login again"});
-//           this.router.navigate(['login'])
-//         })
-//       })
-//     )
-// }
+
 
 

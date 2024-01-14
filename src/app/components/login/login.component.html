@@ -28,9 +28,23 @@
               <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')">
                 *Password is required
               </small>
-              <div class="form-inline fr mt-4">
-                <a id="forget" class="font-weight-bold">Forgot password?</a>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group pt-4">
+                    <input type="checkbox" id="rememberMe" class="rememberMe  form-check-input fs-5">
+                    <label for="rememberMe" class="label-agree-term ms-2">
+                      <span> Remember me</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6 text-end">
+                  <div class="form-inline mt-4">
+                    <a id="forget" class="font-weight-bold">Forgot password?</a>
+                  </div>
+                </div>
               </div>
+
               <button (click)="onSubmit()" type="submit" class="btn btn-orange btn-block mt-4 w-100">Login</button>
               <button type="submit" class="btn btn-white btn-block mt-4 w-100 text-muted">
                 <a href="http://www.google.com" target="_blank">

@@ -17,7 +17,7 @@ export class AddSkillComponent {
     description: '',
     category: '',
     level: '',
-    prerequisites: '',
+    prerequisity: '',
     picture: ''
   }
 

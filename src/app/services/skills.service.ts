@@ -16,14 +16,14 @@ export class SkillsService {
      return this.http.get<Skill[]>(this.baseApiUrl + '/api/Skills');
   }
 
+  getSKill(id: string): Observable<Skill> {
+    return this.http.get<Skill>(this.baseApiUrl + '/api/skills/' + id);
+  }
+
   addSkill(addSkillRequest: Skill): Observable<Skill> {
     addSkillRequest.id = '0';
     return this.http.post<Skill>(this.baseApiUrl + '/api/skills',
     addSkillRequest)
-  }
-
-  getSKill(id: string): Observable<Skill> {
-    return this.http.get<Skill>(this.baseApiUrl + '/api/skills/' + id);
   }
 
   updateSkill(id: string, updateSkillRequest: Skill): Observable<Skill> {

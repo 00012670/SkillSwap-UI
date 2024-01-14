@@ -55,13 +55,16 @@ export class AuthService {
   decodedToken() {
     try {
       const jwtHelper = new JwtHelperService();
-      const token = this.getToken()!;
-      console.log('Decoding token:', token);
-      console.log(jwtHelper.decodeToken(token));
-      return jwtHelper.decodeToken(token);
+      const token = this.getToken();
+      if (token) {
+        console.log('Decoding token:', token);
+        return jwtHelper.decodeToken(token);
+      } else {
+        return {}; // Return an empty object or any default value
+      }
     } catch (error) {
       console.error('Error decoding token:', error);
-      return null;
+      return {}; // Return an empty object or any default value
     }
   }
 
@@ -75,7 +78,4 @@ export class AuthService {
       return this.userPayload.role;
   }
 
-  //   renewToken(tokenApi : TokenApiModel){
-  //     return this.http.post<any>(`${this.baseUrl}refresh`, tokenApi)
-  //   }
 }
