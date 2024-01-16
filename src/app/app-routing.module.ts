@@ -16,9 +16,10 @@ const routes: Routes = [
   {path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
   {path: 'skills', component:SkillsListComponent},
   {path: 'skills/add', component:AddSkillComponent},
-  {path: 'skills/edit/:id', component:EditSkillComponent},
-  {path: 'profile', component:ProfileComponent},
-  {path: 'profile/:id', component: ProfileComponent }
+  {path: 'skill/:id', component:EditSkillComponent},
+  {path: 'profile/:id', component: ProfileComponent },
+  //{path: 'profile', component:ProfileComponent}
+
 ];
 
 @NgModule({

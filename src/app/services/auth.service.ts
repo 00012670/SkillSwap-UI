@@ -10,7 +10,7 @@ export class AuthService {
 
   private baseUrl: string = 'https://localhost:7222/api/Authentication/'
   private userPayload: any;
-  //router: any;
+  
   constructor(
     private http: HttpClient,
     private router: Router
@@ -40,13 +40,8 @@ export class AuthService {
 
   getToken() {
     const token = localStorage.getItem('token');
-    console.log('Token:', token);
     return token;
   }
-
-  // getRefreshToken(){
-  //   return localStorage.getItem('refreshToken')
-  // }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token')
@@ -57,10 +52,10 @@ export class AuthService {
       const jwtHelper = new JwtHelperService();
       const token = this.getToken();
       if (token) {
-        console.log('Decoding token:', token);
+       // console.log('Decoding token:', token);
         return jwtHelper.decodeToken(token);
       } else {
-        return {}; // Return an empty object or any default value
+        return {};
       }
     } catch (error) {
       console.error('Error decoding token:', error);

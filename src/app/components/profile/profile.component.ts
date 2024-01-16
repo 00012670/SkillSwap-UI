@@ -15,13 +15,15 @@ import { catchError, map, of } from 'rxjs';
 })
 
 export class ProfileComponent implements OnInit {
+  id: any;
+
   profileDetails: Profile = {
-    userId: '',
+    id: '',
     username: '',
+    email: '',
     fullname: '',
     bio: '',
     skillsInterested: '',
-    picture: ''
   };
 
 
@@ -51,36 +53,36 @@ export class ProfileComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(this.route.snapshot.params['id'])
     this.route.paramMap.subscribe({
       next: (params) => {
-        const userId = params.get('id');
+        const id = params.get('id');
 
-        if (userId) {
-          this.profileService.getProfileById(userId)
-            .subscribe({
-              next: (response) => {
-                this.profileDetails = response;
-              }
-            })
+        if(id) {
+          this.profileService.getProfileById(id)
+          .subscribe({
+            next: (response) => {
+              this.profileDetails = response;
+            }
+          })
         }
       }
     });
 
+    this.userStore.getUsernameFromStore().subscribe(val => {
+      const usernameFromToken = this.auth.getUsernameFromToken();
+      this.username = val || usernameFromToken;
+    });
 
-    //   this.userStore.getUsernameFromStore()
-    //     .subscribe(val => {
-    //       const UsernameFromToken = this.auth.getUsernameFromToken();
-    //       this.username = val || UsernameFromToken
-    //     });
-    //   this.userStore.getRoleFromStore()
-    //     .subscribe(val => {
-    //       const roleFromToken = this.auth.getRoleFromToken();
-    //       this.role = val || roleFromToken;
-    //     })
+    this.userStore.getRoleFromStore().subscribe(val => {
+      const roleFromToken = this.auth.getRoleFromToken();
+      this.role = val || roleFromToken;
+    });
   }
 
+
   updateProfile() {
-    this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
+    this.profileService.updateProfile(this.profileDetails.id, this.profileDetails)
       .subscribe({
         next: () => {
           // Handle successful update (e.g., show success message, navigate to another page)
@@ -105,8 +107,8 @@ export class ProfileComponent implements OnInit {
   //   this.open();
   //   this.profileImage = image;
   //   this.EditProfileCode = code;
-
   // }
+
   // RemoveImage(code: any, name: any) {
   //   if (confirm("Do you want remove the product : " + name + " ?")) {
   //     this.profileService.removeImage(code).subscribe(result => {

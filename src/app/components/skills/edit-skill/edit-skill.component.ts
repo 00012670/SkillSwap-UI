@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Skill } from 'src/app/models/skill.model';
+import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
 
 @Component({
@@ -11,44 +11,54 @@ import { SkillsService } from 'src/app/services/skills.service';
 
 export class EditSkillComponent {
 
-  skillDetails: Skill ={
+  levelOptions: SkillLevel[] = [
+    SkillLevel.Foundational,
+    SkillLevel.Competent,
+    SkillLevel.Expert,
+    SkillLevel.Master
+  ];
+
+
+  skillDetails: Skill = {
     id: '',
     name: '',
     description: '',
     category: '',
-    level: '',
+    level: SkillLevel.Competent,
     prerequisity: '',
-    picture: ''
-  }
+  };
+
 
   constructor(
     private route: ActivatedRoute,
     private skillService: SkillsService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe({
       next: (params) => {
         const id = params.get('id');
 
-        if(id) {
+        if (id) {
           this.skillService.getSKill(id)
-          .subscribe({
-            next: (response) => {
-              this.skillDetails = response;
-            }
-          })
+            .subscribe({
+              next: (response) => {
+                this.skillDetails = response;
+              }
+            })
         }
       }
     });
   }
 
   updateSkill() {
+    this.skillDetails.level = +this.skillDetails.level;
+
     this.skillService.updateSkill(this.skillDetails.id, this.
       skillDetails)
       .subscribe({
-        next: (response) =>{
+        next: (response) => {
           this.router.navigate(['skills'])
         }
       })
@@ -56,10 +66,25 @@ export class EditSkillComponent {
 
   deleteSkill(id: string) {
     this.skillService.deleteSkill(id)
-    .subscribe({
-      next: (response) => {
-        this.router.navigate(['skills']);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          this.router.navigate(['skills']);
+        }
+      });
+  }
+
+  getSkillLevelString(level: SkillLevel): string {
+    switch (level) {
+      case SkillLevel.Foundational:
+        return 'Foundational';
+      case SkillLevel.Competent:
+        return 'Competent';
+      case SkillLevel.Expert:
+        return 'Expert';
+      case SkillLevel.Master:
+        return 'Master';
+      default:
+        return '';
+    }
   }
 }

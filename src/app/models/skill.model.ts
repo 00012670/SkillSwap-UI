@@ -3,7 +3,14 @@ export interface Skill {
   name: string;
   description: string;
   category: string;
-  level: string;
+  level: SkillLevel;
   prerequisity: string;
-  picture: string;
+
+}
+
+export enum SkillLevel {
+  Foundational = 0,
+  Competent = 1,
+  Expert = 2,
+  Master = 3,
 }

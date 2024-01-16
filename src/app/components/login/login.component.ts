@@ -11,11 +11,13 @@ import { UserStoreService } from 'src/app/services/user-store.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
+
 export class LoginComponent implements OnInit {
   public loginForm!: FormGroup;
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa-eye-slash';
+  
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -40,10 +42,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      this.auth.signIn(this.loginForm.value).subscribe({
+      this.auth.signIn(this.loginForm.value)
+      .subscribe({
         next: (res) => {
-          console.log(res.message);
           this.loginForm.reset();
           this.auth.storeToken(res.token);
           this.auth.storeRefreshToken(res.refreshToken);

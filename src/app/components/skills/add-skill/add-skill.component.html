@@ -3,8 +3,8 @@
 
   <div class="row">
     <div class="col-5">
-
       <form #form="ngForm" (ngSubmit)="addSkill()">
+
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input type="text" class="form-control" id="name"
@@ -20,25 +20,39 @@
           <input type="text" class="form-control" id="category"
           name="category" [(ngModel)] ="addSkillRequest.category">
         </div>
+
         <div class="mb-3">
           <label for="level" class="form-label">Level</label>
-          <input type="text" class="form-control" id="level"
-          name="level" [(ngModel)] ="addSkillRequest.level">
+          <select class="form-select" id="level" name="level" [(ngModel)]="addSkillRequest.level">
+            <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
+          </select>
         </div>
+
         <div class="mb-3">
           <label for="prerequisity" class="form-label">Prerequisity</label>
           <input type="text" class="form-control" id="prerequisites"
           name="prerequisity" [(ngModel)] ="addSkillRequest.prerequisity">
         </div>
-        <div class="mb-3">
-          <label for="picture" class="form-label">Picture</label>
-          <input type="text" class="form-control" id="picture"
-          name="picture" [(ngModel)]="addSkillRequest.picture">
+
+        <div class="md-3">
+          <label for="uploadImage" class="form-label">Upload Image</label>
+          <input type="file" class="form-control" placeholder="Choose file" (change)="onChange($event)" id="uploadImage" name="upload">
+          <br>
+          <img class="img-responsive img-thumbnail popupclass" [src]="skillImage">
         </div>
+        <!-- <div class="md-3">
+          <label for="uploadImage" class="form-label">Upload Image</label>
+          <input type="file" class="form-control" placeholder="Choose file" id="uploadImage" name="upload">
+          <label style="width: 100%" for="fileupload">
+          <br>
+          <img class="img-responsive img-thumbnail popupclass" [src]="EditImageCode"></label>
+        </div> -->
+        <br>
+        <!-- <button class="btn btn-primary" (click)="updateSkill()">Update Profile</button> -->
 
         <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
 
+      </form>
     </div>
   </div>
 </div>

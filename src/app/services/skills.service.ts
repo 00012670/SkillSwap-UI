@@ -17,20 +17,39 @@ export class SkillsService {
   }
 
   getSKill(id: string): Observable<Skill> {
-    return this.http.get<Skill>(this.baseApiUrl + '/api/skills/' + id);
+    return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/' + id);
   }
 
   addSkill(addSkillRequest: Skill): Observable<Skill> {
     addSkillRequest.id = '0';
-    return this.http.post<Skill>(this.baseApiUrl + '/api/skills',
+    return this.http.post<Skill>(this.baseApiUrl + '/api/Skills',
     addSkillRequest)
   }
 
   updateSkill(id: string, updateSkillRequest: Skill): Observable<Skill> {
-    return this.http.put<Skill>(this.baseApiUrl + '/api/skills/' + id, updateSkillRequest);
+    return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/' + id, updateSkillRequest);
   }
 
   deleteSkill(id: string): Observable<Skill> {
-    return this.http.delete<Skill>(this.baseApiUrl + '/api/skills/' + id);
+    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/' + id);
+  }
+
+  getAllImages(){
+    return this.http.get(this.baseApiUrl + '/api/Skills/GetDBImage');
+  }
+
+  // getImagebyId(id :any){
+  //   return this.http.get("https://localhost:44308/api/Skill/GetProductwithimagebycode/"+ id);
+  // }
+
+  uploadImage(inputData: any) {
+    return this.http.post(this.baseApiUrl + '/api/Skills/DBUploadImage', inputData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
+
+  removeImage(id: any) {
+    return this.http.get(this.baseApiUrl + '/api/Skills/RemoveImage/' + id);
   }
 }

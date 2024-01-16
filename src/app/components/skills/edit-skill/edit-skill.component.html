@@ -3,13 +3,8 @@
 
   <div class="row">
     <div class="col-5">
-
       <form #form="ngForm" (ngSubmit)="updateSkill()">
-        <!-- <div class="mb-3">
-          <label for="id" class="form-label">Id</label>
-          <input type="text" class="form-control" id="id" readonly
-          name="id" [(ngModel)] = "skillDetails.id">
-        </div> -->
+
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input type="text" class="form-control" id="name" name="name" [(ngModel)]="skillDetails.name">
@@ -23,20 +18,19 @@
           <label for="category" class="form-label">Category</label>
           <input type="text" class="form-control" id="category" name="category" [(ngModel)]="skillDetails.category">
         </div>
+
         <div class="mb-3">
           <label for="level" class="form-label">Level</label>
-          <input type="text" class="form-control" id="level" name="level" [(ngModel)]="skillDetails.level">
+          <select class="form-select" id="level" name="level" [(ngModel)]="skillDetails.level">
+            <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
+          </select>
         </div>
+
         <div class="mb-3">
           <label for="prerequisites" class="form-label">Prerequisity</label>
           <input type="text" class="form-control" id="prerequisites" name="prerequisites"
             [(ngModel)]="skillDetails.prerequisity">
         </div>
-        <div class="mb-3">
-          <label for="picture" class="form-label">Picture</label>
-          <input type="text" class="form-control" id="picture" name="picture" [(ngModel)]="skillDetails.picture">
-        </div>
-
         <button type="submit" class="btn btn-primary">Save</button> |
         <button type="button" class="btn btn-danger" (click)="deleteSkill(skillDetails.id)">Delete</button>
 

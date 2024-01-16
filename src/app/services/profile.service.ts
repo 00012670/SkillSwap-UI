@@ -15,28 +15,16 @@ export class ProfileService {
   constructor(private http: HttpClient) { }
 
   getAllProfiles(): Observable<Profile[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Profile`);
+    return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Authentication`);
   }
 
-  getProfileById(userId: string): Observable<Profile> {
-    return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
+  getProfileById(id: string): Observable<Profile> {
+    return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${id}`);
   }
 
-  updateProfile(userId: string, updateProfileRequest: Profile): Observable<Profile> {
-    return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`, updateProfileRequest);
+  updateProfile(id: string, updateProfileRequest: Profile): Observable<Profile> {
+    return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${id}`, updateProfileRequest);
   }
-
-  // getAllAuthentications() {
-  //   return this.http.get(this.baseApiUrl + "/api/Authentication/");
-  // }
-
-  // getProfileById(userId: any): Observable<Profile> {
-  //   return this.http.get<Profile>(this.baseApiUrl + "/api/Profile/" + userId);
-  // }
-
-  // updateProfile(userId: string, updateProfileRequest: Profile): Observable<Profile> {
-  //   return this.http.put<Profile>(this.baseApiUrl + '/api/Profile/' + userId, updateProfileRequest);
-  // }
 
   uploadImage(inpudata: any) {
     return this.http.post(this.baseApiUrl + '/api/Profile/UploadImage', inpudata, {

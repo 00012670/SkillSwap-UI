@@ -1,8 +1,8 @@
 export interface Profile {
-  userId: string;
+  id: string;
   username: string;
+  email: string,
   fullname: string;
   bio: string;
   skillsInterested: string;
-  picture: string;
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
-
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +23,9 @@ export class SignupComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private userStore: UserStoreService
+
   ) { }
 
   ngOnInit(): void {
@@ -46,14 +48,17 @@ export class SignupComponent {
         .subscribe({
           next: (res => {
             this.auth.storeToken(res.token);
-            this.router.navigate(['dashboard'])
+            this.auth.storeRefreshToken(res.refreshToken);
+            const tokenPayload = this.auth.decodedToken();
+            this.userStore.setUsernameForStore(tokenPayload.name);
+            this.userStore.setRoleForStore(tokenPayload.role);
             this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 5000 });
+            this.router.navigate(['dashboard'])
           }),
           error: (err => {
             this.toast.error({detail:"ERROR", summary: err, duration: 5000});
-           // alert(err);
           })
-        })
+        });
 
       console.log(this.signUpForm.value);
     } else {
