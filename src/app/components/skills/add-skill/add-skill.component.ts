@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { catchError, map, of } from 'rxjs';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
+import { ImageService } from 'src/app/services/image.service';
 import { SkillsService } from 'src/app/services/skills.service';
 
 @Component({
@@ -39,6 +40,7 @@ export class AddSkillComponent implements OnInit {
 
   constructor(
     private skillService: SkillsService,
+    private imageService: ImageService,
     private router: Router,
     private modalService: NgbModal
   ) { }
@@ -95,7 +97,7 @@ export class AddSkillComponent implements OnInit {
 
     RemoveImage(code: any, name: any) {
       if (confirm("Do you want remove the image : " + name + " ?")) {
-        this.skillService.removeImage(code).subscribe(result => {
+        this.imageService.removeImage(code).subscribe(result => {
           alert("Upload completed"); // Use alertify instead of alertifyjs
           this.GetImage();
         });
@@ -105,7 +107,7 @@ export class AddSkillComponent implements OnInit {
     ProceedUpload() {
       let formdata = new FormData();
       formdata.append("file", this.file, this.EditSkillCode)
-      this.skillService.uploadImage(formdata).pipe(
+      this.imageService.uploadImage(formdata).pipe(
 
         map(events => {
           switch (events.type) {
@@ -134,7 +136,7 @@ export class AddSkillComponent implements OnInit {
     }
 
     GetImage() {
-      this.skillService.getAllImages().subscribe(result => {
+      this.imageService.getAllImages().subscribe(result => {
         this.skillList = result;
       });
     }
@@ -160,7 +162,7 @@ export class AddSkillComponent implements OnInit {
     //     return `with: ${reason}`;
     //   }
     // }
-    
+
   }
 
 

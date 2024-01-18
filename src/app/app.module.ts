@@ -15,6 +15,7 @@ import { AddSkillComponent } from './components/skills/add-skill/add-skill.compo
 import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FilterPipe } from './components/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AddSkillComponent,
     EditSkillComponent,
     ProfileComponent,
+    FilterPipe,
   ],
   imports: [
     BrowserModule,

@@ -25,15 +25,4 @@ export class ProfileService {
   updateProfile(id: string, updateProfileRequest: Profile): Observable<Profile> {
     return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${id}`, updateProfileRequest);
   }
-
-  uploadImage(inpudata: any) {
-    return this.http.post(this.baseApiUrl + '/api/Profile/UploadImage', inpudata, {
-      reportProgress: true,
-      observe: 'events'
-    });
-  }
-
-  removeImage(code: any) {
-    return this.http.get(this.baseApiUrl + '/api/Profile/RemoveImage/' + code);
-  }
 }

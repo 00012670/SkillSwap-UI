@@ -4,15 +4,18 @@ import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { catchError, map, of } from 'rxjs';
+import { ImageService } from 'src/app/services/image.service';
+import { Pipe, PipeTransform } from '@angular/core';
+
+
+
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
+
 
 export class ProfileComponent implements OnInit {
   id: any;
@@ -21,10 +24,15 @@ export class ProfileComponent implements OnInit {
     id: '',
     username: '',
     email: '',
-    fullname: '',
+    password: '',
+    fullName: '',
     bio: '',
-    skillsInterested: '',
+    skillInterested: '',
   };
+
+  @Pipe({
+    name: 'filterSkills'
+  })
 
 
   public users: any = [];
@@ -32,11 +40,15 @@ export class ProfileComponent implements OnInit {
   public role!: string;
 
   profileList: any;
+  imageList: any;
   profileImage: any;
   EditProfileCode = '';
   Result: any;
   file!: File;
   progressvalue = 0;
+
+  @ViewChild('content') addview !: ElementRef;
+  @ViewChild('fileupload') fileupload !: ElementRef;
 
 
   constructor(
@@ -44,27 +56,23 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private userStore: UserStoreService,
     private router: Router,
-    private modalService: NgbModal,
+    private imageService: ImageService,
     private route: ActivatedRoute
   ) { }
 
-  @ViewChild('content') addview !: ElementRef;
-  @ViewChild('fileupload') fileupload !: ElementRef;
-
-
   ngOnInit() {
-    console.log(this.route.snapshot.params['id'])
     this.route.paramMap.subscribe({
       next: (params) => {
         const id = params.get('id');
 
-        if(id) {
+        if (id) {
           this.profileService.getProfileById(id)
-          .subscribe({
-            next: (response) => {
-              this.profileDetails = response;
-            }
-          })
+            .subscribe({
+              next: (response) => {
+                this.profileDetails = response;
+                this.GetImagebyId(this.profileDetails.id);
+              }
+            })
         }
       }
     });
@@ -78,36 +86,108 @@ export class ProfileComponent implements OnInit {
       const roleFromToken = this.auth.getRoleFromToken();
       this.role = val || roleFromToken;
     });
+
+    this.GetAllImages();
   }
 
+  // ngOnInit() {
+  //   this.route.paramMap.subscribe({
+  //     next: (params) => {
+  //       const id = params.get('id');
+
+  //       if(id) {
+  //         this.profileService.getProfileById(id)
+  //         .subscribe({
+  //           next: (response) => {
+  //             this.profileDetails = response;
+  //           }
+  //         })
+  //       }
+  //     }
+  //   });
+
+  //   this.userStore.getUsernameFromStore().subscribe(val => {
+  //     const usernameFromToken = this.auth.getUsernameFromToken();
+  //     this.username = val || usernameFromToken;
+  //   });
+
+  //   this.userStore.getRoleFromStore().subscribe(val => {
+  //     const roleFromToken = this.auth.getRoleFromToken();
+  //     this.role = val || roleFromToken;
+  //   });
+
+  //   this.GetAllImages();
+  // }
+
+  UploadImage(code: any) {
+    if (!this.imageList) {
+      console.error('No image selected.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.file);
+
+    this.imageService.uploadImage(formData).subscribe({
+      next: (response) => {
+        console.log('Image uploaded successfully:', response);
+        this.updateProfile();
+      },
+      error: (error) => {
+        console.error('Error uploading image:', error);
+      },
+    });
+  }
 
   updateProfile() {
     this.profileService.updateProfile(this.profileDetails.id, this.profileDetails)
-      .subscribe({
-        next: () => {
-          // Handle successful update (e.g., show success message, navigate to another page)
-        },
-        error: () => {
-          // Handle error (e.g., show error message)
-        }
-      });
+    .subscribe({
+      next: (response) => {
+        this.router.navigate(['dashboard'])
+      }
+    })
   }
 
-  // updateProfile() {
-  //   this.profileService.updateProfile(this.profileDetails.userId, this.
-  //     profileDetails)
-  //     .subscribe({
-  //       next: (response) => {
-  //         this.router.navigate(['profile'])
-  //       }
-  //     })
+  // UploadImage(code: any, image: any) {
+  //   if (!this.imageList) {
+  //     console.error('No image selected.');
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append('filecollection', this.file);
+
+  //   this.imageService.uploadImage(formData).subscribe({
+  //     next: (response) => {
+  //       console.log('Image uploaded successfully:', response);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error uploading image:', error);
+  //     },
+  //   });
   // }
 
-  // UploadImage(code: any, image: any) {
-  //   this.open();
-  //   this.profileImage = image;
-  //   this.EditProfileCode = code;
-  // }
+  GetAllImages() {
+    this.imageService.getAllImages().subscribe(result => {
+      this.profileList = result;
+    });
+  }
+
+  GetImagebyId(imgCode: any) {
+    this.imageService.getImagebyId(imgCode).subscribe(result => {
+      this.profileImage = result; // Assign the retrieved image to the profileImage property
+    });
+  }
+
+
+  onchange(event: any) {
+    let reader = new FileReader();
+    this.file = event.target.files[0];
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = () => {
+      this.imageList = reader.result;
+    };
+  }
 
   // RemoveImage(code: any, name: any) {
   //   if (confirm("Do you want remove the product : " + name + " ?")) {
@@ -146,21 +226,6 @@ export class ProfileComponent implements OnInit {
   //   ).subscribe(() => {
   //     // this.Getallproducts();
   //     // alertifyjs.success("Upload completed");
-  //   });
-  // }
-
-  // onchange(event: any) {
-  //   let reader = new FileReader();
-  //   this.file = event.target.files[0];
-  //   reader.readAsDataURL(event.target.files[0]);
-  //   reader.onload = () => {
-  //     this.profileImage = reader.result;
-  //   };
-  // }
-
-  // GetAllProfiles() {
-  //   this.profileService.getAllAuthentications().subscribe(result => {
-  //     this.profileList = result;
   //   });
   // }
 

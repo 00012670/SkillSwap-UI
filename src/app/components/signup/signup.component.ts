@@ -56,11 +56,9 @@ export class SignupComponent {
             this.router.navigate(['dashboard'])
           }),
           error: (err => {
-            this.toast.error({detail:"ERROR", summary: err, duration: 5000});
+            this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
           })
         });
-
-      console.log(this.signUpForm.value);
     } else {
       ValidateForm.validateAllFormFileds(this.signUpForm)
       alert("Your form is invalid");

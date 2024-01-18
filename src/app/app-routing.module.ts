@@ -18,8 +18,6 @@ const routes: Routes = [
   {path: 'skills/add', component:AddSkillComponent},
   {path: 'skill/:id', component:EditSkillComponent},
   {path: 'profile/:id', component: ProfileComponent },
-  //{path: 'profile', component:ProfileComponent}
-
 ];
 
 @NgModule({

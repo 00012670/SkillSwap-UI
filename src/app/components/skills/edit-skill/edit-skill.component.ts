@@ -41,7 +41,7 @@ export class EditSkillComponent {
         const id = params.get('id');
 
         if (id) {
-          this.skillService.getSKill(id)
+          this.skillService.getSKillbyId(id)
             .subscribe({
               next: (response) => {
                 this.skillDetails = response;
@@ -55,8 +55,7 @@ export class EditSkillComponent {
   updateSkill() {
     this.skillDetails.level = +this.skillDetails.level;
 
-    this.skillService.updateSkill(this.skillDetails.id, this.
-      skillDetails)
+    this.skillService.updateSkill(this.skillDetails.id, this.skillDetails)
       .subscribe({
         next: (response) => {
           this.router.navigate(['skills'])

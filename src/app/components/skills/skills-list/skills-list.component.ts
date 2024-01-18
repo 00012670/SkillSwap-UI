@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { ImageService } from 'src/app/services/image.service';
+import { ProfileService } from 'src/app/services/profile.service';
 import { SkillsService } from 'src/app/services/skills.service';
-
-
+import { UserStoreService } from 'src/app/services/user-store.service';
 @Component({
   selector: 'app-skills-list',
   templateUrl: './skills-list.component.html',
-  styleUrls: ['./skills-list.component.scss']
+  styleUrls: ['./skills-list.component.scss'],
 })
 export class SkillsListComponent implements OnInit {
 
   skills: Skill[] = [];
-  images: any[] = [];
+  searchText: any;
 
-  SkillList: any;
-  SkillImage: any;
-  editImageCode = '';
-  Result: any;
-  file!: File;
-  Progress = 0
-  EditImageCode: any;
+  public userProfiles: any = [];
+  public username: string = "";
+  public role!:string;
 
-  constructor(private skillsService: SkillsService) {}
+
+  constructor(
+    private skillsService: SkillsService,
+    private imageService: ImageService,
+    private auth: AuthService,
+    private userStore: UserStoreService,
+    private profileService: ProfileService
+    ) {}
 
   ngOnInit(): void {
     this.skillsService.getAllSkills()
@@ -34,7 +39,18 @@ export class SkillsListComponent implements OnInit {
       }
     });
 
-    //this.GetAllImages();
+    this.userStore.getUsernameFromStore().subscribe(val => {
+      const usernameFromToken = this.auth.getUsernameFromToken();
+      this.username = val || usernameFromToken;
+      this.profileService.getAllProfiles().subscribe(profiles => {
+        this.userProfiles = profiles.filter(profile => profile.username === this.username);
+      });
+    });
+
+    this.userStore.getRoleFromStore().subscribe(val => {
+      const roleFromToken = this.auth.getRoleFromToken();
+      this.role = val || roleFromToken;
+    });
 
   }
 
@@ -53,17 +69,8 @@ export class SkillsListComponent implements OnInit {
     }
   }
 
-  GetAllImages() {
-    this.skillsService.getAllImages().subscribe(result => {
-      this.SkillList = result;
-    });
-  }
-
-  GetSkillInfo(code: any, prodimage: any, name: any) {
-    this.SkillImage = prodimage;
-    this.EditImageCode = code;
-
-   // this.open();
+  logout() {
+    this.auth.signOut();
   }
 }
 

@@ -2,7 +2,10 @@ export interface Profile {
   id: string;
   username: string;
   email: string,
-  fullname: string;
+  password: string;
+  fullName: string;
   bio: string;
-  skillsInterested: string;
+  skillInterested: string;
 }
+
+
