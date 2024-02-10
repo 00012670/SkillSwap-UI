@@ -23,7 +23,7 @@ export class AddSkillComponent implements OnInit {
 
 
   addSkillRequest: Skill = {
-    skillId: '',
+    skillId: 0,
     name: '',
     description: '',
     category: '',

@@ -22,7 +22,7 @@ export class EditSkillComponent {
 
 
   skillDetails: Skill = {
-    skillId: '',
+    skillId: 0,
     name: '',
     description: '',
     category: '',
@@ -80,8 +80,8 @@ export class EditSkillComponent {
       })
   }
 
-  removeSkillFromUser(id: string) {
-    this.skillService.removeSkillFromUser(id)
+  removeSkill(skillId: number) {
+    this.skillService.removeSkill(skillId)
       .subscribe({
         next: (response) => {
           this.router.navigate(['skills']);

@@ -36,7 +36,7 @@
   <table class="table  table-striped " *ngIf="skillList && skillList.length > 0">
     <thead>
       <tr>
-        <th scope="col">Id</th>
+        <!-- <th scope="col">Id</th> -->
         <th scope="col">Name</th>
         <th scope="col">Description</th>
         <th scope="col">Category</th>
@@ -48,7 +48,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let skill of userProfiles[0].skills.$values | filter :searchText">
-        <td>{{ skill.skillId}}</td>
         <td>{{ skill.name }}</td>
         <td>{{ skill.description }}</td>
         <td>{{ skill.category }}</td>

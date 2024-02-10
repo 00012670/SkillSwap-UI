@@ -34,11 +34,18 @@ export class SkillsService {
     return this.http.post<Skill>(this.baseApiUrl + '/api/Skills/AddSkillToUser/' + userId, addSkillRequest);
   }
 
-  updateSkill(id: string, updateSkillRequest: Skill): Observable<Skill> {
+  updateSkill(id: number, updateSkillRequest: Skill): Observable<Skill> {
     return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/UpdateSkillBy' + id, updateSkillRequest);
   }
 
-  removeSkillFromUser(id: string): Observable<Skill> {
-    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/RemoveSkillFromUser' + id);
+  removeSkill(id: number): Observable<Skill> {
+    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/' + id);
+
   }
+
+  removeSkillFromUser(userId: number): Observable<Skill> {
+    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/RemoveSkillFromUser/' + userId);
+  }
+
+
 }
