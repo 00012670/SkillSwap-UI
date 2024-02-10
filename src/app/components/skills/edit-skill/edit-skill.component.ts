@@ -28,18 +28,7 @@ export class EditSkillComponent {
     category: '',
     level: SkillLevel.Competent,
     prerequisity: '',
-    userId: '',
-    user: {
-      userId: '',
-      username: '',
-      email: '',
-      password: '',
-      fullName: '',
-      bio: '',
-      skillInterested: '',
-      token: '',
-      role: ''
-    }
+    userId: 0
   }
 
   editSkillForm!: FormGroup

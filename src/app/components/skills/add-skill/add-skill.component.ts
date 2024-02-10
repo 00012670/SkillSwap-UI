@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { SkillsService } from 'src/app/services/skills.service';
@@ -29,18 +29,7 @@ export class AddSkillComponent implements OnInit {
     category: '',
     level: SkillLevel.Competent,
     prerequisity: '',
-    userId: '',
-    user: {
-      userId: '',
-      username: '',
-      email: '',
-      password: '',
-      fullName: '',
-      bio: '',
-      skillInterested: '',
-      token: '',
-      role: ''
-    }
+    userId: 0
   }
 
   addSkillForm!: FormGroup
@@ -55,22 +44,27 @@ export class AddSkillComponent implements OnInit {
   progressvalue = 0;
 
   constructor(
+    private authService: AuthService,
     private skillService: SkillsService,
     private imageService: ImageService,
     private router: Router,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private profileService: ProfileService
-  ) {
-    this.profileService.getProfileById(this.userId).subscribe(profile => {
-      this.userId = profile.userId;
-    });
-  }
+  ) { }
 
   @ViewChild('content') addview !: ElementRef;
   @ViewChild('fileupload') fileupload !: ElementRef;
 
   ngOnInit(): void {
+
+    const userId = this.authService.getUserId();
+    if (userId !== null) {
+      this.userId = userId;
+    } else {
+      console.error('Error: userId is null');
+    }
+
     this.addSkillForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -86,17 +80,26 @@ export class AddSkillComponent implements OnInit {
       return
     }
     this.addSkillRequest.level = +this.addSkillRequest.level;
-    this.skillService.addSkill(this.userId, this.addSkillRequest)
-      .subscribe({
-        next: (skill) => {
-          this.router.navigate(['/skills']);
-        },
-        error: (error) => {
-          console.error('Error adding skill:', error);
-        }
-      });
-  }
+    this.addSkillRequest.userId = this.userId;
 
+    const requestBody = {
+      name: this.addSkillRequest.name,
+      description: this.addSkillRequest.description,
+      category: this.addSkillRequest.category,
+      level: this.addSkillRequest.level,
+      prerequisity: this.addSkillRequest.prerequisity
+    };
+
+    this.skillService.addSkill(this.addSkillRequest.userId, requestBody)
+    .subscribe({
+      next: (skill) => {
+        this.router.navigate(['/skills']);
+      },
+      error: (error) => {
+        console.error('Error adding skill:', error);
+      }
+    });
+  }
   getSkillLevelString(level: SkillLevel): string {
     switch (level) {
       case SkillLevel.Foundational:

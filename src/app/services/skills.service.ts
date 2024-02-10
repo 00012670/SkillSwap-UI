@@ -30,8 +30,8 @@ export class SkillsService {
     return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/GetSkillBy/' + id);
   }
 
-  addSkill(userId: string, addSkillRequest: Skill): Observable<Skill> {
-    return this.http.post<Skill>(`${this.baseApiUrl}/api/Skills/AddSkillToUser/${userId}`, addSkillRequest);
+  addSkill(userId: number, addSkillRequest: any): Observable<Skill> {
+    return this.http.post<Skill>(this.baseApiUrl + '/api/Skills/AddSkillToUser/' + userId, addSkillRequest);
   }
 
   updateSkill(id: string, updateSkillRequest: Skill): Observable<Skill> {

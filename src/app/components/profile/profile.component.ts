@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,13 +18,11 @@ interface ImageResponse {
   }>;
 }
 
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-
 
 export class ProfileComponent implements OnInit {
   userId: any;

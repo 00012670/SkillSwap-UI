@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { SkillsService } from 'src/app/services/skills.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -23,25 +20,22 @@ export class DashboardComponent implements OnInit {
   public role!: string;
 
   constructor(
-    private auth: AuthService,
-    private skillsService: SkillsService,
+    private authService: AuthService,
     private userStore: UserStoreService,
     private profileService: ProfileService,
-    private route: ActivatedRoute,
     private router: Router
     ) { }
 
   ngOnInit(): void {
-    // const userId = this.auth.getUserId();
-    // if (userId !== null) {
-    //   this.userId = userId;
-    //   this.router.navigate(['/skills', this.userId]);
-    // } else {
-    //   console.error('Error: userId is null');
-    // }
+   const userId = this.authService.getUserId();
+    if (userId !== null) {
+      this.userId = userId;
+    } else {
+      console.error('Error: userId is null');
+    }
 
     this.userStore.getUsernameFromStore().subscribe(val => {
-      const usernameFromToken = this.auth.getUsernameFromToken();
+      const usernameFromToken = this.authService.getUsernameFromToken();
       this.username = val || usernameFromToken;
       this.profileService.getAllProfiles().subscribe(profiles => {
         console.log(profiles);
@@ -52,17 +46,12 @@ export class DashboardComponent implements OnInit {
       });
     });
     this.userStore.getRoleFromStore().subscribe(val => {
-      const roleFromToken = this.auth.getRoleFromToken();
+      const roleFromToken = this.authService.getRoleFromToken();
       this.role = val || roleFromToken;
     });
   }
+
   logout() {
-    this.auth.signOut();
+    this.authService.signOut();
   }
-
-  goToUserSkills(userId: number): void {
-    this.router.navigate(['/skills', userId]);
-  }
-
-  
 }

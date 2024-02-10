@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Profile } from 'src/app/models/profile.model';
-import { Skill, SkillLevel } from 'src/app/models/skill.model';
+import { SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
-import { SkillsService } from 'src/app/services/skills.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-skills-list',
@@ -55,13 +54,10 @@ export class SkillsListComponent implements OnInit {
     private auth: AuthService,
     private userStore: UserStoreService,
     private profileService: ProfileService,
-    private router: Router
+    private router: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    const userId = this.auth.getUserId();
-    this.userId = userId !== null ? parseInt(userId.toString(), 10) : 0;
-
 
     this.userStore.getUsernameFromStore().subscribe(val => {
       const usernameFromToken = this.auth.getUsernameFromToken();
@@ -82,10 +78,6 @@ export class SkillsListComponent implements OnInit {
     if(this.userProfiles.length > 0) {
       this.skillList = this.userProfiles[0].skills.$values;
     }
-  }
-
-  goToUserSkills(userId: number): void {
-    this.router.navigate(['/user-skills', userId]);
   }
 
   getLevel(level: SkillLevel): string {
