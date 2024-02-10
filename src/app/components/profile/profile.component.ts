@@ -1,13 +1,22 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { ImageService } from 'src/app/services/image.service';
-import { Pipe, PipeTransform } from '@angular/core';
+import { catchError, map, of } from 'rxjs';
+import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
+interface ImageResponse {
+  $id: string;
+  $values: Array<{
+    $id: string;
+    imageUrl: string;
+  }>;
+}
 
 
 @Component({
@@ -18,30 +27,41 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 
 export class ProfileComponent implements OnInit {
-  id: any;
+  userId: any;
 
-  profileDetails: Profile = {
-    id: '',
+  public profileDetails: Profile = {
+    userId: 0,
     username: '',
     email: '',
     password: '',
     fullName: '',
     bio: '',
     skillInterested: '',
+    token: '',
+    role: '',
+    skills: [{
+      skillId: 0,
+      name: '',
+      description: '',
+      category: '',
+      level: 0,
+      prerequisity: '',
+      userId: 0,
+      user: '',
+    }],
   };
-
-  @Pipe({
-    name: 'filterSkills'
-  })
-
 
   public users: any = [];
   public username: string = "";
   public role!: string;
+  public imageUrl: SafeUrl | undefined;
 
   profileList: any;
   imageList: any;
   profileImage: any;
+  img: any;
+  imgCode: string = '';
+
   EditProfileCode = '';
   Result: any;
   file!: File;
@@ -55,22 +75,22 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private auth: AuthService,
     private userStore: UserStoreService,
-    private router: Router,
     private imageService: ImageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe({
       next: (params) => {
-        const id = params.get('id');
+        const id = Number(params.get('id'));
 
         if (id) {
           this.profileService.getProfileById(id)
             .subscribe({
               next: (response) => {
                 this.profileDetails = response;
-                this.GetImagebyId(this.profileDetails.id);
+                return this.GetImagebyId(this.profileDetails.userId);
               }
             })
         }
@@ -86,86 +106,52 @@ export class ProfileComponent implements OnInit {
       const roleFromToken = this.auth.getRoleFromToken();
       this.role = val || roleFromToken;
     });
-
-    this.GetAllImages();
   }
 
-  // ngOnInit() {
-  //   this.route.paramMap.subscribe({
-  //     next: (params) => {
-  //       const id = params.get('id');
-
-  //       if(id) {
-  //         this.profileService.getProfileById(id)
-  //         .subscribe({
-  //           next: (response) => {
-  //             this.profileDetails = response;
-  //           }
-  //         })
-  //       }
-  //     }
-  //   });
-
-  //   this.userStore.getUsernameFromStore().subscribe(val => {
-  //     const usernameFromToken = this.auth.getUsernameFromToken();
-  //     this.username = val || usernameFromToken;
-  //   });
-
-  //   this.userStore.getRoleFromStore().subscribe(val => {
-  //     const roleFromToken = this.auth.getRoleFromToken();
-  //     this.role = val || roleFromToken;
-  //   });
-
-  //   this.GetAllImages();
-  // }
-
-  UploadImage(code: any) {
-    if (!this.imageList) {
-      console.error('No image selected.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', this.file);
-
-    this.imageService.uploadImage(formData).subscribe({
-      next: (response) => {
-        console.log('Image uploaded successfully:', response);
-        this.updateProfile();
-      },
-      error: (error) => {
-        console.error('Error uploading image:', error);
-      },
-    });
+  UploadImage(userId: number, imgCode: any, img: any) {
+    this.profileImage = img;
+    this.EditProfileCode = imgCode;
+    this.ProceedUpload(userId);
   }
+
+
+  ProceedUpload(userId: number) {
+    this.imageService.uploadImage(this.EditProfileCode, userId, this.file).pipe(
+      map(events => {
+        switch (events.type) {
+          case HttpEventType.UploadProgress:
+            this.progressvalue = Math.round(events.loaded / events.total! * 100);
+            break;
+          case HttpEventType.Response:
+            this.imgCode = this.EditProfileCode;
+            this.GetAllImages();
+            console.log("Upload completed");
+            setTimeout(() => {
+              this.progressvalue = 0;
+            }, 2500);
+            break;
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log('Failed to upload');
+        return of("failed");
+      })
+    ).subscribe(result => {});
+  }
+
 
   updateProfile() {
-    this.profileService.updateProfile(this.profileDetails.id, this.profileDetails)
-    .subscribe({
-      next: (response) => {
-        this.router.navigate(['dashboard'])
-      }
-    })
+    this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
+      .subscribe({
+        next: (response) => {
+          this.ProceedUpload(this.profileDetails.userId);
+        },
+        error: (error) => {
+          console.error('Failed to update profile', error);
+        }
+      });
   }
 
-  // UploadImage(code: any, image: any) {
-  //   if (!this.imageList) {
-  //     console.error('No image selected.');
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append('filecollection', this.file);
-
-  //   this.imageService.uploadImage(formData).subscribe({
-  //     next: (response) => {
-  //       console.log('Image uploaded successfully:', response);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error uploading image:', error);
-  //     },
-  //   });
-  // }
 
   GetAllImages() {
     this.imageService.getAllImages().subscribe(result => {
@@ -174,9 +160,31 @@ export class ProfileComponent implements OnInit {
   }
 
   GetImagebyId(imgCode: any) {
-    this.imageService.getImagebyId(imgCode).subscribe(result => {
-      this.profileImage = result; // Assign the retrieved image to the profileImage property
+    this.imageService.getImagebyId(imgCode).subscribe((response: ImageResponse) => {
+      const imageBlob = this.base64ToBlob(response.$values[0].imageUrl, 'image/png');
+      const blobUrl = URL.createObjectURL(imageBlob);
+      this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
     });
+  }
+
+  base64ToBlob(base64: string, contentType: string) {
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
 
@@ -185,70 +193,7 @@ export class ProfileComponent implements OnInit {
     this.file = event.target.files[0];
     reader.readAsDataURL(event.target.files[0]);
     reader.onload = () => {
-      this.imageList = reader.result;
+      this.profileImage = reader.result;
     };
   }
-
-  // RemoveImage(code: any, name: any) {
-  //   if (confirm("Do you want remove the product : " + name + " ?")) {
-  //     this.profileService.removeImage(code).subscribe(result => {
-  //       alert("Upload completed"); // Use alertify instead of alertifyjs
-  //       this.GetAllProfiles();
-  //     });
-  //   }
-  // }
-
-  // ProceedUpload() {
-  //   let formdata = new FormData();
-  //   formdata.append("file", this.file, this.EditProfileCode)
-  //   this.profileService.uploadImage(formdata).pipe(
-
-  //     map(events => {
-  //       switch (events.type) {
-  //         case HttpEventType.UploadProgress:
-  //           this.progressvalue = Math.round(events.loaded / events.total! * 100);
-  //           break;
-  //         case HttpEventType.Response:
-  //           this.GetAllProfiles();
-  //           alert("Upload completed");
-  //           setTimeout(() => {
-  //             this.progressvalue = 0;
-  //           }, 2500);
-  //           break;
-
-  //       }
-  //     }),
-  //     catchError((error: HttpErrorResponse) => {
-  //       alert('Failed to upload')
-  //       return of("failed");
-  //     })
-
-  //   ).subscribe(() => {
-  //     // this.Getallproducts();
-  //     // alertifyjs.success("Upload completed");
-  //   });
-  // }
-
-  // GetProfileInfo(code: any, prodimage: any, name: any) {
-  //   this.profileImage = prodimage;
-  //   this.EditProfileCode = code;
-  //   this.open();
-  // }
-  // open() {
-  //   this.modalService.open(this.addview, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-  //   }, (reason) => {
-  //   });
-  // }
-
-  // private getDismissReason(reason: any): string {
-  //   if (reason === ModalDismissReasons.ESC) {
-  //     return 'by pressing ESC';
-  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-  //     return 'by clicking on a backdrop';
-  //   } else {
-  //     return `with: ${reason}`;
-  //   }
-  // }
 }
-
-

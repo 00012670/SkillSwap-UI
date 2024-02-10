@@ -4,6 +4,11 @@ import { environment } from 'src/environments/environment';
 import { Skill } from '../models/skill.model';
 import { Observable } from 'rxjs';
 
+interface SkillsResponse {
+  $id: string;
+  $values: Skill[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,24 +19,26 @@ export class SkillsService {
   constructor(private http: HttpClient) {}
 
   getAllSkills(): Observable<Skill[]> {
-     return this.http.get<Skill[]>(this.baseApiUrl + '/api/Skills');
+     return this.http.get<Skill[]>(this.baseApiUrl + '/api/Skills/GetAllSkills');
+  }
+
+  getSkillsByUserId(userId: number): Observable<Skill> {
+    return this.http.get<Skill>(this.baseApiUrl + 'api/Skills/GetSkillsByUserId/' + userId);
   }
 
   getSKillbyId(id: string): Observable<Skill> {
-    return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/' + id);
+    return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/GetSkillBy/' + id);
   }
 
-  addSkill(addSkillRequest: Skill): Observable<Skill> {
-    addSkillRequest.id = '0';
-    return this.http.post<Skill>(this.baseApiUrl + '/api/Skills',
-    addSkillRequest)
+  addSkill(userId: string, addSkillRequest: Skill): Observable<Skill> {
+    return this.http.post<Skill>(`${this.baseApiUrl}/api/Skills/AddSkillToUser/${userId}`, addSkillRequest);
   }
 
   updateSkill(id: string, updateSkillRequest: Skill): Observable<Skill> {
-    return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/' + id, updateSkillRequest);
+    return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/UpdateSkillBy' + id, updateSkillRequest);
   }
 
-  deleteSkill(id: string): Observable<Skill> {
-    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/' + id);
+  removeSkillFromUser(id: string): Observable<Skill> {
+    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/RemoveSkillFromUser' + id);
   }
 }

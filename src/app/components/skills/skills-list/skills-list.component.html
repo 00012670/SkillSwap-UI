@@ -19,7 +19,7 @@
           Hello, {{username}}
         </a>
         <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
-          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles" [routerLink]="['/profile/' + userProfile?.id]">View Profile</a></li>
+          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles" [routerLink]="['/profile/' + userProfile?.userId]">View Profile</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
         </ul>
@@ -33,7 +33,7 @@
   <h3 class="mb-3">Skills</h3>
     <a class="nav-link active orange-text" aria-current="page" routerLink="/skills/add">Create skill</a>
   <br><br>
-  <table class="table  table-striped " *ngIf="skills && skills.length > 0">
+  <table class="table  table-striped " *ngIf="skillList && skillList.length > 0">
     <thead>
       <tr>
         <th scope="col">Id</th>
@@ -47,18 +47,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let skill of skills | filter :searchText">
-        <td>{{ skill.id}}</td>
+      <tr *ngFor="let skill of userProfiles[0].skills.$values | filter :searchText">
+        <td>{{ skill.skillId}}</td>
         <td>{{ skill.name }}</td>
         <td>{{ skill.description }}</td>
         <td>{{ skill.category }}</td>
         <td>{{ getLevel(skill.level) }}</td>
         <td>{{ skill.prerequisity }}</td>
         <!-- <td><img src="{{skill.skillImage}}" class="img-responsive img-thumbnail" style="width: 50px; height: 70px"></td> -->
-        <td><a [routerLink]="['/skill', skill.id]">Veiw</a></td>
+        <td><a [routerLink]="['/skill', skill.skillId]">Veiw</a></td>
       </tr>
     </tbody>
   </table>
-  <p *ngIf="!skills || skills.length <= 0 ">No skills found</p>
+  <p *ngIf="!skillList || skillList.length <= 0 ">No skills found</p>
 
 </div>

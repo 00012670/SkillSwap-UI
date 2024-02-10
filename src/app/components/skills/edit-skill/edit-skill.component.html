@@ -3,36 +3,50 @@
 
   <div class="row">
     <div class="col-5">
-      <form #form="ngForm" (ngSubmit)="updateSkill()">
+      <form [formGroup]="editSkillForm" (ngSubmit)="updateSkill()">
 
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="skillDetails.name">
+          <input formControlName="name" [(ngModel)]="skillDetails.name" [ngClass]="{'is-invalid': submited && editSkillForm.get('name')!.errors}" type="text" class="form-control" id="name" name="name">
+          <div *ngIf="submited && editSkillForm.get('name')!.hasError('required')" class="invalid-feedback">
+            *Skill name is required
+          </div>
         </div>
+
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <input type="text" class="form-control" id="description" name="description"
-            [(ngModel)]="skillDetails.description">
+          <input formControlName="description" [(ngModel)]="skillDetails.description" [ngClass]="{'is-invalid': submited && editSkillForm.get('description')!.errors}" type="text" class="form-control" id="description" name="description">
+          <div *ngIf="submited && editSkillForm.get('description')!.hasError('required')" class="invalid-feedback">
+            *Description is required
+          </div>
         </div>
+
         <div class="mb-3">
           <label for="category" class="form-label">Category</label>
-          <input type="text" class="form-control" id="category" name="category" [(ngModel)]="skillDetails.category">
+          <input formControlName="category" [(ngModel)]="skillDetails.category" [ngClass]="{'is-invalid': submited && editSkillForm.get('category')!.errors}" type="text" class="form-control" id="category" name="category">
+          <div *ngIf="submited && editSkillForm.get('category')!.hasError('required')" class="invalid-feedback">
+            *Category is required
+          </div>
         </div>
 
         <div class="mb-3">
           <label for="level" class="form-label">Level</label>
-          <select class="form-select" id="level" name="level" [(ngModel)]="skillDetails.level">
+          <select formControlName="level" [(ngModel)]="skillDetails.level" [ngClass]="{'is-invalid': submited && editSkillForm.get('level')!.errors}"  class="form-select" id="level" name="level">
             <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
           </select>
         </div>
 
+
         <div class="mb-3">
           <label for="prerequisites" class="form-label">Prerequisity</label>
-          <input type="text" class="form-control" id="prerequisites" name="prerequisites"
-            [(ngModel)]="skillDetails.prerequisity">
+          <input formControlName="prerequisity" [(ngModel)]="skillDetails.prerequisity" [ngClass]="{'is-invalid': submited && editSkillForm.get('prerequisity')!.errors}"  name="prerequisity" type="text" class="form-control"id="prerequisites">
+          <div *ngIf="submited && editSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
+            *Prerequisity is required
+          </div>
         </div>
+
         <button type="submit" class="btn btn-primary">Update</button> |
-        <button type="button" class="btn btn-danger" (click)="deleteSkill(skillDetails.id)">Delete</button> 
+        <button type="button" class="btn btn-danger" (click)="removeSkillFromUser(skillDetails.skillId)">Delete</button>
 
       </form>
 

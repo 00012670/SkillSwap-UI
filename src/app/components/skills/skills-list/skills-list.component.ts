@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Profile } from 'src/app/models/profile.model';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { SkillsService } from 'src/app/services/skills.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-skills-list',
   templateUrl: './skills-list.component.html',
@@ -12,38 +15,60 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 export class SkillsListComponent implements OnInit {
 
-  skills: Skill[] = [];
+  userId: number | null = null;
   searchText: any;
 
   public userProfiles: any = [];
   public username: string = "";
-  public role!:string;
+  public role!: string;
+  authService: any;
 
+
+  profileObj : any = {
+    "userId": 0,
+    "username": "",
+    "email": "",
+    "password": "",
+    "fullName": "",
+    "bio": "string",
+    "skillInterested": "",
+    "token": "",
+    "role": "",
+    "skills": []
+  };
+
+  skillList : any[] = [];
+
+  skillObj : any =  {
+    "skillId": 0,
+    "name": "",
+    "description": "",
+    "category": "",
+    "level": 0,
+    "prerequisity": "",
+    "userId": 0,
+    "user": ''
+  };
 
   constructor(
-    private skillsService: SkillsService,
     private imageService: ImageService,
     private auth: AuthService,
     private userStore: UserStoreService,
-    private profileService: ProfileService
-    ) {}
+    private profileService: ProfileService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.skillsService.getAllSkills()
-    .subscribe({
-      next: (skills) => {
-        this.skills = skills;
-      },
-      error: (response) => {
-        console.log(response);
-      }
-    });
+    const userId = this.auth.getUserId();
+    this.userId = userId !== null ? parseInt(userId.toString(), 10) : 0;
+
 
     this.userStore.getUsernameFromStore().subscribe(val => {
       const usernameFromToken = this.auth.getUsernameFromToken();
       this.username = val || usernameFromToken;
       this.profileService.getAllProfiles().subscribe(profiles => {
-        this.userProfiles = profiles.filter(profile => profile.username === this.username);
+        this.userProfiles = profiles.$values.filter((profile: Profile) => profile.username === this.username);
+        this.getSkills();
       });
     });
 
@@ -51,7 +76,16 @@ export class SkillsListComponent implements OnInit {
       const roleFromToken = this.auth.getRoleFromToken();
       this.role = val || roleFromToken;
     });
+  }
 
+  getSkills(): void {
+    if(this.userProfiles.length > 0) {
+      this.skillList = this.userProfiles[0].skills.$values;
+    }
+  }
+
+  goToUserSkills(userId: number): void {
+    this.router.navigate(['/user-skills', userId]);
   }
 
   getLevel(level: SkillLevel): string {

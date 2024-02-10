@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-edit-skill',
@@ -20,22 +22,44 @@ export class EditSkillComponent {
 
 
   skillDetails: Skill = {
-    id: '',
+    skillId: '',
     name: '',
     description: '',
     category: '',
     level: SkillLevel.Competent,
     prerequisity: '',
-  };
+    userId: '',
+    user: {
+      userId: '',
+      username: '',
+      email: '',
+      password: '',
+      fullName: '',
+      bio: '',
+      skillInterested: '',
+      token: '',
+      role: ''
+    }
+  }
 
+  editSkillForm!: FormGroup
+  submited = false;
 
   constructor(
     private route: ActivatedRoute,
     private skillService: SkillsService,
-    private router: Router
+    private router: Router,
+    private formBuilder: FormBuilder
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.editSkillForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      category: ['', Validators.required],
+      level: ['', Validators.required],
+      prerequisity: ['', Validators.required],
+    });
     this.route.paramMap.subscribe({
       next: (params) => {
         const id = params.get('id');
@@ -53,9 +77,13 @@ export class EditSkillComponent {
   }
 
   updateSkill() {
+    this.submited = true;
+    if (this.editSkillForm.invalid) {
+      return
+    }
     this.skillDetails.level = +this.skillDetails.level;
 
-    this.skillService.updateSkill(this.skillDetails.id, this.skillDetails)
+    this.skillService.updateSkill(this.skillDetails.skillId, this.skillDetails)
       .subscribe({
         next: (response) => {
           this.router.navigate(['skills'])
@@ -63,8 +91,8 @@ export class EditSkillComponent {
       })
   }
 
-  deleteSkill(id: string) {
-    this.skillService.deleteSkill(id)
+  removeSkillFromUser(id: string) {
+    this.skillService.removeSkillFromUser(id)
       .subscribe({
         next: (response) => {
           this.router.navigate(['skills']);

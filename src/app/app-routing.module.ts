@@ -14,8 +14,9 @@ const routes: Routes = [
   {path:'login', component:LoginComponent},
   {path:'signup', component:SignupComponent},
   {path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
-  {path: 'skills', component:SkillsListComponent},
   {path: 'skills/add', component:AddSkillComponent},
+  {path: 'skills/:userId', component:SkillsListComponent},
+  {path: 'skills', component: SkillsListComponent},
   {path: 'skill/:id', component:EditSkillComponent},
   {path: 'profile/:id', component: ProfileComponent },
 ];

@@ -40,12 +40,14 @@
         <label for="uploadImage" class="form-label">Upload Image</label>
         <input type="file" class="form-control" placeholder="Choose file" (change)="onchange($event)" id="uploadImage" name="upload">
         <br>
-        <img class="img-responsive img-thumbnail popupclass" [src]="profileImage">
+        <label style="width: 100%" for="fileupload">
+          <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
       </div>
       <br>
-      <button (click)="UploadImage(profileDetails.id)" class="btn btn-success">Upload</button> |
+      <button (click)="UploadImage(profileDetails.userId, imgCode, profileImage)" class="btn btn-success">Upload</button>
       <button class="btn btn-danger">Remove</button>
     </div>
+
 
 
 

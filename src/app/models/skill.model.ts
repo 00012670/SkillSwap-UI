@@ -1,11 +1,22 @@
 export interface Skill {
-  id: string;
+  skillId: string;
   name: string;
   description: string;
   category: string;
   level: SkillLevel;
   prerequisity: string;
-
+  userId: string;
+  user: {
+    userId: string;
+    username: string;
+    email: string;
+    password: string;
+    fullName: string;
+    bio: string;
+    skillInterested: string;
+    token: string;
+    role: string;
+  };
 }
 
 export enum SkillLevel {
@@ -14,3 +25,5 @@ export enum SkillLevel {
   Expert = 2,
   Master = 3,
 }
+
+

@@ -4,6 +4,10 @@ import { environment } from 'src/environments/environment';
 import { Profile } from '../models/profile.model';
 import { Observable } from 'rxjs';
 
+interface ProfilesResponse {
+  $id: string;
+  $values: Profile[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +18,15 @@ export class ProfileService {
   baseApiUrl: string = environment.baseApiUrl
   constructor(private http: HttpClient) { }
 
-  getAllProfiles(): Observable<Profile[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Authentication`);
+  getAllProfiles(): Observable<ProfilesResponse> {
+    return this.http.get<ProfilesResponse>(`${this.baseApiUrl}/api/Authentication`);
   }
 
-  getProfileById(id: string): Observable<Profile> {
-    return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${id}`);
+  getProfileById(userId: number): Observable<Profile> {
+    return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
   }
 
-  updateProfile(id: string, updateProfileRequest: Profile): Observable<Profile> {
-    return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${id}`, updateProfileRequest);
+  updateProfile(userId: number, updateProfileRequest: Profile): Observable<Profile> {
+    return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`, updateProfileRequest);
   }
 }

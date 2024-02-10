@@ -3,35 +3,46 @@
 
   <div class="row">
     <div class="col-5">
-      <form #form="ngForm" (ngSubmit)="addSkill()">
+      <form [formGroup]="addSkillForm" (ngSubmit)="addSkill()">
 
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name"
-          name="name" [(ngModel)] = "addSkillRequest.name">
+          <input formControlName="name" [(ngModel)]="addSkillRequest.name" [ngClass]="{'is-invalid': submited && addSkillForm.get('name')!.errors}" type="text" class="form-control" id="name" name="name">
+          <div *ngIf="submited && addSkillForm.get('name')!.hasError('required')" class="invalid-feedback">
+            *Skill name is required
+          </div>
         </div>
+
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <input type="text" class="form-control" id="description"
-          name="description" [(ngModel)] = "addSkillRequest.description">
+          <input formControlName="description" [(ngModel)]="addSkillRequest.description" [ngClass]="{'is-invalid': submited && addSkillForm.get('description')!.errors}" type="text" class="form-control" id="description" name="description">
+          <div *ngIf="submited && addSkillForm.get('description')!.hasError('required')" class="invalid-feedback">
+            *Description is required
+          </div>
         </div>
+
         <div class="mb-3">
           <label for="category" class="form-label">Category</label>
-          <input type="text" class="form-control" id="category"
-          name="category" [(ngModel)] ="addSkillRequest.category">
+          <input formControlName="category" [(ngModel)]="addSkillRequest.category" [ngClass]="{'is-invalid': submited && addSkillForm.get('category')!.errors}" type="text" class="form-control" id="category" name="category">
+          <div *ngIf="submited && addSkillForm.get('category')!.hasError('required')" class="invalid-feedback">
+            *Category is required
+          </div>
         </div>
 
         <div class="mb-3">
           <label for="level" class="form-label">Level</label>
-          <select class="form-select" id="level" name="level" [(ngModel)]="addSkillRequest.level">
+          <select formControlName="level" [(ngModel)]="addSkillRequest.level" [ngClass]="{'is-invalid': submited && addSkillForm.get('level')!.errors}"  class="form-select" id="level" name="level">
             <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
           </select>
         </div>
 
+
         <div class="mb-3">
-          <label for="prerequisity" class="form-label">Prerequisity</label>
-          <input type="text" class="form-control" id="prerequisites"
-          name="prerequisity" [(ngModel)] ="addSkillRequest.prerequisity">
+          <label for="prerequisites" class="form-label">Prerequisity</label>
+          <input formControlName="prerequisity" [(ngModel)]="addSkillRequest.prerequisity" [ngClass]="{'is-invalid': submited && addSkillForm.get('prerequisity')!.errors}"  name="prerequisity" type="text" class="form-control" id="prerequisites">
+          <div *ngIf="submited && addSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
+            *Prerequisity is required
+          </div>
         </div>
 
         <div class="md-3">

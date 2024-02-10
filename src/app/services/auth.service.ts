@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt'
+import { environment } from 'src/environments/environment';
+import { tap } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl: string = 'https://localhost:44369/api/Authentication/'
+  baseApiUrl: string = environment.baseApiUrl
   private userPayload: any;
 
   constructor(
@@ -18,11 +21,23 @@ export class AuthService {
   }
 
   signUp(userObj: any) {
-    return this.http.post<any>(`${this.baseUrl}register`, userObj)
+    return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/register`, userObj)
   }
 
   signIn(loginObj: any) {
-    return this.http.post<any>(`${this.baseUrl}authenticate`, loginObj)
+    return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/authenticate`, loginObj).pipe(
+      tap(response => {
+        if (response && response.userId) {
+          localStorage.setItem('userId', response.userId.toString());
+         // console.log(response)
+        }
+      })
+    );
+  }
+
+  getUserId() {
+    const userId = localStorage.getItem('userId');
+    return userId ? parseInt(userId, 10) : null;
   }
 
   signOut() {
