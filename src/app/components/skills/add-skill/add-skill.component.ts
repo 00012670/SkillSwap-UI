@@ -79,18 +79,16 @@ export class AddSkillComponent implements OnInit {
     if (this.addSkillForm.invalid) {
       return
     }
-    this.addSkillRequest.level = +this.addSkillRequest.level;
-    this.addSkillRequest.userId = this.userId;
 
     const requestBody = {
-      name: this.addSkillRequest.name,
-      description: this.addSkillRequest.description,
-      category: this.addSkillRequest.category,
-      level: this.addSkillRequest.level,
-      prerequisity: this.addSkillRequest.prerequisity
+      name: this.addSkillForm.get('name')?.value,
+      description: this.addSkillForm.get('description')?.value,
+      category: this.addSkillForm.get('category')?.value,
+      level: +this.addSkillForm.get('level')?.value,
+      prerequisity: this.addSkillForm.get('prerequisity')?.value
     };
 
-    this.skillService.addSkill(this.addSkillRequest.userId, requestBody)
+    this.skillService.addSkill(this.userId, requestBody)
     .subscribe({
       next: (skill) => {
         this.router.navigate(['/skills']);
@@ -100,6 +98,7 @@ export class AddSkillComponent implements OnInit {
       }
     });
   }
+  
   getSkillLevelString(level: SkillLevel): string {
     switch (level) {
       case SkillLevel.Foundational:

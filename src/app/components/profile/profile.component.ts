@@ -8,6 +8,7 @@ import { ImageService } from 'src/app/services/image.service';
 import { catchError, map, of } from 'rxjs';
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NgToastService } from 'ng-angular-popup';
 
 
 interface ImageResponse {
@@ -53,13 +54,12 @@ export class ProfileComponent implements OnInit {
   public username: string = "";
   public role!: string;
   public imageUrl: SafeUrl | undefined;
-
+  errorMessage: string = '';
   profileList: any;
   imageList: any;
   profileImage: any;
   img: any;
   imgCode: string = '';
-
   EditProfileCode = '';
   Result: any;
   file!: File;
@@ -68,14 +68,15 @@ export class ProfileComponent implements OnInit {
   @ViewChild('content') addview !: ElementRef;
   @ViewChild('fileupload') fileupload !: ElementRef;
 
-
   constructor(
     private profileService: ProfileService,
     private auth: AuthService,
     private userStore: UserStoreService,
     private imageService: ImageService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toast: NgToastService,
+
   ) { }
 
   ngOnInit() {
@@ -137,12 +138,12 @@ export class ProfileComponent implements OnInit {
     ).subscribe(result => {});
   }
 
-
   updateProfile() {
     this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
       .subscribe({
         next: (response) => {
           this.ProceedUpload(this.profileDetails.userId);
+          this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 5000 });
         },
         error: (error) => {
           console.error('Failed to update profile', error);
@@ -184,7 +185,6 @@ export class ProfileComponent implements OnInit {
     }
     return new Blob(byteArrays, { type: contentType });
   }
-
 
   onchange(event: any) {
     let reader = new FileReader();

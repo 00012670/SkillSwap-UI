@@ -55,11 +55,12 @@ export class EditSkillComponent {
 
         if (id) {
           this.skillService.getSKillbyId(id)
-            .subscribe({
-              next: (response) => {
-                this.skillDetails = response;
-              }
-            })
+          .subscribe({
+            next: (response) => {
+              this.skillDetails = response;
+              this.editSkillForm.patchValue(this.skillDetails);
+            }
+          })
         }
       }
     });
@@ -70,14 +71,26 @@ export class EditSkillComponent {
     if (this.editSkillForm.invalid) {
       return
     }
-    this.skillDetails.level = +this.skillDetails.level;
 
-    this.skillService.updateSkill(this.skillDetails.skillId, this.skillDetails)
+    const requestBody = {
+      skillId: this.skillDetails.skillId,
+      userId: this.skillDetails.userId,
+      name: this.editSkillForm.get('name')?.value,
+      description: this.editSkillForm.get('description')?.value,
+      category: this.editSkillForm.get('category')?.value,
+      level: +this.editSkillForm.get('level')?.value,
+      prerequisity: this.editSkillForm.get('prerequisity')?.value
+    };
+
+    this.skillService.updateSkill(this.skillDetails.skillId, requestBody)
       .subscribe({
         next: (response) => {
           this.router.navigate(['skills'])
+        },
+        error: (error) => {
+          console.error('Error adding skill:', error);
         }
-      })
+      });
   }
 
   removeSkill(skillId: number) {
