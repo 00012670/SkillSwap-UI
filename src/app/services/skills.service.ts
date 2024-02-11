@@ -18,14 +18,6 @@ export class SkillsService {
   baseApiUrl: string = environment.baseApiUrl
   constructor(private http: HttpClient) {}
 
-  getAllSkills(): Observable<Skill[]> {
-     return this.http.get<Skill[]>(this.baseApiUrl + '/api/Skills/GetAllSkills');
-  }
-
-  getSkillsByUserId(userId: number): Observable<Skill> {
-    return this.http.get<Skill>(this.baseApiUrl + 'api/Skills/GetSkillsByUserId/' + userId);
-  }
-
   getSKillbyId(id: string): Observable<Skill> {
     return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/GetSkillBy/' + id);
   }
@@ -35,17 +27,10 @@ export class SkillsService {
   }
 
   updateSkill(id: number, updateSkillRequest: Skill): Observable<Skill> {
-    return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/UpdateSkillBy' + id, updateSkillRequest);
+    return this.http.put<Skill>(this.baseApiUrl + '/api/Skills/UpdateSkillBy/' + id, updateSkillRequest);
   }
 
   removeSkill(id: number): Observable<Skill> {
-    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/' + id);
-
+    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/DeleteSkillBy/' + id);
   }
-
-  removeSkillFromUser(userId: number): Observable<Skill> {
-    return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/RemoveSkillFromUser/' + userId);
-  }
-
-
 }

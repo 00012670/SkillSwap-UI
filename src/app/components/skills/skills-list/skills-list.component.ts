@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Profile } from 'src/app/models/profile.model';
 import { SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-skills-list',
@@ -14,47 +12,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class SkillsListComponent implements OnInit {
 
-  userId: number | null = null;
   searchText: any;
-
-  public userProfiles: any = [];
-  public username: string = "";
-  public role!: string;
-  authService: any;
-
-
-  profileObj : any = {
-    "userId": 0,
-    "username": "",
-    "email": "",
-    "password": "",
-    "fullName": "",
-    "bio": "string",
-    "skillInterested": "",
-    "token": "",
-    "role": "",
-    "skills": []
-  };
-
+  userProfiles: any = [];
+  username: string = "";
+  role!: string;
   skillList : any[] = [];
 
-  skillObj : any =  {
-    "skillId": 0,
-    "name": "",
-    "description": "",
-    "category": "",
-    "level": 0,
-    "prerequisity": "",
-    "userId": 0,
-    "user": ''
-  };
 
   constructor(
-    private imageService: ImageService,
     private auth: AuthService,
     private userStore: UserStoreService,
     private profileService: ProfileService,
-    private router: ActivatedRoute
   ) { }
 
   ngOnInit(): void {

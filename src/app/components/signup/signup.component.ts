@@ -13,11 +13,11 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 
 export class SignupComponent {
+
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa-eye-slash';
   signUpForm!: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,

@@ -42,23 +42,16 @@ export class ProfileComponent implements OnInit {
     }],
   };
 
-  public users: any = [];
-  public username: string = "";
-  public role!: string;
-  public imageUrl: SafeUrl | undefined;
-  errorMessage: string = '';
-  profileList: any;
-  imageList: any;
+  username: string = "";
+  role!: string;
+  imageUrl: SafeUrl | undefined;
   profileImage: any;
-  img: any;
-  imgCode: string = '';
-  EditProfileCode = '';
-  Result: any;
   file!: File;
   progressvalue = 0;
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
+  isImageDeleted: boolean = false;
 
   @ViewChild('content') addview !: ElementRef;
   @ViewChild('fileupload') fileupload !: ElementRef;
@@ -115,6 +108,7 @@ export class ProfileComponent implements OnInit {
             setTimeout(() => {
               this.progressvalue = 0;
             }, 2500);
+            this.isImageDeleted = false;
             break;
         }
       }),
@@ -140,13 +134,24 @@ export class ProfileComponent implements OnInit {
   }
 
   getImageByUserId(userId: number) {
-    this.imageService.getImageByUserId(userId).subscribe((response: ArrayBuffer) => {
-      const blob = new Blob([response], { type: 'image/jpeg' });
-      const blobUrl = URL.createObjectURL(blob);
-      this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
-    });
+    if (!this.isImageDeleted) {
+      this.imageService.getImageByUserId(userId).subscribe(
+        (response: ArrayBuffer) => {
+          const blob = new Blob([response], { type: 'image/jpeg' });
+          const blobUrl = URL.createObjectURL(blob);
+          this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+        },
+        (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.toast.error({ detail: "ERROR", summary: "Image not found", duration: 5000 });
+            this.imageUrl = undefined;
+          } else {
+            console.error('Failed to get image', error);
+          }
+        }
+      );
+    }
   }
-
 
   base64ToBlob(base64: string, contentType: string) {
     const sliceSize = 1024;
@@ -181,46 +186,25 @@ export class ProfileComponent implements OnInit {
 
   removeImage() {
     if (this.profileDetails.userId) {
-      this.imageService.removeImage(this.profileDetails.userId).subscribe({
-        next: (response) => {
-          this.toast.success({ detail: "SUCCESS", summary: "Image removed successfully", duration: 5000 });
-          this.imageUrl = undefined;
-          this.profileDetails.profileImage = undefined;
-          this.isImageUploaded = false;
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-          console.error('Failed to remove image', error);
-        }
-      });
+      if (confirm('Are you sure you want to remove the image?')) {
+        this.imageService.removeImage(this.profileDetails.userId).subscribe(
+          (response: any) => {
+            if (response.status == 200) {
+              this.toast.success({ detail: "SUCCESS", summary: "Image removed successfully", duration: 5000 });
+              this.imageUrl = undefined;
+              this.profileDetails.profileImage = undefined;
+              this.isImageUploaded = false;
+              this.isImageDeleted = true;
+              this.cdr.detectChanges();
+            } else {
+              this.toast.error({ detail: "ERROR", summary: "Failed to remove image", duration: 5000 });
+            }
+          },
+          (error) => {
+            console.error('Failed to remove image', error);
+          }
+        );
+      }
     }
   }
-
-
-
-
-
-  // ProceedUpload(userId: number) {
-  //   this.imageService.uploadImage(this.EditProfileCode, userId, this.file).pipe(
-  //     map(events => {
-  //       switch (events.type) {
-  //         case HttpEventType.UploadProgress:
-  //           this.progressvalue = Math.round(events.loaded / events.total! * 100);
-  //           break;
-  //         case HttpEventType.Response:
-  //           this.imgCode = this.EditProfileCode;
-  //           this.GetAllImages();
-  //           console.log("Upload completed");
-  //           setTimeout(() => {
-  //             this.progressvalue = 0;
-  //           }, 2500);
-  //           break;
-  //       }
-  //     }),
-  //     catchError((error: HttpErrorResponse) => {
-  //       console.log('Failed to upload');
-  //       return of("failed");
-  //     })
-  //   ).subscribe(result => {});
-  // }
 }

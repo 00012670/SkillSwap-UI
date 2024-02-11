@@ -4,7 +4,6 @@ import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-edit-skill',
   templateUrl: './edit-skill.component.html',

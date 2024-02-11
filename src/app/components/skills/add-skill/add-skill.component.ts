@@ -1,10 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { ImageService } from 'src/app/services/image.service';
-import { ProfileService } from 'src/app/services/profile.service';
 import { SkillsService } from 'src/app/services/skills.service';
 
 @Component({
@@ -21,40 +19,21 @@ export class AddSkillComponent implements OnInit {
     SkillLevel.Master
   ];
 
-
-  addSkillRequest: Skill = {
-    skillId: 0,
-    name: '',
-    description: '',
-    category: '',
-    level: SkillLevel.Competent,
-    prerequisity: '',
-    userId: 0
-  }
-
   addSkillForm!: FormGroup
   submited = false;
 
   userId: any;
-  skillList: any;
   skillImage: any;
   EditSkillCode = '';
-  Result: any;
   file!: File;
   progressvalue = 0;
 
   constructor(
     private authService: AuthService,
     private skillService: SkillsService,
-    private imageService: ImageService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private profileService: ProfileService
   ) { }
-
-  @ViewChild('content') addview !: ElementRef;
-  @ViewChild('fileupload') fileupload !: ElementRef;
 
   ngOnInit(): void {
 
@@ -98,7 +77,7 @@ export class AddSkillComponent implements OnInit {
       }
     });
   }
-  
+
   getSkillLevelString(level: SkillLevel): string {
     switch (level) {
       case SkillLevel.Foundational:
@@ -127,36 +106,6 @@ export class AddSkillComponent implements OnInit {
       this.skillImage = reader.result;
     };
   }
-
-
-
-  // ProceedUpload() {
-  //   let formdata = new FormData();
-  //   formdata.append("file", this.file, this.EditSkillCode)
-  //   this.imageService.uploadImage(formdata).pipe(
-  //     map(events => {
-  //       switch (events.type) {
-  //         case HttpEventType.UploadProgress:
-  //           this.progressvalue = Math.round(events.loaded / events.total! * 100);
-  //           break;
-  //         case HttpEventType.Response:
-  //           this.GetImage();
-  //           alert("Upload completed");
-  //           setTimeout(() => {
-  //             this.progressvalue = 0;
-  //           }, 2500);
-  //           break;
-
-  //       }
-  //     }),
-  //     catchError((error: HttpErrorResponse) => {
-  //       alert('Failed to upload')
-  //       return of("failed");
-  //     })
-  //   ).subscribe(() => {
-  //   });
-  // }
-
 }
 
 

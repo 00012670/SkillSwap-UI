@@ -3,8 +3,8 @@ import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
-import ValidateForm from 'src/app/helpers/validateForm';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import ValidateForm from 'src/app/helpers/validateForm';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +13,12 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup;
+
+  loginForm!: FormGroup;
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa-eye-slash';
-  
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
-          console.log(err);
+          //console.log(err);
         },
       });
     } else {

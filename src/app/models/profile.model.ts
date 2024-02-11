@@ -4,7 +4,6 @@ export interface ImageResponse {
   userId: number;
   user: string;
 }
-
 export interface Skill {
   skillId: number;
   name: string;

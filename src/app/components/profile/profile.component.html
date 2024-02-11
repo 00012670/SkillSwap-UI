@@ -32,6 +32,6 @@
           <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
       </div>
       <br>
-      <button (click)="uploadImage()" class="btn btn-success" [disabled]="!isImageChosen">Upload</button>
+      <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
       <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger" [disabled]="!isImageUploaded">Remove</button>  </div>
 </div>

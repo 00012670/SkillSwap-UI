@@ -49,7 +49,7 @@ export class AuthService {
       const decodedToken = jwtHelper.decodeToken(token);
       const userId = decodedToken.userId;
       if (userId) {
-        console.log('Retrieved userId from token:', userId);
+       // console.log('Retrieved userId from token:', userId);
         return userId;
       } else {
         console.log('No userId found in token');
