@@ -1,3 +1,10 @@
+export interface ImageResponse {
+  imgId: number;
+  img: any;
+  userId: number;
+  user: string;
+}
+
 export interface Skill {
   skillId: number;
   name: string;
@@ -8,7 +15,6 @@ export interface Skill {
   userId: number;
   user: string;
 }
-
 export interface Profile {
   userId: number;
   username: string;
@@ -19,5 +25,7 @@ export interface Profile {
   skillInterested: string;
   token: string;
   role: string;
+  profileImage?: ImageResponse;
   skills: Skill[];
 }
+

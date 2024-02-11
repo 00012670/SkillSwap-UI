@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
@@ -9,15 +8,8 @@ import { catchError, map, of } from 'rxjs';
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgToastService } from 'ng-angular-popup';
-
-
-interface ImageResponse {
-  $id: string;
-  $values: Array<{
-    $id: string;
-    imageUrl: string;
-  }>;
-}
+import { Profile } from 'src/app/models/profile.model';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
@@ -65,6 +57,9 @@ export class ProfileComponent implements OnInit {
   file!: File;
   progressvalue = 0;
 
+  isImageChosen: boolean = false;
+  isImageUploaded: boolean = false;
+
   @ViewChild('content') addview !: ElementRef;
   @ViewChild('fileupload') fileupload !: ElementRef;
 
@@ -76,6 +71,7 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toast: NgToastService,
+    private cdr: ChangeDetectorRef,
 
   ) { }
 
@@ -89,7 +85,7 @@ export class ProfileComponent implements OnInit {
             .subscribe({
               next: (response) => {
                 this.profileDetails = response;
-                return this.GetImagebyId(this.profileDetails.userId);
+                this.getImageByUserId(this.profileDetails.userId);
               }
             })
         }
@@ -107,24 +103,15 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  UploadImage(userId: number, imgCode: any, img: any) {
-    this.profileImage = img;
-    this.EditProfileCode = imgCode;
-    this.ProceedUpload(userId);
-  }
-
-
-  ProceedUpload(userId: number) {
-    this.imageService.uploadImage(this.EditProfileCode, userId, this.file).pipe(
+  uploadImage() {
+    this.imageService.uploadImage(this.profileDetails.userId, this.file).pipe(
       map(events => {
         switch (events.type) {
           case HttpEventType.UploadProgress:
             this.progressvalue = Math.round(events.loaded / events.total! * 100);
             break;
           case HttpEventType.Response:
-            this.imgCode = this.EditProfileCode;
-            this.GetAllImages();
-            console.log("Upload completed");
+            this.toast.success({ detail: "SUCCESS", summary: "Image uploaded successfully", duration: 5000 });
             setTimeout(() => {
               this.progressvalue = 0;
             }, 2500);
@@ -135,14 +122,15 @@ export class ProfileComponent implements OnInit {
         console.log('Failed to upload');
         return of("failed");
       })
-    ).subscribe(result => {});
+    ).subscribe(result => {
+      this.isImageUploaded = true;
+    });
   }
 
   updateProfile() {
     this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
       .subscribe({
         next: (response) => {
-          this.ProceedUpload(this.profileDetails.userId);
           this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 5000 });
         },
         error: (error) => {
@@ -151,20 +139,14 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-
-  GetAllImages() {
-    this.imageService.getAllImages().subscribe(result => {
-      this.profileList = result;
-    });
-  }
-
-  GetImagebyId(imgCode: any) {
-    this.imageService.getImagebyId(imgCode).subscribe((response: ImageResponse) => {
-      const imageBlob = this.base64ToBlob(response.$values[0].imageUrl, 'image/png');
-      const blobUrl = URL.createObjectURL(imageBlob);
+  getImageByUserId(userId: number) {
+    this.imageService.getImageByUserId(userId).subscribe((response: ArrayBuffer) => {
+      const blob = new Blob([response], { type: 'image/jpeg' });
+      const blobUrl = URL.createObjectURL(blob);
       this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
     });
   }
+
 
   base64ToBlob(base64: string, contentType: string) {
     const sliceSize = 1024;
@@ -192,6 +174,53 @@ export class ProfileComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
     reader.onload = () => {
       this.profileImage = reader.result;
+      this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+      this.isImageChosen = true;
     };
   }
+
+  removeImage() {
+    if (this.profileDetails.userId) {
+      this.imageService.removeImage(this.profileDetails.userId).subscribe({
+        next: (response) => {
+          this.toast.success({ detail: "SUCCESS", summary: "Image removed successfully", duration: 5000 });
+          this.imageUrl = undefined;
+          this.profileDetails.profileImage = undefined;
+          this.isImageUploaded = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Failed to remove image', error);
+        }
+      });
+    }
+  }
+
+
+
+
+
+  // ProceedUpload(userId: number) {
+  //   this.imageService.uploadImage(this.EditProfileCode, userId, this.file).pipe(
+  //     map(events => {
+  //       switch (events.type) {
+  //         case HttpEventType.UploadProgress:
+  //           this.progressvalue = Math.round(events.loaded / events.total! * 100);
+  //           break;
+  //         case HttpEventType.Response:
+  //           this.imgCode = this.EditProfileCode;
+  //           this.GetAllImages();
+  //           console.log("Upload completed");
+  //           setTimeout(() => {
+  //             this.progressvalue = 0;
+  //           }, 2500);
+  //           break;
+  //       }
+  //     }),
+  //     catchError((error: HttpErrorResponse) => {
+  //       console.log('Failed to upload');
+  //       return of("failed");
+  //     })
+  //   ).subscribe(result => {});
+  // }
 }
