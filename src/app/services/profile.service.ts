@@ -29,4 +29,8 @@ export class ProfileService {
   updateProfile(userId: number, updateProfileRequest: Profile): Observable<Profile> {
     return this.http.put<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`, updateProfileRequest);
   }
+
+  deleteProfile(userId: number): Observable<Profile> {
+    return this.http.delete<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
+  }
 }

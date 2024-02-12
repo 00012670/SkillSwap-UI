@@ -16,7 +16,7 @@ interface SkillsResponse {
 export class SkillsService {
 
   baseApiUrl: string = environment.baseApiUrl
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getSKillbyId(id: string): Observable<Skill> {
     return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/GetSkillBy/' + id);
@@ -32,5 +32,9 @@ export class SkillsService {
 
   removeSkill(id: number): Observable<Skill> {
     return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/DeleteSkillBy/' + id);
+  }
+
+  getAllSkills(): Observable<SkillsResponse> {
+    return this.http.get<SkillsResponse>(this.baseApiUrl + '/api/Skills/GetAllSkills');
   }
 }

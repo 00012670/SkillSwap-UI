@@ -1,3 +1,10 @@
+.navbar-img {
+  width: auto;
+  height: 40px;
+  border-radius: 10%;
+}
+
+
 .sidebar-text{
   color: #11111F;
   font-size: 19px;
@@ -6,12 +13,16 @@
   text-decoration: none;
 }
 
-
 .logo {
   font-weight:500;
 }
 
 #sidebarMenu {
-  height: 100%;
+  height: 100vh;
 }
 
+.delete-link {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}

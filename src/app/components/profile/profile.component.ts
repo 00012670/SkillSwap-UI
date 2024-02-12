@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit {
     }],
   };
 
+  userProfiles: any = [];
   username: string = "";
   role!: string;
   imageUrl: SafeUrl | undefined;
@@ -58,7 +59,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private auth: AuthService,
+    private authService: AuthService,
     private userStore: UserStoreService,
     private imageService: ImageService,
     private route: ActivatedRoute,
@@ -86,12 +87,12 @@ export class ProfileComponent implements OnInit {
     });
 
     this.userStore.getUsernameFromStore().subscribe(val => {
-      const usernameFromToken = this.auth.getUsernameFromToken();
+      const usernameFromToken = this.authService.getUsernameFromToken();
       this.username = val || usernameFromToken;
     });
 
     this.userStore.getRoleFromStore().subscribe(val => {
-      const roleFromToken = this.auth.getRoleFromToken();
+      const roleFromToken = this.authService.getRoleFromToken();
       this.role = val || roleFromToken;
     });
   }
@@ -206,5 +207,9 @@ export class ProfileComponent implements OnInit {
         );
       }
     }
+  }
+
+  logout() {
+    this.authService.signOut();
   }
 }

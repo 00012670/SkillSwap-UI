@@ -1,6 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 logo" href="/dashboard">
+    SKILL SWAP
+  </a>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">Home</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link px-3 cursor-pointer" id="profileDropdown" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Hello, {{username}}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
+          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles"
+              [routerLink]="['/profile/' + userProfile?.userId]">View Profile</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Sign out</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <img [src]="imageUrl" class="navbar-img">
+
+  </div>
+</nav>
+
 <div class="container my-5">
   <h1 class="mb-3">User profile</h1>
-<br>
+  <br>
   <div class="row">
     <div class="col-md-6">
 
@@ -18,6 +49,7 @@
           <input type="text" class="form-control" id="skillInterested" name="skillInterested"
             [(ngModel)]="profileDetails.skillInterested">
         </div>
+        <br>
         <button class="btn btn-primary">Update</button>
       </form>
 
@@ -26,12 +58,16 @@
     <div class="col-md-6">
       <div class="md-6">
         <label for="uploadImage" class="form-label">Upload Image</label>
-        <input type="file" class="form-control" placeholder="Choose file" (change)="onchange($event)" id="uploadImage" name="upload">
+        <input type="file" class="form-control" placeholder="Choose file" (change)="onchange($event)" id="uploadImage"
+          name="upload">
         <br>
         <label style="width: 100%" for="fileupload">
-          <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
+          <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"
+            style="width: auto; height: 150px;"></label>
       </div>
       <br>
       <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
-      <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger" [disabled]="!isImageUploaded">Remove</button>  </div>
-</div>
+      <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger"
+        [disabled]="!isImageUploaded">Remove</button>
+    </div>
+  </div>

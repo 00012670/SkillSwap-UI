@@ -4,7 +4,8 @@
   </a>
 
   <form class="form-inline my-2 my-lg-0 mx-auto">
-    <input class="form-control mr-sm-2 w-100  rounded-0 border-0" type="search" [(ngModel)]="searchText" [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search">
+    <input class="form-control mr-sm-2 w-100  rounded-0 border-0" type="search" [(ngModel)]="searchText"
+      [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search">
   </form>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -14,13 +15,17 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link px-3 cursor-pointer" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link px-3 cursor-pointer" id="profileDropdown" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
           Hello, {{username}}
         </a>
         <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
-          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles" [routerLink]="['/profile/' + userProfile?.userId]">View Profile</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
+          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles"
+              [routerLink]="['/profile/' + userProfile?.userId]">View Profile</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Sign out</a></li>
         </ul>
       </li>
     </ul>
@@ -30,7 +35,7 @@
 
 <div class="container my-5">
   <h3 class="mb-3">Skills</h3>
-    <a class="nav-link active orange-text" aria-current="page" routerLink="/skills/create">Create skill</a>
+  <a class="nav-link active orange-text" aria-current="page" routerLink="/skills/create">Create skill</a>
   <br><br>
   <table class="table  table-striped " *ngIf="skillList && skillList.length > 0">
     <thead>
