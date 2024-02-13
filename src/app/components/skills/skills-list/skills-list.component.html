@@ -51,7 +51,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let skill of userProfiles[0].skills.$values | filter :searchText">
+      <tr *ngFor="let skill of skillList | filter :searchText">
         <td>{{ skill.name }}</td>
         <td>{{ skill.description }}</td>
         <td>{{ skill.category }}</td>

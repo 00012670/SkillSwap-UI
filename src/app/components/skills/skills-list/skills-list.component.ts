@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Profile } from 'src/app/models/profile.model';
 import { SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { SkillsService } from 'src/app/services/skills.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
@@ -16,13 +17,14 @@ export class SkillsListComponent implements OnInit {
   userProfiles: any = [];
   username: string = "";
   role!: string;
-  skillList : any[] = [];
-
+  skillList: any[] = [];
+  userId: number | null = null;
 
   constructor(
     private auth: AuthService,
     private userStore: UserStoreService,
     private profileService: ProfileService,
+    private skillsService: SkillsService
   ) { }
 
   ngOnInit(): void {
@@ -31,20 +33,21 @@ export class SkillsListComponent implements OnInit {
       const usernameFromToken = this.auth.getUsernameFromToken();
       this.username = val || usernameFromToken;
       this.profileService.getAllProfiles().subscribe(profiles => {
-        this.userProfiles = profiles.$values.filter((profile: Profile) => profile.username === this.username);
-        this.getSkills();
+        this.userProfiles = profiles.filter((profile: Profile) => profile.username === this.username);
+        if (this.userProfiles.length > 0) {
+          this.userId = this.userProfiles[0].userId;
+          this.getSkills();
+        }
       });
-    });
-
-    this.userStore.getRoleFromStore().subscribe(val => {
-      const roleFromToken = this.auth.getRoleFromToken();
-      this.role = val || roleFromToken;
     });
   }
 
   getSkills(): void {
-    if(this.userProfiles.length > 0) {
-      this.skillList = this.userProfiles[0].skills.$values;
+    if (this.userId !== null) {
+      this.skillsService.getSkillsByUserId(this.userId).subscribe(skills => {
+        this.skillList = skills;
+        console.log(this.skillList);
+      });
     }
   }
 

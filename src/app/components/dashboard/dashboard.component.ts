@@ -58,9 +58,9 @@ export class DashboardComponent implements OnInit {
         return this.profileService.getAllProfiles();
       })
     ).subscribe(profiles => {
-      this.userProfiles = profiles.$values.filter((profile: Profile) => profile.username === this.username);
+      this.userProfiles = profiles.filter((profile: Profile) => profile.username === this.username);
       if (this.userProfiles.length > 0) {
-        this.skills = this.userProfiles[0].skills.$values;
+        this.skills = this.userProfiles[0].skills;
       }
     });
 
@@ -70,13 +70,15 @@ export class DashboardComponent implements OnInit {
 
       if (this.role === 'Admin') {
         this.profileService.getAllProfiles().subscribe(profiles => {
-          this.userProfiles = profiles.$values;
+          this.userProfiles = profiles;
+          console.log(profiles)
         });
       }
 
       if (this.role === 'User') {
-        this.skillsService.getAllSkills().subscribe(skillsResponse => {
-          this.skillList = skillsResponse.$values;
+        this.skillsService.getAllSkills().subscribe(skills => {
+          this.skillList = skills;
+          console.log(this.skillList);
         });
       }
     });
@@ -102,7 +104,7 @@ export class DashboardComponent implements OnInit {
 
   getSkills(): void {
     if (this.userProfiles.length > 0) {
-      this.skillList = this.userProfiles[0].skills.$values;
+      this.skillList = this.userProfiles[0].skills;
     }
   }
 

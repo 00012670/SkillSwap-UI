@@ -5,8 +5,8 @@ import { Profile } from '../models/profile.model';
 import { Observable } from 'rxjs';
 
 interface ProfilesResponse {
-  $id: string;
-  $values: Profile[];
+  id: string;
+  profile: Profile[];
 }
 
 @Injectable({
@@ -18,8 +18,8 @@ export class ProfileService {
   baseApiUrl: string = environment.baseApiUrl
   constructor(private http: HttpClient) { }
 
-  getAllProfiles(): Observable<ProfilesResponse> {
-    return this.http.get<ProfilesResponse>(`${this.baseApiUrl}/api/Authentication`);
+  getAllProfiles(): Observable<Profile[]> {
+    return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Authentication`);
   }
 
   getProfileById(userId: number): Observable<Profile> {

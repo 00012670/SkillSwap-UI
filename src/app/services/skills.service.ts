@@ -5,8 +5,8 @@ import { Skill } from '../models/skill.model';
 import { Observable } from 'rxjs';
 
 interface SkillsResponse {
-  $id: string;
-  $values: Skill[];
+  id: string;
+  skills: Skill[];
 }
 
 @Injectable({
@@ -34,7 +34,12 @@ export class SkillsService {
     return this.http.delete<Skill>(this.baseApiUrl + '/api/Skills/DeleteSkillBy/' + id);
   }
 
-  getAllSkills(): Observable<SkillsResponse> {
-    return this.http.get<SkillsResponse>(this.baseApiUrl + '/api/Skills/GetAllSkills');
+  getAllSkills(): Observable<Skill[]> {
+    return this.http.get<Skill[]>(this.baseApiUrl + '/api/Skills/GetAllSkills');
   }
+
+  getSkillsByUserId(userId: number): Observable<Skill[]> {
+    return this.http.get<Skill[]>(`${this.baseApiUrl}/api/Skills/GetSkillsByUserId/${userId}`);
+  }
+
 }
