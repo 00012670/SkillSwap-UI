@@ -16,6 +16,7 @@ import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.co
 import { ProfileComponent } from './components/profile/profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './components/filter.pipe';
+import { SwapRequestComponent } from './components/swap-request/swap-request.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FilterPipe } from './components/filter.pipe';
     EditSkillComponent,
     ProfileComponent,
     FilterPipe,
+    SwapRequestComponent,
   ],
   imports: [
     BrowserModule,

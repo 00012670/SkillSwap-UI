@@ -42,4 +42,7 @@ export class SkillsService {
     return this.http.get<Skill[]>(`${this.baseApiUrl}/api/Skills/GetSkillsByUserId/${userId}`);
   }
 
+  getSkillAndUserById(id: number): Observable<Skill> {
+    return this.http.get<Skill>(`${this.baseApiUrl}/api/Skills/GetSkillAndUserBy/${id}`);
+  }
 }

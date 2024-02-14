@@ -47,10 +47,7 @@ export class DashboardComponent implements OnInit {
     if (userId !== null) {
       this.userId = userId;
       this.getImageByUserId(userId);
-    } else {
-      // console.error('Error: userId is null');
-    }
-
+    } 
     this.userStore.getUsernameFromStore().pipe(
       switchMap(val => {
         const usernameFromToken = this.authService.getUsernameFromToken();
@@ -71,14 +68,12 @@ export class DashboardComponent implements OnInit {
       if (this.role === 'Admin') {
         this.profileService.getAllProfiles().subscribe(profiles => {
           this.userProfiles = profiles;
-          console.log(profiles)
         });
       }
 
       if (this.role === 'User') {
         this.skillsService.getAllSkills().subscribe(skills => {
           this.skillList = skills;
-          console.log(this.skillList);
         });
       }
     });

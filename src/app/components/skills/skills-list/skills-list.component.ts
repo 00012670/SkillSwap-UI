@@ -46,7 +46,6 @@ export class SkillsListComponent implements OnInit {
     if (this.userId !== null) {
       this.skillsService.getSkillsByUserId(this.userId).subscribe(skills => {
         this.skillList = skills;
-        console.log(this.skillList);
       });
     }
   }

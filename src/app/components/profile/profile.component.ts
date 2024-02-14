@@ -105,7 +105,7 @@ export class ProfileComponent implements OnInit {
             this.progressvalue = Math.round(events.loaded / events.total! * 100);
             break;
           case HttpEventType.Response:
-            this.toast.success({ detail: "SUCCESS", summary: "Image uploaded successfully", duration: 5000 });
+            this.toast.success({ detail: "SUCCESS", summary: "Image uploaded successfully", duration: 3000 });
             setTimeout(() => {
               this.progressvalue = 0;
             }, 2500);
@@ -126,7 +126,7 @@ export class ProfileComponent implements OnInit {
     this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
       .subscribe({
         next: (response) => {
-          this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 5000 });
+          this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 3000 });
         },
         error: (error) => {
           console.error('Failed to update profile', error);
@@ -144,7 +144,7 @@ export class ProfileComponent implements OnInit {
         },
         (error: HttpErrorResponse) => {
           if (error.status === 404) {
-            this.toast.error({ detail: "ERROR", summary: "Image not found", duration: 5000 });
+            this.toast.error({ detail: "ERROR", summary: "Image not found", duration: 3000 });
             this.imageUrl = undefined;
           } else {
             console.error('Failed to get image', error);
@@ -189,25 +189,25 @@ export class ProfileComponent implements OnInit {
     if (this.profileDetails.userId) {
       if (confirm('Are you sure you want to remove the image?')) {
         this.imageService.removeImage(this.profileDetails.userId).subscribe(
-          (response: any) => {
-            if (response.status == 200) {
-              this.toast.success({ detail: "SUCCESS", summary: "Image removed successfully", duration: 5000 });
-              this.imageUrl = undefined;
-              this.profileDetails.profileImage = undefined;
-              this.isImageUploaded = false;
-              this.isImageDeleted = true;
-              this.cdr.detectChanges();
-            } else {
-              this.toast.error({ detail: "ERROR", summary: "Failed to remove image", duration: 5000 });
-            }
+          () => {
+            this.toast.success({ detail: "SUCCESS", summary: "Image removed successfully", duration: 3000 });
+            this.imageUrl = undefined;
+            this.profileDetails.profileImage = undefined;
+            this.isImageUploaded = false;
+            this.isImageDeleted = true;
+            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           },
           (error) => {
             console.error('Failed to remove image', error);
+            this.toast.error({ detail: "ERROR", summary: "Failed to remove image", duration: 3000 });
           }
         );
       }
     }
   }
+
+
 
   logout() {
     this.authService.signOut();

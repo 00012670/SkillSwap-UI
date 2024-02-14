@@ -1,0 +1,58 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-5">
+      <h2 class="mb-4">Skill Information</h2>
+      <div class="mb-3 detail-item">
+        <label for="name" class="form-label detail-label">Name</label>
+        <p id="name" class="detail-value">{{ skillDetails.name }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="description" class="form-label detail-label">Description</label>
+        <p id="description" class="detail-value">{{ skillDetails.description }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="category" class="form-label detail-label">Category</label>
+        <p id="category" class="detail-value">{{ skillDetails.category }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="level" class="form-label detail-label">Level</label>
+        <p id="level" class="detail-value">{{ getSkillLevelString(skillDetails.level) }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="prerequisites" class="form-label detail-label">Prerequisity</label>
+        <p id="prerequisites" class="detail-value">{{ skillDetails.prerequisity }}</p>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <h2 class="mb-4">User Information</h2>
+      <div class="mb-3 detail-item">
+        <label for="fullName" class="form-label detail-label">Full Name</label>
+        <p id="fullName" class="detail-value">{{ userProfile.fullName }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="bio" class="form-label detail-label">Bio</label>
+        <p id="bio" class="detail-value">{{ userProfile.bio }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <label for="skillInterested" class="form-label detail-label">Skills Interested</label>
+        <p id="skillInterested" class="detail-value">{{ userProfile.skillInterested }}</p>
+      </div>
+
+      <div class="mb-3 detail-item">
+        <img [src]="imageUrl" class="img-responsive img-thumbnail" style="width: auto; height: 150px;">
+      </div>
+
+      <button class="btn btn-primary" style="  background-color: #ED8C02;
+      border-color: #ED8C02;
+      color: #fff;
+      padding: 8px;">Request for Swap</button>
+    </div>
+  </div>
+</div>
