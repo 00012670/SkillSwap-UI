@@ -1,7 +1,7 @@
 import { SignupComponent } from './components/signup/signup.component';
 import { NgModule } from '@angular/core';
+import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -17,6 +17,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './components/filter.pipe';
 import { SwapRequestComponent } from './components/swap-request/swap-request.component';
+import { CommonModule } from '@angular/common';
+import { ModalContent } from './components/swap-modal/swap-modal.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { SwapRequestComponent } from './components/swap-request/swap-request.com
     ProfileComponent,
     FilterPipe,
     SwapRequestComponent,
+    ModalContent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,9 @@ import { SwapRequestComponent } from './components/swap-request/swap-request.com
     FormsModule,
     HttpClientModule,
     NgToastModule,
-    NgbModule
+    NgbModule,
+    NgbModalModule,
+    CommonModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,

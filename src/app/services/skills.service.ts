@@ -4,11 +4,6 @@ import { environment } from 'src/environments/environment';
 import { Skill } from '../models/skill.model';
 import { Observable } from 'rxjs';
 
-interface SkillsResponse {
-  id: string;
-  skills: Skill[];
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +13,7 @@ export class SkillsService {
   baseApiUrl: string = environment.baseApiUrl
   constructor(private http: HttpClient) { }
 
-  getSKillbyId(id: string): Observable<Skill> {
+  getSKillbyId(id: number): Observable<Skill> {
     return this.http.get<Skill>(this.baseApiUrl + '/api/Skills/GetSkillBy/' + id);
   }
 

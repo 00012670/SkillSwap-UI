@@ -53,7 +53,7 @@ export class EditSkillComponent {
         const id = params.get('id');
 
         if (id) {
-          this.skillService.getSKillbyId(id)
+          this.skillService.getSKillbyId(+id)
           .subscribe({
             next: (response) => {
               this.skillDetails = response;

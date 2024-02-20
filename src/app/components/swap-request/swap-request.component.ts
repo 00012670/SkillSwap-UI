@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
@@ -7,13 +7,17 @@ import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { Profile } from 'src/app/models/profile.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component';
+
 
 @Component({
   selector: 'app-swap-request',
   templateUrl: './swap-request.component.html',
-  styleUrls: ['./swap-request.component.scss']
+  styleUrls: ['./swap-request.component.scss'],
+  template: '<button (click)="open()">Open modal</button>'
+
 })
 
 export class SwapRequestComponent {
@@ -52,7 +56,7 @@ export class SwapRequestComponent {
   editSkillForm!: FormGroup
   submited = false;
   imageUrl: SafeUrl | undefined;
-  //userProfile: any;
+
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
   isImageDeleted: boolean = false;
@@ -63,7 +67,11 @@ export class SwapRequestComponent {
     private profileService: ProfileService,
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
+    private modalService: NgbModal
   ) { }
+
+  @ViewChild('content') addview !: ElementRef;
+
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -107,12 +115,18 @@ export class SwapRequestComponent {
           const blob = new Blob([response], { type: 'image/jpeg' });
           const blobUrl = URL.createObjectURL(blob);
           this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
-        } 
+        }
       );
     }
     else {
       this.imageUrl = undefined;
     }
+  }
+
+  open() {
+    const modalRef = this.modalService.open(ModalContent);
+    modalRef.componentInstance.skillRequestedId = this.skillDetails.skillId;
+    modalRef.componentInstance.receiverId = this.userProfile.userId;
   }
 }
 

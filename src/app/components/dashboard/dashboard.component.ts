@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
     if (userId !== null) {
       this.userId = userId;
       this.getImageByUserId(userId);
-    } 
+    }
     this.userStore.getUsernameFromStore().pipe(
       switchMap(val => {
         const usernameFromToken = this.authService.getUsernameFromToken();
