@@ -58,8 +58,8 @@
     <div class="col-md-6">
       <div class="md-6">
         <label for="uploadImage" class="form-label">Upload Image</label>
-        <input type="file" class="form-control" placeholder="Choose file" (change)="onchange($event)" id="uploadImage"
-          name="upload">
+        <input #uploadImageRef  type="file" class="form-control" placeholder="Choose file" (change)="onchange($event)" id="uploadImage" name="upload">
+
         <br>
         <label style="width: 100%" for="fileupload">
           <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"

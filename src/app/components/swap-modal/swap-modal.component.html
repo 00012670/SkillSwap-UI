@@ -8,15 +8,16 @@
 </div>
 <div class="modal-body mt-3">
   <p style="color: #495057; margin-bottom: 10px;">Select the offered skill</p>
-  <select [(ngModel)]="selectedSkillId" style="width: 100%; padding: 10px; margin-bottom: 20px;">
+  <select [(ngModel)]="selectedSkillId" required style="width: 100%; padding: 10px; margin-bottom: 20px;">
     <option *ngFor="let skill of skillList" [value]="skill.skillId">{{ skill.name }}</option>
   </select>
-  <p style="color: #495057; margin-bottom: 10px;">Aditional details</p>
-  <input [(ngModel)]="details" type="text" style="width: 100%; padding: 10px;">  <br><br>
+  <p style="color: #495057; margin-bottom: 10px;">Aditional details (optional)</p>
+  <input [(ngModel)]="details" type="text" style="width: 100%; padding: 10px;"> <br><br>
 </div>
 <div class="modal-footer mt-3" style="border-top: 1px solid #dee2e6;">
-  <button type="button"
+
+  <button class="btn" [disabled]="!selectedSkillId"
     style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 6px; border-radius: 6px;"
     (click)="sendRequest(selectedSkillId || 0, details)">Request</button>
-      <button type=" button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
+  <button type=" button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
 </div>

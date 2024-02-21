@@ -1,12 +1,12 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { Profile } from 'src/app/models/profile.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component';
@@ -16,8 +16,6 @@ import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component
   selector: 'app-swap-request',
   templateUrl: './swap-request.component.html',
   styleUrls: ['./swap-request.component.scss'],
-  template: '<button (click)="open()">Open modal</button>'
-
 })
 
 export class SwapRequestComponent {
@@ -56,6 +54,7 @@ export class SwapRequestComponent {
   editSkillForm!: FormGroup
   submited = false;
   imageUrl: SafeUrl | undefined;
+  loggedInUserId: number | null = null;
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
@@ -65,15 +64,19 @@ export class SwapRequestComponent {
     private route: ActivatedRoute,
     private skillService: SkillsService,
     private profileService: ProfileService,
+    private authService: AuthService,
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef,
   ) { }
 
   @ViewChild('content') addview !: ElementRef;
 
 
   ngOnInit(): void {
+    this.loggedInUserId = this.authService.getUserId();
+
     this.route.paramMap.subscribe(params => {
       const skillId = Number(params.get('id'));
 
@@ -81,6 +84,7 @@ export class SwapRequestComponent {
         this.skillService.getSkillAndUserById(skillId).subscribe(data => {
           this.skillDetails = data;
           this.fetchUserProfile(this.skillDetails.userId);
+          this.cd.detectChanges();
         });
       }
     });
@@ -89,7 +93,9 @@ export class SwapRequestComponent {
   fetchUserProfile(userId: number): void {
     this.profileService.getProfileById(userId).subscribe(profile => {
       this.userProfile = profile;
-      this.getImageByUserId(this.userProfile.userId);
+      if (this.userProfile.hasImage) {
+        this.getImageByUserId(this.userProfile.userId);
+      }
     });
   }
 
@@ -127,6 +133,10 @@ export class SwapRequestComponent {
     const modalRef = this.modalService.open(ModalContent);
     modalRef.componentInstance.skillRequestedId = this.skillDetails.skillId;
     modalRef.componentInstance.receiverId = this.userProfile.userId;
+  }
+
+  isOwnSkill(): boolean {
+    return this.skillDetails.userId === Number(this.loggedInUserId);
   }
 }
 

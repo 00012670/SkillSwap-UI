@@ -9,7 +9,6 @@ import { ImageService } from 'src/app/services/image.service';
 import { SkillsService } from 'src/app/services/skills.service';
 import { SkillLevel, Skill } from 'src/app/models/skill.model';
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -20,6 +19,7 @@ export class DashboardComponent implements OnInit {
 
   userId: number | null = null;
   imageUrl: SafeUrl | undefined;
+  hasImage: boolean = false;
   skills: any[] = [];
   allSkills: Skill[] = [];
   userProfiles: any = [];
@@ -46,8 +46,9 @@ export class DashboardComponent implements OnInit {
     const userId = this.authService.getUserId();
     if (userId !== null) {
       this.userId = userId;
-      this.getImageByUserId(userId);
+      this.fetchUserProfile(userId);
     }
+
     this.userStore.getUsernameFromStore().pipe(
       switchMap(val => {
         const usernameFromToken = this.authService.getUsernameFromToken();
@@ -79,6 +80,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+  fetchUserProfile(userId: number): void {
+    this.profileService.getProfileById(userId).subscribe(profile => {
+      this.userProfiles = [profile];
+      if (profile.hasImage) {
+        this.getImageByUserId(profile.userId);
+      } else {
+        this.hasImage = false;
+      }
+    });
+  }
+
   getImageByUserId(userId: number) {
     if (!this.isImageDeleted) {
       this.imageService.getImageByUserId(userId).subscribe(
@@ -98,8 +111,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getSkills(): void {
-    if (this.userProfiles.length > 0) {
-      this.skillList = this.userProfiles[0].skills;
+    if (this.userId !== null) {
+      this.skillsService.getSkillsByUserId(this.userId).subscribe(skills => {
+        this.skillList = skills;
+      });
     }
   }
 

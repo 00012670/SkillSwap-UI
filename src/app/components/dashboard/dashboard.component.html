@@ -174,7 +174,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let userProfile of userProfiles | filter :searchText; let i= index">
+              <tr *ngFor="let userProfile of userProfiles | filter :searchText;">
                 <td>{{userProfile.userId}}</td>
                 <td>{{userProfile.username}}</td>
                 <td>{{userProfile.email}}</td>
@@ -192,7 +192,7 @@
       <div *ngIf="role === 'User'">
         <h2>Skill List</h2><br>
         <div class="table-responsive">
-          <table class="table  table-striped   " *ngIf="skillList && skillList.length > 0">
+          <table class="table  table-striped" *ngIf="skillList && skillList.length > 0">
             <thead>
               <tr>
                 <!-- <th scope="col">Id</th> -->

@@ -7,6 +7,8 @@ import { Skill } from 'src/app/models/skill.model';
 import { RequestService } from 'src/app/services/request.service';
 import { SwapRequest, User } from 'src/app/models/request.model';
 import { Profile } from 'src/app/models/profile.model';
+import { NgToastService } from 'ng-angular-popup';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -31,8 +33,8 @@ export class ModalContent {
     private skillsService: SkillsService,
     private authService: AuthService,
     private profileService: ProfileService,
-    private requestService: RequestService
-
+    private requestService: RequestService,
+    private toast: NgToastService,
   ) { }
 
   ngOnInit() {
@@ -69,9 +71,13 @@ export class ModalContent {
                 details: details
               };
               this.requestService.createSwapRequest(request).subscribe(
-                () => {},
+                (response) => {
+                  this.toast.success({ detail: "SUCCESS", summary: "Swap request created successfully", duration: 3000 });
+                  this.activeModal.close('Close click');
+                },
                 error => {
                   console.error('Error creating swap request:', error);
+                  this.toast.error({ detail: "ERROR", summary: 'Error creating swap request',  duration: 4000 });
                 }
               );
             });

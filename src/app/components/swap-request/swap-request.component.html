@@ -49,7 +49,9 @@
         <img [src]="imageUrl" class="img-responsive img-thumbnail" style="width: auto; height: 150px;">
       </div>
 
-      <button class="btn" style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;" (click)="open()">Request for Swap</button>
+      <button class="btn" *ngIf="!isOwnSkill()"
+        style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;" (click)="open()">Request
+        for Swap</button>
     </div>
   </div>
 </div>

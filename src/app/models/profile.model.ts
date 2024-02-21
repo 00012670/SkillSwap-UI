@@ -26,5 +26,6 @@ export interface Profile {
   role: string;
   profileImage?: ImageResponse;
   skills: Skill[];
+  hasImage?: boolean;
 }
 

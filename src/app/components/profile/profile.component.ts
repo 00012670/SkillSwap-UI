@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
@@ -17,8 +17,7 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./profile.component.scss']
 })
 
-export class ProfileComponent implements OnInit {
-  userId: any;
+export class ProfileComponent implements OnInit, AfterViewInit{
 
   public profileDetails: Profile = {
     userId: 0,
@@ -41,14 +40,15 @@ export class ProfileComponent implements OnInit {
       user: '',
     }],
   };
-
+  
+  userId: any;
   userProfiles: any = [];
   username: string = "";
   role!: string;
   imageUrl: SafeUrl | undefined;
   profileImage: any;
   file!: File;
-  progressvalue = 0;
+
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('content') addview !: ElementRef;
   @ViewChild('fileupload') fileupload !: ElementRef;
+  @ViewChild('uploadImageRef', { static: false }) uploadImageRef!: ElementRef;
 
   constructor(
     private profileService: ProfileService,
@@ -79,7 +80,12 @@ export class ProfileComponent implements OnInit {
             .subscribe({
               next: (response) => {
                 this.profileDetails = response;
-                this.getImageByUserId(this.profileDetails.userId);
+                if (this.profileDetails.hasImage) {
+                  this.getImageByUserId(this.profileDetails.userId);
+                }
+              },
+              error: (error) => {
+                console.error('Failed to get profile', error);
               }
             })
         }
@@ -100,17 +106,10 @@ export class ProfileComponent implements OnInit {
   uploadImage() {
     this.imageService.uploadImage(this.profileDetails.userId, this.file).pipe(
       map(events => {
-        switch (events.type) {
-          case HttpEventType.UploadProgress:
-            this.progressvalue = Math.round(events.loaded / events.total! * 100);
-            break;
-          case HttpEventType.Response:
-            this.toast.success({ detail: "SUCCESS", summary: "Image uploaded successfully", duration: 3000 });
-            setTimeout(() => {
-              this.progressvalue = 0;
-            }, 2500);
-            this.isImageDeleted = false;
-            break;
+        if (events.type === HttpEventType.Response) {
+          this.toast.success({ detail: "SUCCESS", summary: "Image uploaded successfully", duration: 3000 });
+          this.isImageDeleted = false;
+          this.profileDetails.hasImage = true;
         }
       }),
       catchError((error: HttpErrorResponse) => {
@@ -119,8 +118,12 @@ export class ProfileComponent implements OnInit {
       })
     ).subscribe(result => {
       this.isImageUploaded = true;
+      this.isImageChosen = false;
+      this.profileDetails.hasImage = true;
+      this.updateProfile();
     });
   }
+
 
   updateProfile() {
     this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
@@ -135,18 +138,16 @@ export class ProfileComponent implements OnInit {
   }
 
   getImageByUserId(userId: number) {
-    if (!this.isImageDeleted) {
+    if (this.profileDetails.hasImage && !this.isImageDeleted) {
       this.imageService.getImageByUserId(userId).subscribe(
         (response: ArrayBuffer) => {
           const blob = new Blob([response], { type: 'image/jpeg' });
           const blobUrl = URL.createObjectURL(blob);
           this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+          this.isImageUploaded = true;
         },
         (error: HttpErrorResponse) => {
-          if (error.status === 404) {
-            this.toast.error({ detail: "ERROR", summary: "Image not found", duration: 3000 });
-            this.imageUrl = undefined;
-          } else {
+          if (error.status !== 404) {
             console.error('Failed to get image', error);
           }
         }
@@ -185,6 +186,15 @@ export class ProfileComponent implements OnInit {
     };
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.uploadImageRef && this.uploadImageRef.nativeElement) {
+        this.uploadImageRef.nativeElement.value = '';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   removeImage() {
     if (this.profileDetails.userId) {
       if (confirm('Are you sure you want to remove the image?')) {
@@ -195,8 +205,16 @@ export class ProfileComponent implements OnInit {
             this.profileDetails.profileImage = undefined;
             this.isImageUploaded = false;
             this.isImageDeleted = true;
+            this.isImageChosen = false;
+
             this.cdr.detectChanges();
             this.cdr.markForCheck();
+
+            const uploadImageInput = this.uploadImageRef.nativeElement;
+            if (uploadImageInput) {
+              uploadImageInput.value = null;
+            }
+
           },
           (error) => {
             console.error('Failed to remove image', error);
@@ -206,8 +224,6 @@ export class ProfileComponent implements OnInit {
       }
     }
   }
-
-
 
   logout() {
     this.authService.signOut();
