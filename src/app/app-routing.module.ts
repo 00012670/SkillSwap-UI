@@ -9,6 +9,7 @@ import { AddSkillComponent } from './components/skills/add-skill/add-skill.compo
 import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SwapRequestComponent} from './components/swap-request/swap-request.component';
+import { ManageRequestsComponent} from './components/manage-requests/manage-requests.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},
@@ -21,7 +22,7 @@ const routes: Routes = [
   {path: 'skill/:id', component:EditSkillComponent},
   {path: 'profile/:id', component: ProfileComponent },
   {path: 'swap/:id', component: SwapRequestComponent },
-
+  {path: 'manage-requests', component: ManageRequestsComponent },
 ];
 
 @NgModule({

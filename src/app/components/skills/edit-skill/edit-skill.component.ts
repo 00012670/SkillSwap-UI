@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skills.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RequestService } from 'src/app/services/request.service';
+
 
 @Component({
   selector: 'app-edit-skill',
@@ -36,6 +38,7 @@ export class EditSkillComponent {
   constructor(
     private route: ActivatedRoute,
     private skillService: SkillsService,
+    private requestService: RequestService,
     private router: Router,
     private formBuilder: FormBuilder
   ) { }
@@ -93,13 +96,27 @@ export class EditSkillComponent {
   }
 
   removeSkill(skillId: number) {
-    this.skillService.removeSkill(skillId)
+    this.requestService.getSwapRequestsBySkillId(skillId)
       .subscribe({
-        next: (response) => {
-          this.router.navigate(['skills']);
+        next: (swapRequests) => {
+          if (swapRequests.length > 0) {
+            // Show error message to the user
+            alert('This skill cannot be deleted because it is associated with existing swap requests.');
+          } else {
+            this.skillService.removeSkill(skillId)
+              .subscribe({
+                next: (response) => {
+                  this.router.navigate(['skills']);
+                }
+              });
+          }
+        },
+        error: (error) => {
+          console.error('Error checking swap requests:', error);
         }
       });
   }
+
 
   getSkillLevelString(level: SkillLevel): string {
     switch (level) {

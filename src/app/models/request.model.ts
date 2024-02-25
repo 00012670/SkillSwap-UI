@@ -10,7 +10,7 @@ export interface Skill {
   // ... other properties ...
 }
 
-export interface SwapRequest {
+export interface CreateSwapRequest {
   requestId: number;
   initiatorId: number;
   receiverId: number;
@@ -21,9 +21,30 @@ export interface SwapRequest {
 }
 
 
+export interface GetSwapRequest {
+status: any;
+  requestId: number;
+  initiatorId: number;
+  initiatorName: string;
+  receiverId: number;
+  receiverName: string;
+  skillOfferedId: number;
+  skillOfferedName: string;
+  skillRequestedId: number;
+  skillRequestedName: string;
+  statusRequest: Status;
+  details: string;
+}
+
+
+
 export enum Status {
-  Pending,
-  Accepted,
-  Rejected,
-  Invalid
+  Pending = 0,
+  Accepted = 1,
+  Rejected = 2,
+  Invalid = 3,
+}
+
+export interface UpdateSwapRequest {
+  statusRequest: Status;
 }

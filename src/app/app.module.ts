@@ -19,6 +19,7 @@ import { FilterPipe } from './components/filter.pipe';
 import { SwapRequestComponent } from './components/swap-request/swap-request.component';
 import { CommonModule } from '@angular/common';
 import { ModalContent } from './components/swap-modal/swap-modal.component';
+import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ModalContent } from './components/swap-modal/swap-modal.component';
     ProfileComponent,
     FilterPipe,
     SwapRequestComponent,
-    ModalContent
+    ModalContent,
+    ManageRequestsComponent
   ],
   imports: [
     BrowserModule,

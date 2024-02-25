@@ -5,7 +5,7 @@ import { SkillsService } from 'src/app//services/skills.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { Skill } from 'src/app/models/skill.model';
 import { RequestService } from 'src/app/services/request.service';
-import { SwapRequest, User } from 'src/app/models/request.model';
+import { CreateSwapRequest } from 'src/app/models/request.model';
 import { Profile } from 'src/app/models/profile.model';
 import { NgToastService } from 'ng-angular-popup';
 import { FormsModule } from '@angular/forms';
@@ -61,7 +61,7 @@ export class ModalContent {
         this.profileService.getProfileById(userId).subscribe((initiator: Profile) => {
           this.profileService.getProfileById(this.receiverId as number).subscribe((receiver: Profile) => {
             this.skillsService.getSKillbyId(this.skillRequestedId as number).subscribe((requestedSkill: Skill) => {
-              const request: SwapRequest = {
+              const request: CreateSwapRequest = {
                 requestId: 0,
                 initiatorId: userId,
                 receiverId: this.receiverId as number,

@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
       user: '',
     }],
   };
-  
+
   userId: any;
   userProfiles: any = [];
   username: string = "";
@@ -120,9 +120,9 @@ export class ProfileComponent implements OnInit, AfterViewInit{
       this.isImageUploaded = true;
       this.isImageChosen = false;
       this.profileDetails.hasImage = true;
-      this.updateProfile();
     });
-  }
+}
+
 
 
   updateProfile() {
