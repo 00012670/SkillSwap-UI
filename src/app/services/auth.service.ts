@@ -3,7 +3,9 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { TokenApiModel } from '../models/token-api.model';
+import { EMPTY, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,23 +24,23 @@ export class AuthService {
 
   signUp(userObj: any) {
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/register`, userObj).pipe(
-      tap(response => {
-        if (response && response.skills && response.skills.length > 0) {
-          const userId = response.skills[0].userId;
-          localStorage.setItem('userId', userId.toString());
-        }
-      })
-    )
+      // tap(response => {
+      //   if (response && response.skills && response.skills.length > 0) {
+      //     const userId = response.skills[0].userId;
+      //     localStorage.setItem('userId', userId.toString());
+      //   }
+      // })
+    );
   }
 
   signIn(loginObj: any) {
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/authenticate`, loginObj).pipe(
-      tap(response => {
-        if (response && response.skills && response.skills.length > 0) {
-          const userId = response.skills[0].userId;
-          localStorage.setItem('userId', userId.toString());
-        }
-      })
+      // tap(response => {
+      //   if (response && response.skills && response.skills.length > 0) {
+      //     const userId = response.skills[0].userId;
+      //     localStorage.setItem('userId', userId.toString());
+      //   }
+      // })
     );
   }
 
@@ -49,7 +51,7 @@ export class AuthService {
       const decodedToken = jwtHelper.decodeToken(token);
       const userId = decodedToken.userId;
       if (userId) {
-       // console.log('Retrieved userId from token:', userId);
+        // console.log('Retrieved userId from token:', userId);
         return userId;
       } else {
         console.log('No userId found in token');
@@ -59,7 +61,7 @@ export class AuthService {
       console.log('No token found');
       return null;
     }
-}
+  }
 
   signOut() {
     localStorage.clear();
@@ -74,8 +76,10 @@ export class AuthService {
   }
 
   getToken() {
-    const token = localStorage.getItem('token');
-    return token;
+    return localStorage.getItem('token')
+  }
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken')
   }
 
   isLoggedIn(): boolean {
@@ -83,18 +87,10 @@ export class AuthService {
   }
 
   decodedToken() {
-    try {
-      const jwtHelper = new JwtHelperService();
-      const token = this.getToken();
-      if (token) {
-        return jwtHelper.decodeToken(token);
-      } else {
-        return {};
-      }
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return {};
-    }
+    const jwtHelper = new JwtHelperService();
+    const token = this.getToken()!;
+    console.log(jwtHelper.decodeToken(token))
+    return jwtHelper.decodeToken(token)
   }
 
   getUsernameFromToken() {
@@ -105,6 +101,11 @@ export class AuthService {
   getRoleFromToken() {
     if (this.userPayload)
       return this.userPayload.role;
+  }
+
+  renewToken(tokenApi: TokenApiModel): Observable<any> {
+    return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/Refresh`, tokenApi)
+
   }
 
 }

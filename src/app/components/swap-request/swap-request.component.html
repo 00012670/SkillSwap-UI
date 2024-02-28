@@ -1,57 +1,108 @@
 <div class="container my-5">
   <div class="row">
-    <div class="col-5">
-      <h2 class="mb-4">Skill Information</h2>
-      <div class="mb-3 detail-item">
-        <label for="name" class="form-label detail-label">Name</label>
-        <p id="name" class="detail-value">{{ skillDetails.name }}</p>
-      </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Skill Information</h2>
+          <div class="mb-3 detail-item">
+            <label for="name" class="form-label detail-label">Name</label>
+            <p id="name" class="detail-value">{{ skillDetails.name }}</p>
+          </div>
+          <div class="mb-3 detail-item">
+            <label for="description" class="form-label detail-label">Description</label>
+            <p id="description" class="detail-value">{{ skillDetails.description }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <label for="description" class="form-label detail-label">Description</label>
-        <p id="description" class="detail-value">{{ skillDetails.description }}</p>
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="category" class="form-label detail-label">Category</label>
+            <p id="category" class="detail-value">{{ skillDetails.category }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <label for="category" class="form-label detail-label">Category</label>
-        <p id="category" class="detail-value">{{ skillDetails.category }}</p>
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="level" class="form-label detail-label">Level</label>
+            <p id="level" class="detail-value">{{ getSkillLevelString(skillDetails.level) }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <label for="level" class="form-label detail-label">Level</label>
-        <p id="level" class="detail-value">{{ getSkillLevelString(skillDetails.level) }}</p>
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="prerequisites" class="form-label detail-label">Prerequisity</label>
+            <p id="prerequisites" class="detail-value">{{ skillDetails.prerequisity }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <label for="prerequisites" class="form-label detail-label">Prerequisity</label>
-        <p id="prerequisites" class="detail-value">{{ skillDetails.prerequisity }}</p>
+        </div>
       </div>
     </div>
 
-    <div class="col-5">
-      <h2 class="mb-4">User Information</h2>
-      <div class="mb-3 detail-item">
-        <label for="fullName" class="form-label detail-label">Full Name</label>
-        <p id="fullName" class="detail-value">{{ userProfile.fullName }}</p>
-      </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">User Information</h2>
 
-      <div class="mb-3 detail-item">
-        <label for="bio" class="form-label detail-label">Bio</label>
-        <p id="bio" class="detail-value">{{ userProfile.bio }}</p>
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="fullName" class="form-label detail-label">Full Name</label>
+            <p id="fullName" class="detail-value">{{ userProfile.fullName }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <label for="skillInterested" class="form-label detail-label">Skills Interested</label>
-        <p id="skillInterested" class="detail-value">{{ userProfile.skillInterested }}</p>
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="bio" class="form-label detail-label">Bio</label>
+            <p id="bio" class="detail-value">{{ userProfile.bio }}</p>
+          </div>
 
-      <div class="mb-3 detail-item">
-        <img [src]="imageUrl" class="img-responsive img-thumbnail" style="width: auto; height: 150px;">
-      </div>
+          <div class="mb-3 detail-item">
+            <label for="skillInterested" class="form-label detail-label">Skills Interested</label>
+            <p id="skillInterested" class="detail-value">{{ userProfile.skillInterested }}</p>
+          </div>
 
-      <button class="btn" *ngIf="!isOwnSkill()"
-        style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;" (click)="open()">Request
-        for Swap</button>
+          <div class="mb-3 detail-item">
+            <div class="form-label detail-label">
+              <label for="skillInterested">User Image</label>
+            </div>
+            <div>
+              <img [src]="imageUrl" class="img-responsive img-thumbnail" style="width: auto; height: 113px;">
+            </div>
+          </div>
+
+          <button class="btn" *ngIf="!isOwnSkill()"
+            style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;"
+            (click)="open()">Request
+            for Swap</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="row mt-5">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Reviews and Ratings</h2>
+          <!-- Reviews and Ratings Here -->
+
+          <div *ngFor="let review of reviews">
+            <h3>{{ review.fromUserId }}</h3>
+            <p>{{ review.text }}</p>
+            <p>Rating: {{ review.rating }}</p>
+          </div>
+
+          <form (ngSubmit)="submitReview(newReview.skillId, newReview.toUserId, newReview.rating, newReview.text)">
+            <div class="form-group">
+              <label class="form-label detail-label mt-3" for="review">Your Review</label>
+              <textarea [(ngModel)]="newReview.text" name="text"  class="form-control" id="review" rows="3"></textarea>
+            </div>
+            <div class="form-group mt-4">
+              <label class="form-label detail-label" for="rating">Your Rating</label>
+              <div class="star-rating">
+                <input [(ngModel)]="newReview.rating" type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+              </div>
+            </div>
+            <button type="submit" class="btn"
+              style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;">Submit
+              Review</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

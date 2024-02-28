@@ -95,27 +95,34 @@ export class EditSkillComponent {
       });
   }
 
-  removeSkill(skillId: number) {
-    this.requestService.getSwapRequestsBySkillId(skillId)
-      .subscribe({
-        next: (swapRequests) => {
-          if (swapRequests.length > 0) {
-            // Show error message to the user
-            alert('This skill cannot be deleted because it is associated with existing swap requests.');
-          } else {
-            this.skillService.removeSkill(skillId)
-              .subscribe({
-                next: (response) => {
-                  this.router.navigate(['skills']);
-                }
-              });
-          }
-        },
-        error: (error) => {
-          console.error('Error checking swap requests:', error);
-        }
-      });
-  }
+
+  checkSKillBeforeDeleting(skillId: number) {
+  this.requestService.getSwapRequestsBySkillId(skillId).subscribe({
+    next: (swapRequests) => {
+      if (swapRequests && swapRequests.length > 0) {
+        // Show error message to the user
+        alert('This skill cannot be deleted because it is associated with existing swap requests.');
+      } else {
+        this.deleteSkill(skillId);
+      }
+    },
+    error: (error) => {
+      // Log and handle other errors
+      console.error('Error checking swap requests:', error);
+    }
+  });
+}
+
+deleteSkill(skillId: number) {
+  this.skillService.removeSkill(skillId).subscribe({
+    next: (response) => {
+      this.router.navigate(['skills']);
+    },
+    error: (error) => {
+      console.error('Error deleting skill:', error);
+    }
+  });
+}
 
 
   getSkillLevelString(level: SkillLevel): string {

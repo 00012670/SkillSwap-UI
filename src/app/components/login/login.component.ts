@@ -47,17 +47,17 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.loginForm.reset();
-          this.auth.storeToken(res.token);
+          this.auth.storeToken(res.accessToken);
           this.auth.storeRefreshToken(res.refreshToken);
           const tokenPayload = this.auth.decodedToken();
           this.userStore.setUsernameForStore(tokenPayload.name);
           this.userStore.setRoleForStore(tokenPayload.role);
-          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 });
+          this.toast.success({ detail: "SUCCESS", summary: "Login successfuly", duration: 3000 });
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
-          this.toast.error({ detail: "ERROR", summary: err, duration: 4000 });
-          //console.log(err);
+          console.error('Error during sign-in:', err);
+          this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
         },
       });
     } else {

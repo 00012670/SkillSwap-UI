@@ -10,7 +10,9 @@ import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component';
-
+import { ReviewService } from 'src/app/services/review.service';
+import { Review } from 'src/app/models/review.model';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-swap-request',
@@ -33,14 +35,6 @@ export class SwapRequestComponent {
     skills: []
   };
 
-  levelOptions: SkillLevel[] = [
-    SkillLevel.Foundational,
-    SkillLevel.Competent,
-    SkillLevel.Expert,
-    SkillLevel.Master
-  ];
-
-
   skillDetails: Skill = {
     skillId: 0,
     name: '',
@@ -50,6 +44,26 @@ export class SwapRequestComponent {
     prerequisity: '',
     userId: 0
   }
+
+  levelOptions: SkillLevel[] = [
+    SkillLevel.Foundational,
+    SkillLevel.Competent,
+    SkillLevel.Expert,
+    SkillLevel.Master
+  ];
+
+  reviews: Review[] = [];
+
+  newReview: Review = {
+    reviewId: 0,
+    fromUserId: this.authService.getUserId(),
+    toUserId: 0,
+    skillId: 0,
+    requestId: 0,
+    rating: 0,
+    text: ''
+  };
+
 
   editSkillForm!: FormGroup
   submited = false;
@@ -69,6 +83,8 @@ export class SwapRequestComponent {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private cd: ChangeDetectorRef,
+    private reviewService: ReviewService,
+    private toast: NgToastService,
   ) { }
 
   @ViewChild('content') addview !: ElementRef;
@@ -87,6 +103,10 @@ export class SwapRequestComponent {
           this.cd.detectChanges();
         });
       }
+    });
+
+    this.reviewService.getReviewsByUserId(this.authService.getUserId()).subscribe(reviews => {
+      this.reviews = reviews;
     });
   }
 
@@ -138,7 +158,37 @@ export class SwapRequestComponent {
   isOwnSkill(): boolean {
     return this.skillDetails.userId === Number(this.loggedInUserId);
   }
+
+
+  //Review Section
+
+  submitReview(skillId: number, toUserId: number, rating: number, text: string): void {
+    const userId = this.authService.getUserId();
+    if (userId !== null) {
+      this.skillService.getSKillbyId(skillId).subscribe((skill: Skill) => {
+        this.profileService.getProfileById(userId).subscribe((fromUser: Profile) => {
+          this.profileService.getProfileById(toUserId).subscribe((toUser: Profile) => {
+            const review: Review = {
+              reviewId: 0,
+              fromUserId: userId,
+              toUserId: toUserId,
+              skillId: skillId,
+              requestId: 0,
+              rating: rating,
+              text: text
+            };
+            this.reviewService.createReview(review).subscribe(
+              (response) => {
+                this.toast.success({ detail: "SUCCESS", summary: "Review created successfully", duration: 3000 });
+              }, error => {
+                console.error('Error creating review:', error);
+                this.toast.error({ detail: "ERROR", summary: 'Error creating review', duration: 4000 });
+              });
+          });
+        });
+      });
+    }
+  }
+
 }
-
-
 

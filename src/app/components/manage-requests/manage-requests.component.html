@@ -9,7 +9,7 @@
           <th>Skill Requested</th>
           <th>Additional Details</th>
           <th>Status</th>
-          <th>Details</th>
+          <th>Receiver Details</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -47,6 +47,7 @@
           <th>Skill Requested</th>
           <th>Additional Details</th>
           <th>Status</th>
+          <th>Reciever Details</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -57,8 +58,9 @@
           <td>{{request.skillRequestedName}}</td>
           <td>{{request.details}}</td>
           <td>{{ getStatus(request.statusRequest) }}</td>
+          <td><a [routerLink]="['/swap', request.skillRequestedId]">View</a></td>
           <td>
-            <button [disabled]="request.statusRequest !== Status.Rejected"
+            <button [disabled]="request.statusRequest !== Status.Pending && request.statusRequest !== Status.Rejected"
               (click)="deleteRequest(request)">Cancel</button>
           </td>
         </tr>

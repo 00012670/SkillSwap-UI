@@ -1,4 +1,4 @@
-// export class TokenApiModel{
-//   accessToken!:string;
-//   refreshToken!:string;
-// }
+export class TokenApiModel{
+  accessToken!:string;
+  refreshToken!:string;
+}

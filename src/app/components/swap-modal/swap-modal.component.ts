@@ -8,7 +8,6 @@ import { RequestService } from 'src/app/services/request.service';
 import { CreateSwapRequest } from 'src/app/models/request.model';
 import { Profile } from 'src/app/models/profile.model';
 import { NgToastService } from 'ng-angular-popup';
-import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -77,7 +76,7 @@ export class ModalContent {
                 },
                 error => {
                   console.error('Error creating swap request:', error);
-                  this.toast.error({ detail: "ERROR", summary: 'Error creating swap request',  duration: 4000 });
+                  this.toast.error({ detail: "ERROR", summary: 'Error creating swap request', duration: 4000 });
                 }
               );
             });
@@ -86,9 +85,7 @@ export class ModalContent {
       });
     }
   }
-
-
- }
+}
 
 
 

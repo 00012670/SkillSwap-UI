@@ -40,6 +40,4 @@ export class SkillsService {
   getSkillAndUserById(id: number): Observable<Skill> {
     return this.http.get<Skill>(`${this.baseApiUrl}/api/Skills/GetSkillAndUserBy/${id}`);
   }
-
-
 }

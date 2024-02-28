@@ -1,4 +1,3 @@
-<br>
 <div class="modal-header" style=" border-bottom: 1px solid #dee2e6;">
   <h4 class="modal-title" style="color: #495057;">Request for exchange</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"
@@ -14,10 +13,14 @@
   <p style="color: #495057; margin-bottom: 10px;">Aditional details (optional)</p>
   <input [(ngModel)]="details" type="text" style="width: 100%; padding: 10px;"> <br><br>
 </div>
-<div class="modal-footer mt-3" style="border-top: 1px solid #dee2e6;">
+<div class="modal-footer mt-3" style="border-top: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
 
-  <button class="btn" [disabled]="!selectedSkillId"
-    style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 6px; border-radius: 6px;"
-    (click)="sendRequest(selectedSkillId || 0, details)">Request</button>
-  <button type=" button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
+  <p *ngIf="!skillList || skillList.length === 0" style="color: #495057;">No skills created yet.</p>
+
+  <div>
+    <button class="btn" [disabled]="!selectedSkillId || !skillList || skillList.length === 0"
+      style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 6px; border-radius: 6px; margin-right: 10px;"
+      (click)="sendRequest(selectedSkillId || 0, details)">Request</button>
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
+  </div>
 </div>
