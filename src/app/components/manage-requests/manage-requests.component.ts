@@ -12,6 +12,8 @@ import { NgToastService } from 'ng-angular-popup';
 })
 export class ManageRequestsComponent {
 
+
+
   receivedSwapRequests: GetSwapRequest[] = [];
   sentSwapRequests: GetSwapRequest[] = [];
   Status = Status;

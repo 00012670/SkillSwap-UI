@@ -1,13 +1,11 @@
 export interface User {
   userId: number;
   username: string;
-  // ... other properties ...
 }
 
 export interface Skill {
   skillId: number;
   name: string;
-  // ... other properties ...
 }
 
 export interface CreateSwapRequest {

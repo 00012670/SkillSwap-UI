@@ -1,18 +1,17 @@
 export interface User {
   userId: number;
   username: string;
-  // ... other properties ...
 }
 
 export interface Skill {
   skillId: number;
   name: string;
-  // ... other properties ...
 }
 
 export interface Review {
   reviewId: number;
-  fromUserId: number;
+  fromUserId: User;
+  fromUserName: string; 
   toUserId: number;
   skillId: number;
   requestId: number;

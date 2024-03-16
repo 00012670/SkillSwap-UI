@@ -13,6 +13,8 @@ import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component
 import { ReviewService } from 'src/app/services/review.service';
 import { Review } from 'src/app/models/review.model';
 import { NgToastService } from 'ng-angular-popup';
+import { GetSwapRequest } from 'src/app/models/request.model';
+import { RequestService } from 'src/app/services/request.service';
 
 @Component({
   selector: 'app-swap-request',
@@ -57,6 +59,7 @@ export class SwapRequestComponent {
   newReview: Review = {
     reviewId: 0,
     fromUserId: this.authService.getUserId(),
+    fromUserName: '',
     toUserId: 0,
     skillId: 0,
     requestId: 0,
@@ -64,15 +67,21 @@ export class SwapRequestComponent {
     text: ''
   };
 
-
+  username: string | undefined;
   editSkillForm!: FormGroup
   submited = false;
   imageUrl: SafeUrl | undefined;
   loggedInUserId: number | null = null;
+  acceptedSwapRequests: GetSwapRequest[] = [];
+
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
   isImageDeleted: boolean = false;
+
+  isSubmittingReview = false;
+  averageRating: number = 0;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -85,6 +94,7 @@ export class SwapRequestComponent {
     private cd: ChangeDetectorRef,
     private reviewService: ReviewService,
     private toast: NgToastService,
+    private requestService: RequestService
   ) { }
 
   @ViewChild('content') addview !: ElementRef;
@@ -93,6 +103,18 @@ export class SwapRequestComponent {
   ngOnInit(): void {
     this.loggedInUserId = this.authService.getUserId();
 
+    this.requestService.getAcceptedSwapRequests(this.loggedInUserId || 0).subscribe(
+      (requests) => {
+        this.acceptedSwapRequests = requests;
+        if (this.acceptedSwapRequests.length > 0) {
+          this.newReview.requestId = this.acceptedSwapRequests[this.acceptedSwapRequests.length - 1].requestId;
+        }
+      },
+      (error) => {
+        console.error('Failed to get accepted swap requests', error);
+      }
+    );
+
     this.route.paramMap.subscribe(params => {
       const skillId = Number(params.get('id'));
 
@@ -100,13 +122,15 @@ export class SwapRequestComponent {
         this.skillService.getSkillAndUserById(skillId).subscribe(data => {
           this.skillDetails = data;
           this.fetchUserProfile(this.skillDetails.userId);
+          this.newReview.skillId = this.skillDetails.skillId;
+          this.newReview.toUserId = this.skillDetails.userId;
           this.cd.detectChanges();
         });
       }
     });
 
-    this.reviewService.getReviewsByUserId(this.authService.getUserId()).subscribe(reviews => {
-      this.reviews = reviews;
+    this.profileService.getUsername(this.loggedInUserId || 0).subscribe(username => {
+      this.username = username;
     });
   }
 
@@ -116,6 +140,10 @@ export class SwapRequestComponent {
       if (this.userProfile.hasImage) {
         this.getImageByUserId(this.userProfile.userId);
       }
+      this.reviewService.getReviewsByUserId(this.userProfile.userId).subscribe(reviews => {
+        this.reviews = reviews;
+        this.calculateAverageRating();
+      });
     });
   }
 
@@ -159,36 +187,63 @@ export class SwapRequestComponent {
     return this.skillDetails.userId === Number(this.loggedInUserId);
   }
 
+  hasAcceptedSwapRequest(userId: number): boolean {
+    return this.acceptedSwapRequests.some(request => request.initiatorId === userId || request.receiverId === userId);
+  }
 
-  //Review Section
+  onSwapRequestAccepted(request: GetSwapRequest) {
+    this.newReview.requestId = request.requestId;
+    this.newReview.toUserId = request.receiverId;
+    this.newReview.skillId = request.skillRequestedId;
+    this.submitReview();
+  }
 
-  submitReview(skillId: number, toUserId: number, rating: number, text: string): void {
-    const userId = this.authService.getUserId();
-    if (userId !== null) {
-      this.skillService.getSKillbyId(skillId).subscribe((skill: Skill) => {
-        this.profileService.getProfileById(userId).subscribe((fromUser: Profile) => {
-          this.profileService.getProfileById(toUserId).subscribe((toUser: Profile) => {
-            const review: Review = {
-              reviewId: 0,
-              fromUserId: userId,
-              toUserId: toUserId,
-              skillId: skillId,
-              requestId: 0,
-              rating: rating,
-              text: text
-            };
-            this.reviewService.createReview(review).subscribe(
-              (response) => {
-                this.toast.success({ detail: "SUCCESS", summary: "Review created successfully", duration: 3000 });
-              }, error => {
-                console.error('Error creating review:', error);
-                this.toast.error({ detail: "ERROR", summary: 'Error creating review', duration: 4000 });
-              });
-          });
-        });
-      });
+  calculateAverageRating(): void {
+    if (this.reviews.length > 0) {
+      const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+      this.averageRating = Math.round((totalRating / this.reviews.length) * 2) / 2;
     }
   }
 
+  reviewSubmitted = false;
+
+  submitReview(): void {
+    if (this.isSubmittingReview) {
+      return;
+    }
+
+    this.isSubmittingReview = true;
+
+    const userId = this.authService.getUserId();
+    if (userId !== null) {
+      this.profileService.getUsername(userId).subscribe(username => {
+        if (this.acceptedSwapRequests.some(request => request.requestId === this.newReview.requestId)) {
+          const review: Review = {
+            fromUserId: userId,
+            fromUserName: username,
+            toUserId: this.newReview.toUserId,
+            skillId: this.newReview.skillId,
+            requestId: this.newReview.requestId,
+            rating: this.newReview.rating,
+            text: this.newReview.text,
+            reviewId: 0
+          };
+          this.reviewService.createReview(review).subscribe(
+            (response) => {
+              this.isSubmittingReview = false;
+              this.reviewSubmitted = true; // Set the flag to true
+              this.toast.success({ detail: "SUCCESS", summary: "Review created successfully", duration: 3000 });
+              // Push the new review to the reviews array
+              this.reviews.push(response);
+              this.calculateAverageRating();
+            }, error => {
+              this.isSubmittingReview = false;
+              console.error('Error creating review:', error);
+              this.toast.error({ detail: "ERROR", summary: 'Error creating review', duration: 4000 });
+            });
+        }
+      });
+    }
+  }
 }
 

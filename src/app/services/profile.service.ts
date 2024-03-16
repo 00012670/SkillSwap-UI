@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Profile } from '../models/profile.model';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 interface ProfilesResponse {
   id: string;
@@ -33,4 +33,11 @@ export class ProfileService {
   deleteProfile(userId: number): Observable<Profile> {
     return this.http.delete<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
   }
+
+  getUsername(id: number): Observable<string> {
+    return this.http.get<{ username: string }>(`${this.baseApiUrl}/api/Profile/${id}/username`)
+      .pipe(map(response => response.username));
+  }
+
+
 }

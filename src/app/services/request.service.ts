@@ -25,6 +25,10 @@ export class RequestService {
     return this.http.get<GetSwapRequest[]>(`${this.baseApiUrl}/api/SwapRequest/GetSentSwapRequests?userId=${userId}`);
   }
 
+  getAcceptedSwapRequests(userId: number): Observable<GetSwapRequest[]> {
+    return this.http.get<GetSwapRequest[]>(`${this.baseApiUrl}/api/SwapRequest/GetAcceptedSwapRequests?userId=${userId}`);
+  }
+
   getSwapRequestsBySkillId(skillId: number): Observable<GetSwapRequest[]> {
     return this.http.get<GetSwapRequest[]>(`${this.baseApiUrl}/api/SwapRequest/GetBySkillId/${skillId}`);
   }
