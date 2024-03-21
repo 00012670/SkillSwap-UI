@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export interface ImageResponse {
   imgId: number;
   img: any;
@@ -27,5 +29,6 @@ export interface Profile {
   profileImage?: ImageResponse;
   skills: Skill[];
   hasImage?: boolean;
+  imageUrl?: SafeUrl;
 }
 

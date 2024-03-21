@@ -54,8 +54,6 @@ export class SwapRequestComponent {
     SkillLevel.Master
   ];
 
-  reviews: Review[] = [];
-
   newReview: Review = {
     reviewId: 0,
     fromUserId: this.authService.getUserId(),
@@ -73,7 +71,7 @@ export class SwapRequestComponent {
   imageUrl: SafeUrl | undefined;
   loggedInUserId: number | null = null;
   acceptedSwapRequests: GetSwapRequest[] = [];
-
+  reviews: Review[] = [];
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;

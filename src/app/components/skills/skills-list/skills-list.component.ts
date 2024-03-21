@@ -28,7 +28,6 @@ export class SkillsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.userStore.getUsernameFromStore().subscribe(val => {
       const usernameFromToken = this.auth.getUsernameFromToken();
       this.username = val || usernameFromToken;
@@ -36,6 +35,7 @@ export class SkillsListComponent implements OnInit {
         this.userProfiles = profiles.filter((profile: Profile) => profile.username === this.username);
         if (this.userProfiles.length > 0) {
           this.userId = this.userProfiles[0].userId;
+          this.role = this.auth.getRoleFromToken(); 
           this.getSkills();
         }
       });
@@ -43,7 +43,11 @@ export class SkillsListComponent implements OnInit {
   }
 
   getSkills(): void {
-    if (this.userId !== null) {
+    if (this.role === 'Admin') {
+      this.skillsService.getAllSkills().subscribe(skills => {
+        this.skillList = skills;
+      });
+    } else if (this.role === 'User' && this.userId !== null) {
       this.skillsService.getSkillsByUserId(this.userId).subscribe(skills => {
         this.skillList = skills;
       });

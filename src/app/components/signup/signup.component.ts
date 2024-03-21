@@ -52,16 +52,18 @@ export class SignupComponent {
             const tokenPayload = this.auth.decodedToken();
             this.userStore.setUsernameForStore(tokenPayload.name);
             this.userStore.setRoleForStore(tokenPayload.role);
-            this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 3000 });
+            this.toast.success({ detail: "Success", summary: res.message, duration: 3000 });
             this.router.navigate(['dashboard'])
           }),
           error: (err => {
-            this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
+           // console.error('Error during sign-in:', err);
+            this.toast.error({ detail: "ERROR", summary: err.error.message, duration: 5000 });
           })
         });
     } else {
       ValidateForm.validateAllFormFileds(this.signUpForm)
-      alert("Your form is invalid");
+      this.toast.error({ detail: "ERROR", summary: "Your form is invalid", duration: 5000 });
+      //alert("Your form is invalid");
     }
   }
 }

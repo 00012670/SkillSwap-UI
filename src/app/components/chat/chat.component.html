@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+      <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active" *ngFor="let profile of profiles"
+          (click)="selectUser(profile); $event.preventDefault()">
+          <img class="profile-image"
+            [src]="profile.imageUrl ? profile.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'">
+          <span class="username">{{profile.username}}</span>
+        </a>
+      </div>
+    </div>
+
+    <section class="chat" *ngIf="selectedUser">
+      <div class="header-chat">
+        <i class="icon fa fa-user-o" aria-hidden="true"></i>
+        <p class="name">{{selectedUser.username}}</p>
+        <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+      </div>
+      <div class="messages-chat">
+        <div class="message" *ngFor="let message of messages">
+          <div class="profile">
+            <img class="profile-image" [src]="selectedUser.imageUrl" alt="User Image">
+            <!-- <div class="online"></div> -->
+          </div>
+          <p class="text">{{message.messageText}}</p>
+          <p class="timestamp">{{message.timestamp | date:'short'}}</p>
+        </div>
+      </div>
+
+      <div class="footer-chat">
+        <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>
+        <input type="text" class="write-message" placeholder="Type your message here" [(ngModel)]="newMessage">
+        <i class="icon send fa fa-paper-plane-o clickable" (click)="sendMessage()" aria-hidden="true"></i>
+      </div>
+    </section>
+  </div>
+</div>

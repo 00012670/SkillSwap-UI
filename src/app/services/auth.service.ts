@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 import { TokenApiModel } from '../models/token-api.model';
 import { EMPTY, Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,24 +25,13 @@ export class AuthService {
 
   signUp(userObj: any) {
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/register`, userObj).pipe(
-      // tap(response => {
-      //   if (response && response.skills && response.skills.length > 0) {
-      //     const userId = response.skills[0].userId;
-      //     localStorage.setItem('userId', userId.toString());
-      //   }
-      // })
     );
   }
 
   signIn(loginObj: any) {
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/authenticate`, loginObj).pipe(
-      // tap(response => {
-      //   if (response && response.skills && response.skills.length > 0) {
-      //     const userId = response.skills[0].userId;
-      //     localStorage.setItem('userId', userId.toString());
-      //   }
-      // })
     );
+
   }
 
   getUserId() {
@@ -63,6 +53,12 @@ export class AuthService {
     }
   }
 
+  getUserFromToken() {
+    if (this.userPayload)
+      return this.userPayload;
+  }
+
+
   signOut() {
     localStorage.clear();
     this.router.navigate(['login'])
@@ -71,6 +67,7 @@ export class AuthService {
   storeToken(tokenValue: string) {
     localStorage.setItem('token', tokenValue)
   }
+
   storeRefreshToken(tokenValue: string) {
     localStorage.setItem('refreshToken', tokenValue)
   }
@@ -78,6 +75,7 @@ export class AuthService {
   getToken() {
     return localStorage.getItem('token')
   }
+
   getRefreshToken() {
     return localStorage.getItem('refreshToken')
   }

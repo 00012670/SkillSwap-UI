@@ -56,12 +56,13 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
-          console.error('Error during sign-in:', err);
-          this.toast.error({ detail: "ERROR", summary: err, duration: 5000 });
+          //console.error('Error during sign-in:', err);
+          this.toast.error({ detail: "ERROR", summary: err.error.message, duration: 5000 });
         },
       });
     } else {
       ValidateForm.validateAllFormFileds(this.loginForm);
+      this.toast.error({ detail: "ERROR", summary: "Your form is invalid", duration: 5000 });
     }
   }
 }

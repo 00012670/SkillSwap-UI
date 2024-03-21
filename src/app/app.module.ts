@@ -20,6 +20,8 @@ import { SwapRequestComponent } from './components/swap-request/swap-request.com
 import { CommonModule } from '@angular/common';
 import { ModalContent } from './components/swap-modal/swap-modal.component';
 import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { ManageRequestsComponent } from './components/manage-requests/manage-req
     FilterPipe,
     SwapRequestComponent,
     ModalContent,
-    ManageRequestsComponent
+    ManageRequestsComponent,
+    PaymentComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

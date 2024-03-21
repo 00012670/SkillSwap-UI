@@ -1,0 +1,21 @@
+/* Add some CSS to style the Stripe Element */
+.input-field {
+  margin: 0 0 20px 0;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: box-shadow 150ms ease;
+}
+
+.input-field:focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.input-field.invalid {
+  border-color: #fa755a;
+}
+
+#card-errors {
+  color: #fa755a;
+}
