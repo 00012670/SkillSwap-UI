@@ -21,10 +21,15 @@ export class ImageService {
       observe: 'events'
     });
   }
-  
+
   getImageByUserId(userId: number): Observable<ArrayBuffer> {
     return this.http.get<ArrayBuffer>(`${this.baseApiUrl}/api/Image/GetImageByUserId/${userId}`, {responseType: 'arraybuffer' as 'json'});
   }
+
+  getImageById(id: number): Observable<ArrayBuffer> {
+    return this.http.get(`${this.baseApiUrl}/api/Image/GetImage/${id}`, { responseType: 'arraybuffer' });
+  }
+
 
   removeImage(userId: number): Observable<any> {
     return this.http.delete(`${this.baseApiUrl}/api/Image/RemoveImage/${userId}`);

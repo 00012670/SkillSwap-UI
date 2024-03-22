@@ -145,20 +145,6 @@ export class SwapRequestComponent {
     });
   }
 
-  getSkillLevelString(level: SkillLevel): string {
-    switch (level) {
-      case SkillLevel.Foundational:
-        return 'Foundational';
-      case SkillLevel.Competent:
-        return 'Competent';
-      case SkillLevel.Expert:
-        return 'Expert';
-      case SkillLevel.Master:
-        return 'Master';
-      default:
-        return '';
-    }
-  }
 
   getImageByUserId(userId: number): void {
     if (!this.isImageDeleted) {
@@ -179,6 +165,21 @@ export class SwapRequestComponent {
     const modalRef = this.modalService.open(ModalContent);
     modalRef.componentInstance.skillRequestedId = this.skillDetails.skillId;
     modalRef.componentInstance.receiverId = this.userProfile.userId;
+  }
+
+  getSkillLevelString(level: SkillLevel): string {
+    switch (level) {
+      case SkillLevel.Foundational:
+        return 'Foundational';
+      case SkillLevel.Competent:
+        return 'Competent';
+      case SkillLevel.Expert:
+        return 'Expert';
+      case SkillLevel.Master:
+        return 'Master';
+      default:
+        return '';
+    }
   }
 
   isOwnSkill(): boolean {

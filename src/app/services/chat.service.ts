@@ -1,24 +1,36 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { ProfileService } from './profile.service';
+import { MessageDto } from '../models/message.model';
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class ChatService {
+
+
   baseApiUrl: string = environment.baseApiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private profileService: ProfileService) { }
 
   getMessages(senderId: number, receiverId: number): Observable<any> {
     return this.http.get(`${this.baseApiUrl}/api/Message/ReceiveMessage/${senderId}/${receiverId}`);
   }
 
-
-  sendMessage(senderId: number, receiverId: number, messageText: string, senderImage: string): Observable<any> {
-    return this.http.post(`${this.baseApiUrl}/api/Message/SendMessage`, { senderId, receiverId, messageText, senderImage });
+  sendMessage(messageDto: MessageDto): Observable<any> {
+    return this.http.post(`${this.baseApiUrl}/api/Message/SendMessage`, messageDto);
   }
 
+  updateMessage(id: number, messageDto: MessageDto): Observable<any> {
+    return this.http.put(`${this.baseApiUrl}/api/Message/UpdateMessage/${id}`, messageDto);
+  }
+
+  deleteMessage(id: number): Observable<any> {
+    return this.http.delete(`${this.baseApiUrl}/api/Message/DeleteMessage/${id}`);
+  }
 
 }

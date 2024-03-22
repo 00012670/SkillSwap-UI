@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export interface Message {
   messageId: number;
   userId?: number;
@@ -11,15 +13,23 @@ export interface Message {
 
 export interface MessageReadDto {
   messageId: number;
+  senderId: number;
   senderUsername: string;
+  imageId: number;
   messageText: string;
   timestamp: Date;
+  receiverId: number;
 }
 
 export interface MessageDto {
   senderId: number;
+  imageId: number;
   receiverId: number;
   messageText: string;
+}
+
+export interface MessageReadDtoWithSafeUrl extends MessageReadDto {
+  senderImageSafeUrl?: SafeUrl; // Add this line
 }
 
 export interface User {

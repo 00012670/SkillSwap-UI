@@ -11,26 +11,34 @@
       </div>
     </div>
 
+
     <section class="chat" *ngIf="selectedUser">
       <div class="header-chat">
         <i class="icon fa fa-user-o" aria-hidden="true"></i>
         <p class="name">{{selectedUser.username}}</p>
-        <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+        <!-- <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i> -->
       </div>
       <div class="messages-chat">
         <div class="message" *ngFor="let message of messages">
           <div class="profile">
-            <img class="profile-image" [src]="selectedUser.imageUrl" alt="User Image">
+            <img class="profile-image"
+              [src]="message.senderImageSafeUrl ? message.senderImageSafeUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'"
+              alt="User Image">
+            <p class="username">{{message.senderUsername}}</p>
             <!-- <div class="online"></div> -->
           </div>
           <p class="text">{{message.messageText}}</p>
-          <p class="timestamp">{{message.timestamp | date:'short'}}</p>
+          <p class="timestamp styled-element">{{message.timestamp | date:'short'}}</p>
+          <svg *ngIf="message.senderId == authenticatedUser?.userId" (click)="deleteMessage(message.messageId)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24" style="cursor:pointer;" class="styled-element">
+            <path d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z" fill="white"></path>
+          </svg>
+
         </div>
       </div>
 
       <div class="footer-chat">
         <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>
-        <input type="text" class="write-message" placeholder="Type your message here" [(ngModel)]="newMessage">
+        <input type="text" class="write-message" placeholder="Type your message here" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()">
         <i class="icon send fa fa-paper-plane-o clickable" (click)="sendMessage()" aria-hidden="true"></i>
       </div>
     </section>
