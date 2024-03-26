@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
           this.userStore.setUsernameForStore(tokenPayload.name);
           this.userStore.setRoleForStore(tokenPayload.role);
           this.toast.success({ detail: "SUCCESS", summary: "Login successfuly", duration: 3000 });
-          this.router.navigate(['dashboard'])
+          this.router.navigate(['dashboard/', res.userId])
         },
         error: (err) => {
           //console.error('Error during sign-in:', err);

@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
     }],
   };
 
-  userId: any;
+  userId: number | null = null;
   userProfiles: any = [];
   username: string = "";
   role!: string;
@@ -71,24 +71,23 @@ export class ProfileComponent implements OnInit, AfterViewInit{
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe({
-      next: (params) => {
-        const id = Number(params.get('id'));
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.userId = id ? +id : null; 
 
-        if (id) {
-          this.profileService.getProfileById(id)
-            .subscribe({
-              next: (response) => {
-                this.profileDetails = response;
-                if (this.profileDetails.hasImage) {
-                  this.getImageByUserId(this.profileDetails.userId);
-                }
-              },
-              error: (error) => {
-                console.error('Failed to get profile', error);
+      if (this.userId) {
+        this.profileService.getProfileById(this.userId)
+          .subscribe({
+            next: (response) => {
+              this.profileDetails = response;
+              if (this.profileDetails.hasImage) {
+                this.getImageByUserId(this.profileDetails.userId);
               }
-            })
-        }
+            },
+            error: (error) => {
+              console.error('Failed to get profile', error);
+            }
+          });
       }
     });
 

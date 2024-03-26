@@ -22,7 +22,6 @@ import { ModalContent } from './components/swap-modal/swap-modal.component';
 import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ChatComponent } from './components/chat/chat.component';
-
 @NgModule({
   declarations: [
     AppComponent,

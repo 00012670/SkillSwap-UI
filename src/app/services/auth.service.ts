@@ -3,10 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
-import { catchError, tap } from 'rxjs/operators';
 import { TokenApiModel } from '../models/token-api.model';
-import { EMPTY, Observable } from 'rxjs';
-import { throwError } from 'rxjs';
+import {  Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -102,8 +100,7 @@ export class AuthService {
   }
 
   renewToken(tokenApi: TokenApiModel): Observable<any> {
+    console.log('renewing token');
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/Refresh`, tokenApi)
-
   }
-
 }

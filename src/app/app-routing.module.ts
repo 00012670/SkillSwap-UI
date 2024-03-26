@@ -17,16 +17,16 @@ const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},
   {path:'login', component:LoginComponent},
   {path:'signup', component:SignupComponent},
-  {path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
+  {path:'dashboard/:id', component:DashboardComponent, canActivate:[AuthGuard]},
   {path: 'skills/create', component:AddSkillComponent, canActivate:[AuthGuard]},
   {path: 'skills/:userId', component:SkillsListComponent, canActivate:[AuthGuard] },
   {path: 'skills', component: SkillsListComponent, canActivate:[AuthGuard]},
   {path: 'skill/:id', component:EditSkillComponent, canActivate:[AuthGuard]},
   {path: 'profile/:id', component: ProfileComponent, canActivate:[AuthGuard]},
   {path: 'swap/:id', component: SwapRequestComponent, canActivate:[AuthGuard]},
-  {path: 'manage-requests', component: ManageRequestsComponent, canActivate:[AuthGuard]  },
-  {path: 'payment', component: PaymentComponent, canActivate:[AuthGuard]},
-  {path: 'chat', component: ChatComponent, canActivate:[AuthGuard]}
+  {path: 'manage-requests/:id', component: ManageRequestsComponent, canActivate:[AuthGuard]  },
+  {path: 'payment/:id', component: PaymentComponent, canActivate:[AuthGuard]},
+  {path: 'chat/:id', component: ChatComponent, canActivate:[AuthGuard]}
 ];
 
 @NgModule({

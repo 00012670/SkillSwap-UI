@@ -114,6 +114,8 @@ loadMessages(user: Profile) {
   if (senderId !== null) {
     this.chatService.getMessages(senderId, user.userId).subscribe((messages: MessageReadDto[]) => {
       const imageRequests = messages.map(message => {
+        var utcDate = new Date(message.timestamp);
+        message.timestamp = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
         if (message.senderId) {
           return this.profileService.getProfileById(message.senderId).pipe(
             switchMap(profile => {
@@ -135,6 +137,8 @@ loadMessages(user: Profile) {
           });
         }
       });
+
+
 
       forkJoin(imageRequests).subscribe((messagesWithImages: MessageReadDtoWithSafeUrl[]) => {
         this.messages = messagesWithImages;
@@ -181,7 +185,4 @@ loadMessages(user: Profile) {
       // ...
     });
   }
-
-
-
 }
