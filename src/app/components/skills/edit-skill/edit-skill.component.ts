@@ -100,14 +100,12 @@ export class EditSkillComponent {
   this.requestService.getSwapRequestsBySkillId(skillId).subscribe({
     next: (swapRequests) => {
       if (swapRequests && swapRequests.length > 0) {
-        // Show error message to the user
         alert('This skill cannot be deleted because it is associated with existing swap requests.');
       } else {
         this.deleteSkill(skillId);
       }
     },
     error: (error) => {
-      // Log and handle other errors
       console.error('Error checking swap requests:', error);
     }
   });

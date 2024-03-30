@@ -73,7 +73,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      this.userId = id ? +id : null; 
+      this.userId = id ? +id : null;
 
       if (this.userId) {
         this.profileService.getProfileById(this.userId)
@@ -102,6 +102,18 @@ export class ProfileComponent implements OnInit, AfterViewInit{
     });
   }
 
+  updateProfile() {
+    this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
+      .subscribe({
+        next: (response) => {
+          this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 3000 });
+        },
+        error: (error) => {
+          console.error('Failed to update profile', error);
+        }
+      });
+  }
+
   uploadImage() {
     this.imageService.uploadImage(this.profileDetails.userId, this.file).pipe(
       map(events => {
@@ -121,20 +133,6 @@ export class ProfileComponent implements OnInit, AfterViewInit{
       this.profileDetails.hasImage = true;
     });
 }
-
-
-
-  updateProfile() {
-    this.profileService.updateProfile(this.profileDetails.userId, this.profileDetails)
-      .subscribe({
-        next: (response) => {
-          this.toast.success({ detail: "SUCCESS", summary: "Profile updated successfully", duration: 3000 });
-        },
-        error: (error) => {
-          console.error('Failed to update profile', error);
-        }
-      });
-  }
 
   getImageByUserId(userId: number) {
     if (this.profileDetails.hasImage && !this.isImageDeleted) {
@@ -174,7 +172,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
     return new Blob(byteArrays, { type: contentType });
   }
 
-  onchange(event: any) {
+  onChange(event: any) {
     let reader = new FileReader();
     this.file = event.target.files[0];
     reader.readAsDataURL(event.target.files[0]);

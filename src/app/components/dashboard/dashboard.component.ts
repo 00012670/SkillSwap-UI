@@ -21,13 +21,13 @@ export class DashboardComponent implements OnInit {
   imageUrl: SafeUrl | undefined;
   hasImage: boolean = false;
   skills: any[] = [];
+  skillList: any[] = [];
   allSkills: Skill[] = [];
   userProfiles: any = [];
   username: string = "";
   role!: string;
 
   searchText: any;
-  skillList: any[] = [];
 
   isImageChosen: boolean = false;
   isImageUploaded: boolean = false;
@@ -132,6 +132,19 @@ export class DashboardComponent implements OnInit {
         return '';
     }
   }
+
+  toggleBan(userProfile: Profile) {
+    if (userProfile.isSuspended) {
+      this.profileService.unsuspendUser(userProfile.userId).subscribe(() => {
+        userProfile.isSuspended = false;
+      });
+    } else {
+      this.profileService.suspendUser(userProfile.userId).subscribe(() => {
+        userProfile.isSuspended = true;
+      });
+    }
+  }
+
 
   logout() {
     this.authService.signOut();

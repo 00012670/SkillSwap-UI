@@ -38,6 +38,13 @@ export class ProfileService {
     return this.http.get<{ username: string }>(`${this.baseApiUrl}/api/Profile/${id}/username`)
       .pipe(map(response => response.username));
   }
+  
+  suspendUser(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseApiUrl}/api/Profile/${userId}/suspend`, {});
+  }
 
+  unsuspendUser(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseApiUrl}/api/Profile/${userId}/unsuspend`, {});
+  }
 
 }

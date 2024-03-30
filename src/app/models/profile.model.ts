@@ -29,6 +29,7 @@ export interface Profile {
   profileImage?: ImageResponse;
   skills: Skill[];
   hasImage?: boolean;
+  isSuspended?: boolean;
   imageUrl?: SafeUrl;
 }
 

@@ -15,6 +15,7 @@ import { NgToastService } from 'ng-angular-popup';
   templateUrl: './swap-modal.component.html',
   styleUrls: ['./swap-modal.component.scss']
 })
+
 export class ModalContent {
 
   @Input() skillRequestedId: number | null = null;
