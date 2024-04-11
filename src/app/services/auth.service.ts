@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { TokenApiModel } from '../models/token-api.model';
-import {  Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -102,5 +102,13 @@ export class AuthService {
   renewToken(tokenApi: TokenApiModel): Observable<any> {
     console.log('renewing token');
     return this.http.post<any>(`${this.baseApiUrl}/api/Authentication/Refresh`, tokenApi)
+  }
+
+  LoginWithGoogle(idToken: string): Observable<any> {
+    const header = new HttpHeaders().set("Content-type", "application/json");
+    const body = { IdToken: idToken };
+    return this.http.post(this.baseApiUrl + "/api/Authentication/LoginWithGoogle", JSON.stringify(body), {
+      headers: header
+    });
   }
 }

@@ -8,6 +8,7 @@ import { switchMap } from 'rxjs/operators';
 import { ImageService } from 'src/app/services/image.service';
 import { SkillsService } from 'src/app/services/skills.service';
 import { SkillLevel, Skill } from 'src/app/models/skill.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,15 +23,11 @@ export class DashboardComponent implements OnInit {
   hasImage: boolean = false;
   skills: any[] = [];
   skillList: any[] = [];
-  allSkills: Skill[] = [];
   userProfiles: any = [];
   username: string = "";
   role!: string;
 
   searchText: any;
-
-  isImageChosen: boolean = false;
-  isImageUploaded: boolean = false;
   isImageDeleted: boolean = false;
 
   constructor(
@@ -48,6 +45,18 @@ export class DashboardComponent implements OnInit {
       this.userId = userId;
       this.fetchUserProfile(userId);
     }
+
+    this.profileService.userProfile$.subscribe(profile => {
+      if (profile) {
+        this.userProfiles = [profile];
+        if (profile.hasImage) {
+          this.getImageByUserId(profile.userId);
+        } else {
+          this.hasImage = false;
+        }
+      }
+    });
+
 
     this.userStore.getUsernameFromStore().pipe(
       switchMap(val => {

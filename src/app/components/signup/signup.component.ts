@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import { CredentialResponse } from 'google-one-tap';
 
 @Component({
   selector: 'app-signup',
@@ -24,8 +25,8 @@ export class SignupComponent {
     private auth: AuthService,
     private router: Router,
     private toast: NgToastService,
-    private userStore: UserStoreService
-
+    private userStore: UserStoreService,
+    private ngZone: NgZone,
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +35,40 @@ export class SignupComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+
+      // @ts-ignore
+      window.onGoogleLibraryLoad = () => {
+        // @ts-ignore
+        google.accounts.id.initialize({
+          client_id: "",
+          callback: this.handleCredentialResponse.bind(this),
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        // @ts-ignore
+        google.accounts.id.renderButton(
+          // @ts-ignore
+          document.getElementById("buttonDiv"),
+          { theme: "outline", size: "large", text: "continue_with", locale: "en" }
+        );
+        // @ts-ignore
+        google.accounts.id.prompt((notification: PromptMomentNotification) => { });
+      }
+  }
+
+
+  handleCredentialResponse(response: CredentialResponse): void {
+    this.auth.LoginWithGoogle(response.credential).subscribe(
+      (x: any) => {
+        localStorage.setItem("token", x.token);
+        const decodedToken = this.auth.decodedToken();
+        const userId = decodedToken.userId;
+        this.ngZone.run(() => this.router.navigate(['dashboard/', userId]));
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 
   hideShowPass() {

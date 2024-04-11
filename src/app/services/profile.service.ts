@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Profile } from '../models/profile.model';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
 interface ProfilesResponse {
   id: string;
@@ -22,6 +22,10 @@ export class ProfileService {
     return this.http.get<Profile[]>(`${this.baseApiUrl}/api/Authentication`);
   }
 
+  setUserProfile(profile: any): void {
+    this.userProfileSubject.next(profile);
+  }
+
   getProfileById(userId: number): Observable<Profile> {
     return this.http.get<Profile>(`${this.baseApiUrl}/api/Profile/${userId}`);
   }
@@ -38,7 +42,7 @@ export class ProfileService {
     return this.http.get<{ username: string }>(`${this.baseApiUrl}/api/Profile/${id}/username`)
       .pipe(map(response => response.username));
   }
-  
+
   suspendUser(userId: number): Observable<void> {
     return this.http.put<void>(`${this.baseApiUrl}/api/Profile/${userId}/suspend`, {});
   }
@@ -46,5 +50,10 @@ export class ProfileService {
   unsuspendUser(userId: number): Observable<void> {
     return this.http.put<void>(`${this.baseApiUrl}/api/Profile/${userId}/unsuspend`, {});
   }
+
+  private userProfile: any;
+  private userProfileSubject = new BehaviorSubject<any>(null);
+  userProfile$ = this.userProfileSubject.asObservable();
+
 
 }

@@ -22,6 +22,9 @@ import { ModalContent } from './components/swap-modal/swap-modal.component';
 import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,8 +40,8 @@ import { ChatComponent } from './components/chat/chat.component';
     ModalContent,
     ManageRequestsComponent,
     PaymentComponent,
-    ChatComponent
-  ],
+    ChatComponent,
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -48,13 +51,19 @@ import { ChatComponent } from './components/chat/chat.component';
     NgToastModule,
     NgbModule,
     NgbModalModule,
-    CommonModule
+    MatCardModule,
+    CommonModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,
     useClass:TokenInterceptor,
     multi: true
   }],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

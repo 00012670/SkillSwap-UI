@@ -95,7 +95,6 @@ sendMessage() {
   };
 
   this.chatService.sendMessage(messageDto).subscribe(() => {
-    console.log('Message sent successfully');
     // Clear the newMessage field
     this.newMessage = '';
     // Reload the messages
@@ -137,8 +136,6 @@ loadMessages(user: Profile) {
           });
         }
       });
-
-
 
       forkJoin(imageRequests).subscribe((messagesWithImages: MessageReadDtoWithSafeUrl[]) => {
         this.messages = messagesWithImages;
@@ -182,7 +179,6 @@ loadMessages(user: Profile) {
       }
     }, error => {
       console.error('Error deleting message:', error);
-      // ...
     });
   }
 }

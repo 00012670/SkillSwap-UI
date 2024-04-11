@@ -16,9 +16,9 @@
 
 
 .container {
-  background-color: #5172c3;
-  min-height: 100vh; /* Ensure the container extends to the bottom of the page */
-  padding: 20px; /* Add some padding for spacing */
+  background-color: #5171c3;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .list-group {
@@ -60,7 +60,6 @@
 }
 
 
-
 .online {
   position: relative;
   top: 30px;
@@ -70,26 +69,6 @@
   background-color: #8BC34A;
   border-radius: 13px;
   border: 3px solid #FAFAFA;
-}
-
-.desc-contact {
-  height: 43px;
-  width:50%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
-.timer {
-  margin-left: 15%;
-  font-family:'Open Sans', sans-serif;
-  font-size: 11px;
-  padding: 3px 8px;
-  color: #BBB;
-  background-color: #FFF;
-  border: 1px solid #E5E5E5;
-  border-radius: 15px;
 }
 
 .chat {
@@ -153,10 +132,6 @@
   border-radius: 12px;
 }
 
-.text-only {
-  margin-left: 45px;
-}
-
 .time {
   font-size: 10px;
   color:lightgrey;
@@ -165,7 +140,7 @@
 }
 
 .footer-chat {
-  width: calc(55% - 80px);
+  width: calc(47% - 100px);
   height: 80px;
   display:flex;
   align-items: center;
@@ -185,7 +160,7 @@
   color:#060404;
   background-color: white;
   position: absolute;
-  right: 50px;
+  right: 20px;
   padding: 12px 12px 12px 12px;
   border-radius: 50px;
   font-size: 14pt;
@@ -206,7 +181,7 @@
 
 .write-message {
   border:none !important;
-  width:78%;
+  width:80%;
   height: 50px;
   margin-left: 20px;
   padding: 10px;

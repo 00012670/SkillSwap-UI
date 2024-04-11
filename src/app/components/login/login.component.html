@@ -12,7 +12,7 @@
               <div class="form-group">
                 <div class="input-field">
                   <span class="fa fa-user fa-lg p-2"></span>
-                  <input formControlName="username" type="text" placeholder="Username">
+                  <input formControlName="username" type="text" placeholder="Username" autocomplete="current-username">
                 </div>
               </div>
               <small *ngIf="loginForm.controls['username'].dirty && loginForm.hasError('required', 'username')">
@@ -21,7 +21,8 @@
               <div class="form-group pt-3">
                 <div class="input-field">
                   <span class="fa fa-lock fa-lg p-2"></span>
-                  <input formControlName="password" [type]="type" placeholder="Password">
+                  <input formControlName="password" [type]="type" placeholder="Password"
+                    autocomplete="current-password">
                   <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
                 </div>
               </div>
@@ -40,26 +41,71 @@
                 </div>
                 <div class="col-md-6 text-end">
                   <div class="form-inline mt-4">
-                    <a id="forget" class="font-weight-bold">Forgot password?</a>
+                    <a id="forget" class="font-weight-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">Forgot
+                      password?</a>
                   </div>
                 </div>
               </div>
 
               <button (click)="onSubmit()" type="submit" class="btn btn-orange btn-block mt-4 w-100">Login</button>
-              <button type="submit" class="btn btn-white btn-block mt-4 w-100 text-muted">
+
+              <!-- Google Login -->
+
+              <div class="mt-3 center-div" id="buttonDiv"></div>
+
+              <!-- <button id="buttonDiv" type="submit" class="btn btn-white btn-block mt-4 w-100 text-muted">
                 <a href="http://www.google.com" target="_blank">
                   <img src="https://static.cdnlogo.com/logos/g/38/google-icon.svg" class="google-icon"
                     alt="Google Icon">
                 </a>
                 Sign in with Google
-              </button>
-              <div class="text-center pt-4 text-muted account-text">Don't have an account? <a id="forget"
-                  routerLink="/signup">Sign
-                  Up</a></div>
+              </button> -->
+
+              <div class="text-center pt-5 text-muted account-text">
+                Don't have an account? <a id="forget" routerLink="/signup">SignUp</a></div>
             </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <p class="modal-title" id="exampleModalLabel">
+                      <span style="font-size: 25px;font-weight:700">Forget your password?</span><br>
+                      <small>Please provide your E-mail we will send the reset link</small>
+                    </p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group pt-3">
+                      <div class="input-field">
+                        <span class="fa fa-user p-2"></span>
+                        <input type="text" [(ngModel)]="resetPasswordEmail" (ngModelChange)="checkValidEmail($event)"
+                          placeholder="Email">
+                      </div>
+                    </div>
+                    <br>
+                    <small *ngIf="!resetPasswordEmail">
+                      *Email is required
+                    </small>
+                    <small *ngIf="!isValidEmail && resetPasswordEmail">
+                      *Email is invalid
+                    </small>
+                    <br>
+                    <div class="modal-footer pt-3">
+                      <button id="closeBtn" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                      <button type="button" (click)="confirmToSend()" class="btn btn-send">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>

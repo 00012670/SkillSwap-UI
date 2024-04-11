@@ -1,0 +1,46 @@
+/* calendar.component.scss */
+
+::ng-deep .cal-month-view .cal-header {
+  background-color: #4285f4; /* Google blue color */
+  color: white; /* Text color */
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  height: 30px; /* Reduced height for the header */
+  line-height: 30px; /* Ensure text alignment in the header */
+}
+
+::ng-deep .cal-month-view .cal-cell {
+  border: 1px solid #ddd;
+  height: 100px; /* Reduced height for the cells */
+}
+
+::ng-deep .cal-month-view .cal-cell-top {
+  text-align: right;
+  padding: 5px; /* Reduced padding for the cell top */
+  border-bottom: 1px solid #ddd;
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-out-month {
+  background-color: #fafafa;
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-today {
+  background-color: #e8fde7;
+  border: 1px solid #4285f4; /* Border color for today's date */
+  color: #4285f4; /* Text color for today's date */
+}
+
+/* Adjust the font family and size to match Google Calendar */
+::ng-deep .cal-month-view .cal-cell-top,
+::ng-deep .cal-month-view .cal-cell-top .cal-cell-top-inner {
+  font-family: Arial, sans-serif;
+  font-size: 12px; /* Reduced font size */
+}
+
+/* Optionally, adjust event colors to match Google Calendar */
+::ng-deep .cal-event {
+  background-color: #4285f4; /* Event background color */
+  border-color: #4285f4; /* Event border color */
+  color: white; /* Event text color */
+}

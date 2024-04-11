@@ -84,9 +84,14 @@ img {
   padding: 10px;
 }
 
+.btn-send {
+  background-color: #ED8C02;
+  color: white;
+}
+
 .btn-white {
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   color: #11111F;
   padding: 10px;
 }
@@ -97,8 +102,12 @@ img {
 }
 
 .account-text {
-  padding-bottom: 30px;
+  padding-bottom: 20px;
+  font-size: 0.9em;
+  white-space: nowrap;
 }
+
+
 
 
 

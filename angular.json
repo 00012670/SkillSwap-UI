@@ -30,8 +30,11 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.scss"
             ],
+
             "scripts": []
           },
           "configurations": {
@@ -93,7 +96,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "src/styles.scss",
+              "src/styles.css",
+              "src/assets/bootstrap.min.css",
+              "src/assets/fullcalendar.css"
             ],
             "scripts": []
           }
