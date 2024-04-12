@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/services/auth.service';
-import { SkillsService } from 'src/app//services/skills.service';
+import { SkillsService } from 'src/app/services/skill.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { Skill } from 'src/app/models/skill.model';
 import { RequestService } from 'src/app/services/request.service';

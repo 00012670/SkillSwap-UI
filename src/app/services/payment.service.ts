@@ -16,8 +16,8 @@ export class PaymentService {
 
   getPremium(): Observable<IPremiumPlan> {
     return of({
-      id: '',
-      priceId: 'Please add your price id',
+      id: 'prod_PuFBZSQxL3ng0v',
+      priceId: 'price_1P4QguP2zd9Sg1qKXiyDONDG',
       name: 'Exclusive Premium Plan',
       price: '$9.00',
       features: [
@@ -30,28 +30,28 @@ export class PaymentService {
   }
 
   createCheckoutSession(lookupKey: string) {
-    return this.http.post(`${this.baseApiUrl}api/Payment/create-checkout-session`, {
+    return this.http.post(`${this.baseApiUrl}/Payment/create-checkout-session`, {
       lookup_key: lookupKey
     }).toPromise();
   }
 
-  // requestMemberSession(priceId: string): void {
-  //   this.http
-  //     .post<ISession>(this.baseApiUrl + 'api/Payment/create-checkout-session', {
-  //       priceId: priceId,
-  //       successUrl: environment.successUrl,
-  //       failureUrl: environment.cancelUrl,
-  //     })
-  //     .subscribe((session) => {
-  //       this.redirectToCheckout(session);
-  //     });
-  // }
+  requestMemberSession(priceId: string): void {
+    this.http
+      .post<ISession>(this.baseApiUrl + '/Payment/create-checkout-session', {
+        priceId: priceId,
+        // successUrl: environment.successUrl,
+        // failureUrl: environment.cancelUrl,
+      })
+      .subscribe((session) => {
+        this.redirectToCheckout(session.sessionId);
+      });
+  }
 
-  redirectToCheckout(session: ISession) {
-    const stripe = Stripe(session.publicKey);
+  redirectToCheckout(sessionId: string) {
+    const stripe = Stripe("pk_test_51OuxWhP2zd9Sg1qKbHEvtUxTLXJsV1EyBbqtYJoTMuIEQB4ov0FkAEAxeguFUmQ6aVz9NrLUnvmHocWObybDWpkH00QYgm84JH");
 
     stripe.redirectToCheckout({
-      sessionId: session.sessionId,
+      sessionId: sessionId,
     });
   }
 
@@ -59,26 +59,4 @@ export class PaymentService {
   // Stripe Test Publishable Key
   // pk_test_51OuxWhP2zd9Sg1qKbHEvtUxTLXJsV1EyBbqtYJoTMuIEQB4ov0FkAEAxeguFUmQ6aVz9NrLUnvmHocWObybDWpkH00QYgm84JH
 
-
-  // redirectToCustomerPortal() {
-  //   this.http
-  //     .post<ICustomerPortal>(
-  //       this.baseApiUrl + 'api/Payment/customer-portal',
-  //       { returnUrl: environment.homeUrl },
-  //       this.getHttpOptions()
-  //     )
-  //     .subscribe((data) => {
-  //       window.location.href = data.url;
-  //     });
-  // }
-
-  // getHttpOptions() {
-  //   const httpOptions = {
-  //     headers: new HttpHeaders({
-  //       Authorization: 'Bearer ' + localStorage.getItem('token'),
-  //     }),
-  //   };
-
-  //   return httpOptions;
-  // }
 }

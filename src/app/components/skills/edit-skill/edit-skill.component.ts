@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
-import { SkillsService } from 'src/app/services/skills.service';
+import { SkillsService } from 'src/app/services/skill.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequestService } from 'src/app/services/request.service';
 

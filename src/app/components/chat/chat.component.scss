@@ -1,20 +1,4 @@
-.profile-image {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
-.username {
-  vertical-align: middle;
-}
-
-.message {
-  margin-bottom: 10px;
-}
-
-
+/* Container */
 .container {
   background-color: #5171c3;
   min-height: 100vh;
@@ -31,71 +15,84 @@
 }
 
 .list-group-item:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Add hover effect */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Chat messages */
+.messages-chat {
+  padding: 25px 35px;
+  height: calc(100vh - 170px);
+  overflow-y: auto;
+  position: relative; /* Needed for custom scrollbar */
+}
+
+.messages-chat::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.messages-chat::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners of the thumb */
+}
+
+.messages-chat::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
+}
+
+/* Profile image */
 .profile-image {
   border-radius: 50%;
   width: 40px;
   height: 40px;
   object-fit: cover;
-  margin-right: 10px; /* Add margin for spacing between image and username */
+  margin-right: 10px;
 }
 
+/* Username */
 .username {
-  color: #fff; /* Set text color to white */
+  color: #fff;
+  vertical-align: middle;
 }
 
 .username:hover {
-  text-decoration: none; /* Remove underline on hover */
-  color: rgba(255, 255, 255, 0.8); /* Change text color on hover */
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-
+/* Styled element */
 .styled-element {
   color: white;
   margin-bottom: 10px;
   margin-right: 15px;
-
 }
 
-
-.online {
-  position: relative;
-  top: 30px;
-  left: 35px;
-  width: 13px;
-  height: 13px;
-  background-color: #8BC34A;
-  border-radius: 13px;
-  border: 3px solid #FAFAFA;
-}
-
+/* Chat section */
 .chat {
   width: calc(70% - 80px);
 }
 
+/* Header chat */
 .header-chat {
   border-radius: 5px;
   background-color: #FFF;
   height: 90px;
   box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
-  display:flex;
+  display: flex;
   align-items: center;
 }
 
 .chat .header-chat .icon {
   margin-left: 30px;
-  color:#fff;
+  color: #fff;
   font-size: 14pt;
 }
 
 .chat .header-chat .name {
   margin: 0 0 0 20px;
   text-transform: uppercase;
-  font-family:'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13pt;
-  color:#515151;
+  color: #515151;
 }
 
 .chat .header-chat .right {
@@ -103,26 +100,22 @@
   right: 40px;
 }
 
-.chat .messages-chat {
-  padding: 25px 35px;
-}
-
+/* Message */
 .chat .messages-chat .message {
-  display:flex;
+  display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
 
 .chat .messages-chat .message .photo {
-    display: block;
-    width: 45px;
-    height: 45px;
-    background: #E6E7ED;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  display: block;
+  width: 45px;
+  height: 45px;
+  background: #E6E7ED;
+  border-radius: 50px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .chat .messages-chat .text {
@@ -132,19 +125,19 @@
   border-radius: 12px;
 }
 
-.time {
-  font-size: 10px;
-  color:lightgrey;
-  margin-bottom:10px;
-  margin-left: 85px;
+.timestamp {
+  font-size: 12px;
+  color: lightgrey;
+  //margin-bottom: 10px;
 }
 
+/* Footer chat */
 .footer-chat {
   width: calc(47% - 100px);
   height: 80px;
-  display:flex;
+  display: flex;
   align-items: center;
-  position:absolute;
+  position: absolute;
   bottom: 0;
   background-color: transparent;
   border-top: 2px solid #EEE;
@@ -152,12 +145,12 @@
 
 .chat .footer-chat .icon {
   margin-left: 30px;
-  color:#C0C0C0;
+  color: #C0C0C0;
   font-size: 14pt;
 }
 
 .chat .footer-chat .send {
-  color:#060404;
+  color: #060404;
   background-color: white;
   position: absolute;
   right: 20px;
@@ -169,9 +162,9 @@
 .chat .footer-chat .name {
   margin: 0 0 0 20px;
   text-transform: uppercase;
-  font-family:'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13pt;
-  color:#515151;
+  color: #515151;
 }
 
 .chat .footer-chat .right {
@@ -179,12 +172,12 @@
   right: 40px;
 }
 
+/* Write message input */
 .write-message {
-  border:none !important;
-  width:80%;
+  border: none !important;
+  width: 80%;
   height: 50px;
   margin-left: 20px;
   padding: 10px;
   border-radius: 5px;
 }
-

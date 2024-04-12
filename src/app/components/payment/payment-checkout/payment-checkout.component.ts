@@ -1,17 +1,20 @@
+
 import { Component, OnInit } from '@angular/core';
 import { loadStripe, Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
 import { HttpClient } from '@angular/common/http';
-import { PaymentService } from '../../services/payment.service';
+import { PaymentService } from '../../../services/payment.service';
 import { IPremiumPlan } from 'src/app/models/premium-plan.model';
 import { Observable } from 'rxjs';
 import { NgForm } from '@angular/forms';
+
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  selector: 'app-payment-checkout',
+  templateUrl: './payment-checkout.component.html',
+  styleUrls: ['./payment-checkout.component.scss']
 })
 
-export class PaymentComponent implements OnInit {
+
+export class PaymentCheckoutComponent implements OnInit {
 
   $premium: Observable<IPremiumPlan> = new Observable<IPremiumPlan>();
   constructor(
@@ -23,5 +26,8 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     this.$premium = this.paymentService.getPremium();
   }
-}
 
+  onSubmit(f: NgForm) {
+    this.paymentService.requestMemberSession(f.value.priceId);
+  }
+}

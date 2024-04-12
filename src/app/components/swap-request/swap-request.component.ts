@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
-import { SkillsService } from 'src/app/services/skills.service';
+import { SkillsService } from 'src/app/services/skill.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ProfileService } from 'src/app/services/profile.service';

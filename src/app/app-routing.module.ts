@@ -12,6 +12,9 @@ import { SwapRequestComponent } from './components/swap-request/swap-request.com
 import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { PaymentCheckoutComponent } from './components/payment/payment-checkout/payment-checkout.component';
+import { PaymentFailureComponent } from './components/payment/payment-failure/payment-failure.component';
+import { PaymentSuccessComponent } from './components/payment/payment-success/payment-success.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -27,6 +30,10 @@ const routes: Routes = [
   { path: 'manage-requests/:id', component: ManageRequestsComponent, canActivate: [AuthGuard] },
   { path: 'payment/:id', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard] },
+  { path: 'payment', component: PaymentComponent },
+  { path: 'checkout', component: PaymentCheckoutComponent },
+  { path: 'success', component: PaymentFailureComponent },
+  { path: 'failure', component: PaymentSuccessComponent }
 ];
 
 @NgModule({

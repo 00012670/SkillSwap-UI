@@ -1,6 +1,6 @@
 import { SignupComponent } from './components/signup/signup.component';
 import { NgModule } from '@angular/core';
-import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +25,10 @@ import { ChatComponent } from './components/chat/chat.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MatCardModule } from '@angular/material/card';
+import { PaymentCheckoutComponent } from './components/payment/payment-checkout/payment-checkout.component';
+import { PaymentFailureComponent } from './components/payment/payment-failure/payment-failure.component';
+import { PaymentSuccessComponent } from './components/payment/payment-success/payment-success.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +45,11 @@ import { MatCardModule } from '@angular/material/card';
     ManageRequestsComponent,
     PaymentComponent,
     ChatComponent,
-    ],
+    PaymentCheckoutComponent,
+    PaymentFailureComponent,
+    PaymentSuccessComponent,
+    NavigationComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -59,8 +67,8 @@ import { MatCardModule } from '@angular/material/card';
     }),
   ],
   providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:TokenInterceptor,
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
     multi: true
   }],
 

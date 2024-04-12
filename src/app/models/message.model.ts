@@ -9,6 +9,7 @@ export interface Message {
   timestamp: Date;
   sender?: User;
   receiver?: User;
+  isEdited?: boolean;
 }
 
 export interface MessageReadDto {
@@ -19,6 +20,7 @@ export interface MessageReadDto {
   messageText: string;
   timestamp: Date;
   receiverId: number;
+  isEdited?: boolean;
 }
 
 export interface MessageDto {
@@ -26,6 +28,7 @@ export interface MessageDto {
   imageId: number;
   receiverId: number;
   messageText: string;
+  isEdited?: boolean;
 }
 
 export interface MessageReadDtoWithSafeUrl extends MessageReadDto {
