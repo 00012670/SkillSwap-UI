@@ -26,9 +26,9 @@
 			<form class="card p-2" (ngSubmit)="onSubmit(f)" #f="ngForm">
 				<div class="input-group">
 					<input type="hidden" class="form-control" name="priceId" [ngModel]="premium.priceId" #premiumId="ngModel">
-					<button class="btn btn-primary btn-lg custom-button">
+					<button class="btn btn-primary btn-block btn-lg mt-2 custom-button blue">
 						Continue to checkout </button>
-					<a class="btn btn-success btn-lg btn-block mt-5 custom-button" [routerLink]="['/premium']">
+					<a class="btn btn-success btn-lg btn-block mt-2 custom-button" [routerLink]="['/payment']">
 						Cancel</a>
 				</div>
 			</form>

@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./payment-failure.component.scss']
 })
 export class PaymentFailureComponent {
-
+  constructor() { }
+  ngOnInit(): void { }
 }

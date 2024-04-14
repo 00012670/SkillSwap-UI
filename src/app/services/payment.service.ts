@@ -35,28 +35,30 @@ export class PaymentService {
     }).toPromise();
   }
 
-  requestMemberSession(priceId: string): void {
+  requestPremiumSession(priceId: string): void {
     this.http
       .post<ISession>(this.baseApiUrl + '/Payment/create-checkout-session', {
         priceId: priceId,
-        // successUrl: environment.successUrl,
-        // failureUrl: environment.cancelUrl,
+        successUrl: environment.successUrl,
+        failureUrl: environment.failureUrl,
       })
-      .subscribe((session) => {
-        this.redirectToCheckout(session.sessionId);
-      });
+      .subscribe(
+        (session) => {
+          console.log("ckeckout session", session);
+          this.redirectToCheckout(session);
+        },
+        (error) => {
+          console.error('Failed to create checkout session:', error);
+        }
+      );
   }
 
-  redirectToCheckout(sessionId: string) {
-    const stripe = Stripe("pk_test_51OuxWhP2zd9Sg1qKbHEvtUxTLXJsV1EyBbqtYJoTMuIEQB4ov0FkAEAxeguFUmQ6aVz9NrLUnvmHocWObybDWpkH00QYgm84JH");
+
+  redirectToCheckout(session: ISession) {
+    const stripe = Stripe(session.publicKey);
 
     stripe.redirectToCheckout({
-      sessionId: sessionId,
+      sessionId: session.sessionId,
     });
   }
-
-
-  // Stripe Test Publishable Key
-  // pk_test_51OuxWhP2zd9Sg1qKbHEvtUxTLXJsV1EyBbqtYJoTMuIEQB4ov0FkAEAxeguFUmQ6aVz9NrLUnvmHocWObybDWpkH00QYgm84JH
-
 }
