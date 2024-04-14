@@ -28,6 +28,6 @@ export class PaymentCheckoutComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    this.paymentService.requestPremiumSession(f.value.priceId);
+    this.paymentService.requestMemberSession(f.value.priceId);
   }
 }
