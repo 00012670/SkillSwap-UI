@@ -122,7 +122,6 @@ export class SwapRequestComponent {
           this.fetchUserProfile(this.skillDetails.userId);
           this.newReview.skillId = this.skillDetails.skillId;
           this.newReview.toUserId = this.skillDetails.userId;
-          this.cd.detectChanges();
         });
       }
     });
@@ -132,13 +131,14 @@ export class SwapRequestComponent {
     });
   }
 
+
   fetchUserProfile(userId: number): void {
     this.profileService.getProfileById(userId).subscribe(profile => {
       this.userProfile = profile;
       if (this.userProfile.hasImage) {
         this.getImageByUserId(this.userProfile.userId);
       }
-      this.reviewService.getReviewsByUserId(this.userProfile.userId).subscribe(reviews => {
+      this.reviewService.getReviewsByUserIdAndSkillId(this.userProfile.userId, this.skillDetails.skillId).subscribe(reviews => {
         this.reviews = reviews;
         this.calculateAverageRating();
       });
@@ -161,11 +161,13 @@ export class SwapRequestComponent {
     }
   }
 
+
   open() {
     const modalRef = this.modalService.open(ModalContent);
     modalRef.componentInstance.skillRequestedId = this.skillDetails.skillId;
     modalRef.componentInstance.receiverId = this.userProfile.userId;
   }
+
 
   getSkillLevelString(level: SkillLevel): string {
     switch (level) {
@@ -182,13 +184,16 @@ export class SwapRequestComponent {
     }
   }
 
+
   isOwnSkill(): boolean {
     return this.skillDetails.userId === Number(this.loggedInUserId);
   }
 
+
   hasAcceptedSwapRequest(userId: number): boolean {
     return this.acceptedSwapRequests.some(request => request.initiatorId === userId || request.receiverId === userId);
   }
+
 
   onSwapRequestAccepted(request: GetSwapRequest) {
     this.newReview.requestId = request.requestId;
@@ -196,6 +201,7 @@ export class SwapRequestComponent {
     this.newReview.skillId = request.skillRequestedId;
     this.submitReview();
   }
+
 
   calculateAverageRating(): void {
     if (this.reviews.length > 0) {
@@ -210,9 +216,7 @@ export class SwapRequestComponent {
     if (this.isSubmittingReview) {
       return;
     }
-
     this.isSubmittingReview = true;
-
     const userId = this.authService.getUserId();
     if (userId !== null) {
       this.profileService.getUsername(userId).subscribe(username => {
@@ -227,18 +231,25 @@ export class SwapRequestComponent {
             text: this.newReview.text,
             reviewId: 0
           };
-          this.reviewService.createReview(review).subscribe(
-            (response) => {
-              this.isSubmittingReview = false;
-              this.reviewSubmitted = true; // Set the flag to true
-              this.toast.success({ detail: "SUCCESS", summary: "Review created successfully", duration: 3000 });
-              // Push the new review to the reviews array
-              this.reviews.push(response);
-              this.calculateAverageRating();
-            }, error => {
-              this.isSubmittingReview = false;
-              console.error('Error creating review:', error);
-              this.toast.error({ detail: "ERROR", summary: 'Error creating review', duration: 4000 });
+          this.reviewService.createReview(review).
+            subscribe({
+              next: (response) => {
+                this.isSubmittingReview = false;
+                this.reviewSubmitted = true; // Set the flag to true
+                this.toast.success({ detail: "SUCCESS", summary: "Review created successfully", duration: 3000 });
+                this.reviews.push(response);
+                this.calculateAverageRating();
+              },
+              error: (error) => {
+                this.isSubmittingReview = false;
+                console.error('Error creating review:', error);
+                if (error.status === 400) {
+                  this.toast.error({ detail: "ERROR", summary: error.error.message, duration: 4000 });
+                } else {
+                  this.toast.error({ detail: "ERROR", summary: 'An unexpected error occurred', duration: 4000 });
+                }
+                this.toast.error({ detail: "ERROR", summary: error.error.message, duration: 4000 });
+              }
             });
         }
       });

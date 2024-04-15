@@ -215,7 +215,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
           },
           (error) => {
             console.error('Failed to remove image', error);
-            this.toast.error({ detail: "ERROR", summary: "Failed to remove image", duration: 3000 });
+            this.toast.error({ detail: "ERROR", summary: "Failed to remove image", duration: 4000 });
           }
         );
       }

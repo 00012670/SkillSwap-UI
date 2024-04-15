@@ -28,4 +28,8 @@ export class ReviewService {
   deleteReview(reviewId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseApiUrl}/api/Review/DeleteReview/${reviewId}`);
   }
+
+  getReviewsByUserIdAndSkillId(userId: number, skillId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.baseApiUrl}/api/Review/GetReviewsByUserIdAndSkillId/${userId}/${skillId}`);
+  }
 }
