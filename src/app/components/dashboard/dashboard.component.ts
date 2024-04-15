@@ -5,6 +5,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { SkillsService } from 'src/app/services/skill.service';
 import { SkillLevel } from 'src/app/models/skill.model';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +28,7 @@ export class DashboardComponent implements OnInit {
     private profileService: ProfileService,
     private skillsService: SkillsService,
     private userStore: UserStoreService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +48,13 @@ export class DashboardComponent implements OnInit {
           this.skillList = skills;
         });
       }
+
+      this.appService.currentSearchText.subscribe(searchText => this.searchText = searchText);
+
     });
+
+    //this.appService.changeShowSearch(true);
+
   }
 
   getSkills(): void {

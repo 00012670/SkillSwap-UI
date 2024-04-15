@@ -1,74 +1,53 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 logo" [routerLink]="['/dashboard', userId]">
-    SKILL SWAP
-  </a>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/dashboard', userId]">Home</a>
-      </li>
+<app-navbar></app-navbar>
 
-      <li class="nav-item dropdown">
-        <a class="nav-link px-3 cursor-pointer" id="profileDropdown" role="button" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          Hello, {{username}}
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
-          <li><a class="dropdown-item" *ngFor="let userProfile of userProfiles"
-              [routerLink]="['/profile/' + userProfile?.userId]">View Profile</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Sign out</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <img [src]="imageUrl" class="navbar-img">
-
-  </div>
-</nav>
-
-<div class="container my-5">
-  <h1 class="mb-3">User profile</h1>
-  <br>
+<div class="container-fluid">
   <div class="row">
-    <div class="col-md-6">
+    <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-      <form #form="ngForm" (ngSubmit)="updateProfile()">
-        <div class="mb-3">
-          <label for="fullName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="fullName" name="fullName" [(ngModel)]="profileDetails.fullName">
-        </div>
-        <div class="mb-3">
-          <label for="bio" class="form-label">Bio</label>
-          <input type="text" class="form-control" id="bio" name="bio" [(ngModel)]="profileDetails.bio">
-        </div>
-        <div class="mb-3">
-          <label for="skillInterested" class="form-label">Skills Interested</label>
-          <input type="text" class="form-control" id="skillInterested" name="skillInterested"
-            [(ngModel)]="profileDetails.skillInterested">
-        </div>
-        <br>
-        <button class="btn btn-primary">Update</button>
-      </form>
-
-    </div>
-
-    <div class="col-md-6">
-      <div class="md-6">
-        <label for="uploadImage" class="form-label">Upload Image</label>
-        <input #uploadImageRef type="file" class="form-control" placeholder="Choose file" (change)="onChange($event)"
-          id="uploadImage" name="upload">
-
-        <br>
-        <label style="width: 100%" for="fileupload">
-          <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"
-            style="width: auto; height: 150px;"></label>
-      </div>
+      <h3 class="mb-3 mt-5">User profile</h3>
       <br>
-      <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
-      <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger"
-        [disabled]="!isImageUploaded">Remove</button>
-    </div>
+      <div class="row">
+        <div class="col-md-6">
+
+          <form #form="ngForm" (ngSubmit)="updateProfile()">
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="fullName" name="fullName"
+                [(ngModel)]="profileDetails.fullName">
+            </div>
+            <div class="mb-3">
+              <label for="bio" class="form-label">Bio</label>
+              <input type="text" class="form-control" id="bio" name="bio" [(ngModel)]="profileDetails.bio">
+            </div>
+            <div class="mb-3">
+              <label for="skillInterested" class="form-label">Skills Interested</label>
+              <input type="text" class="form-control" id="skillInterested" name="skillInterested"
+                [(ngModel)]="profileDetails.skillInterested">
+            </div>
+            <br>
+            <button class="btn btn-primary">Update</button>
+          </form>
+
+        </div>
+
+        <div class="col-md-6">
+          <div class="md-6">
+            <label for="uploadImage" class="form-label">Upload Image</label>
+            <input #uploadImageRef type="file" class="form-control" placeholder="Choose file"
+              (change)="onChange($event)" id="uploadImage" name="upload">
+
+            <br>
+            <label style="width: 100%" for="fileupload">
+              <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"
+                style="width: auto; height: 150px;"></label>
+          </div>
+          <br>
+          <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
+          <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger"
+            [disabled]="!isImageUploaded">Remove</button>
+        </div>
+      </div>
+    </main>
   </div>
+</div>

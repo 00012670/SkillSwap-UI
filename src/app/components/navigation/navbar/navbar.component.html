@@ -41,9 +41,9 @@
     SKILL SWAP
   </a>
 
-  <form class="form-inline my-2 my-lg-0 mx-auto">
+  <form class="form-inline my-2 my-lg-0 mx-auto" >
     <input class="form-control mr-sm-2 w-100  rounded-0 border-0" type="search" [(ngModel)]="searchText"
-      [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search">
+    [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search" (input)="appService.changeSearchText(searchText)">
   </form>
 
 

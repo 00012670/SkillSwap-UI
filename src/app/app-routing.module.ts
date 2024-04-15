@@ -1,15 +1,15 @@
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
+import { LoginComponent } from './components/auth/login/login.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { SkillsListComponent } from './components/skills/skills-list/skills-list.component';
+import { SkillsListComponent } from './components/skills/list-skills/skills-list.component';
 import { AddSkillComponent } from './components/skills/add-skill/add-skill.component';
 import { EditSkillComponent } from './components/skills/edit-skill/edit-skill.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SwapRequestComponent } from './components/swap-request/swap-request.component';
-import { ManageRequestsComponent } from './components/manage-requests/manage-requests.component';
+import { ManageRequestsComponent } from './components/swap-request/manage-requests/manage-requests.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { PaymentCheckoutComponent } from './components/payment/payment-checkout/payment-checkout.component';
@@ -30,7 +30,6 @@ const routes: Routes = [
   { path: 'manage-requests/:id', component: ManageRequestsComponent, canActivate: [AuthGuard] },
   { path: 'payment/:id', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard] },
-  { path: 'payment', component: PaymentComponent },
   { path: 'checkout', component: PaymentCheckoutComponent },
   { path: 'success', component: PaymentFailureComponent },
   { path: 'failure', component: PaymentSuccessComponent }

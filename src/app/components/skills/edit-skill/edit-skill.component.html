@@ -1,7 +1,5 @@
-<app-navigation></app-navigation>
-
 <div class="container my-5">
-  <h1 class="mb-3">Update skill</h1>
+  <h3 class="mb-3">Update skill</h3>
 
   <div class="row">
     <div class="col-5">
@@ -9,7 +7,8 @@
 
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input formControlName="name" [ngClass]="{'is-invalid': submited && editSkillForm.get('name')!.errors}" type="text" class="form-control" id="name" name="name">
+          <input formControlName="name" [ngClass]="{'is-invalid': submited && editSkillForm.get('name')!.errors}"
+            type="text" class="form-control" id="name" name="name">
           <div *ngIf="submited && editSkillForm.get('name')!.hasError('required')" class="invalid-feedback">
             *Skill name is required
           </div>
@@ -17,7 +16,9 @@
 
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <input formControlName="description" [ngClass]="{'is-invalid': submited && editSkillForm.get('description')!.errors}" type="text" class="form-control" id="description" name="description">
+          <input formControlName="description"
+            [ngClass]="{'is-invalid': submited && editSkillForm.get('description')!.errors}" type="text"
+            class="form-control" id="description" name="description">
           <div *ngIf="submited && editSkillForm.get('description')!.hasError('required')" class="invalid-feedback">
             *Description is required
           </div>
@@ -25,7 +26,9 @@
 
         <div class="mb-3">
           <label for="category" class="form-label">Category</label>
-          <input formControlName="category" [ngClass]="{'is-invalid': submited && editSkillForm.get('category')!.errors}" type="text" class="form-control" id="category" name="category">
+          <input formControlName="category"
+            [ngClass]="{'is-invalid': submited && editSkillForm.get('category')!.errors}" type="text"
+            class="form-control" id="category" name="category">
           <div *ngIf="submited && editSkillForm.get('category')!.hasError('required')" class="invalid-feedback">
             *Category is required
           </div>
@@ -33,7 +36,8 @@
 
         <div class="mb-3">
           <label for="level" class="form-label">Level</label>
-          <select formControlName="level" [ngClass]="{'is-invalid': submited && editSkillForm.get('level')!.errors}"  class="form-select" id="level" name="level">
+          <select formControlName="level" [ngClass]="{'is-invalid': submited && editSkillForm.get('level')!.errors}"
+            class="form-select" id="level" name="level">
             <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
           </select>
         </div>
@@ -41,14 +45,20 @@
 
         <div class="mb-3">
           <label for="prerequisites" class="form-label">Prerequisity</label>
-          <input formControlName="prerequisity" [ngClass]="{'is-invalid': submited && editSkillForm.get('prerequisity')!.errors}"  name="prerequisity" type="text" class="form-control" id="prerequisites">          <div *ngIf="submited && editSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
+          <input formControlName="prerequisity"
+            [ngClass]="{'is-invalid': submited && editSkillForm.get('prerequisity')!.errors}" name="prerequisity"
+            type="text" class="form-control" id="prerequisites">
+          <div *ngIf="submited && editSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
             *Prerequisity is required
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Update</button> |
-        <button type="button" class="btn btn-danger" (click)="checkSKillBeforeDeleting(skillDetails.skillId)">Delete</button>
-
+        <div class="mt-4"> <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
+          <button type="button" class="btn btn-danger"
+            (click)="checkSKillBeforeDeleting(skillDetails.skillId)">Delete</button>
+        </div>
+        <div class="mt-3"> <a [routerLink]="['/skills', userId]"> Go back</a>
+        </div>
       </form>
 
     </div>

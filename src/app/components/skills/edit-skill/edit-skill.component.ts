@@ -21,7 +21,6 @@ export class EditSkillComponent {
     SkillLevel.Master
   ];
 
-
   skillDetails: Skill = {
     skillId: 0,
     name: '',
@@ -34,6 +33,7 @@ export class EditSkillComponent {
 
   editSkillForm!: FormGroup
   submited = false;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,

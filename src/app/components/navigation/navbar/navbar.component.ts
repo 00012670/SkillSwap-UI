@@ -5,13 +5,16 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ImageService } from 'src/app/services/image.service';
 import { Profile } from 'src/app/models/profile.model';
+import { AppService } from 'src/app/services/app.service';
+
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss']
 })
-export class NavigationComponent implements OnInit {
+
+export class NavbarComponent implements OnInit {
 
   userId: number | null = null;
   role: string = '';
@@ -20,6 +23,7 @@ export class NavigationComponent implements OnInit {
   username: string = "";
   searchText: any;
   isImageDeleted: boolean = false;
+  showSearch: boolean | undefined;
 
   constructor(
     private auth: AuthService,
@@ -27,6 +31,7 @@ export class NavigationComponent implements OnInit {
     private userStore: UserStoreService,
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
+    public  appService: AppService
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +47,8 @@ export class NavigationComponent implements OnInit {
         }
       });
     });
+
+    this.appService.currentShowSearch.subscribe(showSearch => this.showSearch = showSearch);
   }
 
   fetchUserProfile(): void {

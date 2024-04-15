@@ -1,13 +1,28 @@
-/* Container */
+body {
+  overflow: hidden !important;
+}
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+.app-sidebar, main {
+  padding: 0;
+}
+
 .container {
   background-color: #5171c3;
   min-height: 100vh;
-  padding: 20px;
+  min-width: 100vh;
+  padding: 0;
+  margin: 0;
 }
 
-.list-group {
-  margin-bottom: 20px;
-}
 
 .list-group-item {
   background-color: transparent;
@@ -18,26 +33,6 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Chat messages */
-.messages-chat {
-  padding: 25px 35px;
-  height: calc(100vh - 170px);
-  overflow-y: auto;
-  position: relative; /* Needed for custom scrollbar */
-}
-
-.messages-chat::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-}
-
-.messages-chat::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3); /* Color of the scrollbar thumb */
-  border-radius: 4px; /* Rounded corners of the thumb */
-}
-
-.messages-chat::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
-}
 
 /* Profile image */
 .profile-image {
@@ -73,22 +68,23 @@
 
 /* Header chat */
 .header-chat {
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #FFF;
-  height: 90px;
+  height: 60px;
   box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
   display: flex;
   align-items: center;
+  width: 85%;
 }
 
 .chat .header-chat .icon {
-  margin-left: 30px;
-  color: #fff;
+  margin-left: 12px;
+  color: #535353;
   font-size: 14pt;
 }
 
 .chat .header-chat .name {
-  margin: 0 0 0 20px;
+  margin: 0 0 0 10px;
   text-transform: uppercase;
   font-family: 'Montserrat', sans-serif;
   font-size: 13pt;
@@ -100,11 +96,30 @@
   right: 40px;
 }
 
-/* Message */
+
+/* Chat messages */
+.messages-chat {
+  height: 500px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.messages-chat::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.messages-chat::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners of the thumb */
+}
+
+.messages-chat::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
+}
+
 .chat .messages-chat .message {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .chat .messages-chat .message .photo {
@@ -128,23 +143,24 @@
 .timestamp {
   font-size: 12px;
   color: lightgrey;
-  //margin-bottom: 10px;
 }
 
+
 /* Footer chat */
+
 .footer-chat {
-  width: calc(47% - 100px);
+  width: 50%;
   height: 80px;
   display: flex;
   align-items: center;
   position: absolute;
   bottom: 0;
   background-color: transparent;
-  border-top: 2px solid #EEE;
+  left: 36.5vw
 }
 
 .chat .footer-chat .icon {
-  margin-left: 30px;
+  margin-left: 20px;
   color: #C0C0C0;
   font-size: 14pt;
 }
@@ -152,8 +168,7 @@
 .chat .footer-chat .send {
   color: #060404;
   background-color: white;
-  position: absolute;
-  right: 20px;
+  position: relative;
   padding: 12px 12px 12px 12px;
   border-radius: 50px;
   font-size: 14pt;
@@ -169,15 +184,14 @@
 
 .chat .footer-chat .right {
   position: absolute;
-  right: 40px;
 }
 
 /* Write message input */
 .write-message {
   border: none !important;
   width: 80%;
-  height: 50px;
+  height: 60px;
   margin-left: 20px;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 20px;
+  border-radius: 10px;
 }

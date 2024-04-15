@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICustomerPortal, IPremiumPlan, ISession } from '../models/premium-plan.model';
 import { Observable, of } from 'rxjs';
@@ -55,8 +55,25 @@ export class PaymentService {
     });
   }
 
+  redirectToCustomerPortal() {
+    this.http
+      .post<ICustomerPortal>(
+        this.baseApiUrl + '/Payment/customer-portal',
+        { returnUrl: environment.homeUrl },
+        this.getHttpOptions()
+      )
+      .subscribe((data) => {
+        window.location.href = data.url;
+      });
+  }
 
-  // Stripe Test Publishable Key
-  // pk_test_51OuxWhP2zd9Sg1qKbHEvtUxTLXJsV1EyBbqtYJoTMuIEQB4ov0FkAEAxeguFUmQ6aVz9NrLUnvmHocWObybDWpkH00QYgm84JH
+  getHttpOptions() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      }),
+    };
 
+    return httpOptions;
+  }
 }

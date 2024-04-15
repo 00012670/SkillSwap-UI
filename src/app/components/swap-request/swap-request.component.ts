@@ -9,13 +9,13 @@ import { Profile } from 'src/app/models/profile.model';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalContent } from 'src/app/components/swap-modal/swap-modal.component';
+import { ModalContent } from 'src/app/components/swap-request/swap-modal/swap-modal.component';
 import { ReviewService } from 'src/app/services/review.service';
 import { Review } from 'src/app/models/review.model';
 import { NgToastService } from 'ng-angular-popup';
 import { GetSwapRequest } from 'src/app/models/request.model';
 import { RequestService } from 'src/app/services/request.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-swap-request',
   templateUrl: './swap-request.component.html',
@@ -80,7 +80,6 @@ export class SwapRequestComponent {
   isSubmittingReview = false;
   averageRating: number = 0;
 
-
   constructor(
     private route: ActivatedRoute,
     private skillService: SkillsService,
@@ -92,7 +91,8 @@ export class SwapRequestComponent {
     private cd: ChangeDetectorRef,
     private reviewService: ReviewService,
     private toast: NgToastService,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private router: Router
   ) { }
 
   @ViewChild('content') addview !: ElementRef;
@@ -243,6 +243,10 @@ export class SwapRequestComponent {
         }
       });
     }
+  }
+
+  navigateToChat(userId: number) {
+    this.router.navigate(['/chat', userId]);
   }
 }
 

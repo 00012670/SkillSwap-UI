@@ -1,5 +1,8 @@
 export const environment = {
   production: false,
-  baseApiUrl: 'https://localhost:7222'
+  baseApiUrl: 'https://localhost:7222',
+  successUrl: 'http://localhost:4200/success',
+  failureUrl: 'http://localhost:4200/failure',
+  homeUrl: "http://localhost:4200/home"
 }
 

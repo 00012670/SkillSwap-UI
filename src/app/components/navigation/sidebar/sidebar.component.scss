@@ -1,0 +1,25 @@
+.nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-text{
+  color: #11111F;
+  font-size: 19px;
+  font-weight:500;
+  padding-left: 1rem !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo {
+  font-weight:500;
+}
+
+#sidebarMenu {
+  height: 100vh;
+}
+
+.svg {
+  cursor: pointer;
+}

@@ -5,10 +5,10 @@ import { ChatService } from 'src/app/services/chat.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Observable, catchError, forkJoin, map, switchMap } from 'rxjs';
+import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { of } from 'rxjs';
 import { MessageDto, MessageReadDto, MessageReadDtoWithSafeUrl } from 'src/app/models/message.model';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -31,14 +31,13 @@ export class ChatComponent implements OnInit {
   messages: MessageReadDtoWithSafeUrl[] = [];
   editingMessage: MessageReadDtoWithSafeUrl | null = null;
 
-
-
   constructor(
     private profileService: ProfileService,
     private imageService: ImageService,
     private chatService: ChatService,
     private authService: AuthService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -54,7 +53,21 @@ export class ChatComponent implements OnInit {
           });
         }
       });
+      this.selectUserFromRouteParams();
+
     });
+
+    this.route.paramMap.subscribe(() => {
+      this.selectUserFromRouteParams();
+    });
+  }
+
+  selectUserFromRouteParams() {
+    const userId = Number(this.route.snapshot.paramMap.get('id'));
+    const user = this.profiles.find(profile => profile.userId === userId);
+    if (user) {
+      this.selectUser(user);
+    }
   }
 
   selectUser(user: Profile) {
@@ -92,6 +105,9 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
+    if (!this.newMessage.trim()) {
+      return;
+    }
     if (this.editingMessage) {
       this.updateMessage(this.editingMessage.messageId, this.newMessage);
       this.editingMessage.isEdited = true;
@@ -116,7 +132,6 @@ export class ChatComponent implements OnInit {
       });
     }
   }
-
 
 
   loadMessages(user: Profile) {
@@ -162,6 +177,9 @@ export class ChatComponent implements OnInit {
   }
 
   updateMessage(id: number, newMessageText: string) {
+    if (!this.newMessage.trim()) {
+      return;
+    }
     const messageDto: MessageDto = {
       senderId: this.authenticatedUser?.userId ?? 0,
       receiverId: this.selectedUser?.userId ?? 0,

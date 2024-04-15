@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+    <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+      <div class="container my-5">
+        <h3>My skills</h3>
+        <a class="nav-link active orange-text" aria-current="page" routerLink="/skills/create">Create skill</a>
+        <br><br>
+        <table class="table  table-striped" *ngIf="skillList && skillList.length > 0">
+          <thead>
+            <tr>
+              <!-- <th scope="col">Id</th> -->
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col">Level</th>
+              <th scope="col">Prerequisity</th>
+              <!-- <th scope="col">Image</th> -->
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let skill of skillList | filter :searchText">
+              <td>{{ skill.name }}</td>
+              <td>{{ skill.description }}</td>
+              <td>{{ skill.category }}</td>
+              <td>{{ getLevel(skill.level) }}</td>
+              <td>{{ skill.prerequisity }}</td>
+              <!-- <td><img src="{{skill.skillImage}}" class="img-responsive img-thumbnail" style="width: 50px; height: 70px"></td> -->
+
+              <td><a style="color: #ED8C02;" [routerLink]="['/skill', skill.skillId]">Veiw</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="!skillList || skillList.length <= 0 ">No skills found</p>
+      </div>
+
+    </main>
+  </div>
+</div>

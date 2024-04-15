@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { SkillsService } from 'src/app/services/skill.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-skills-list',
@@ -27,6 +28,7 @@ export class SkillsListComponent implements OnInit {
     private userStore: UserStoreService,
     private profileService: ProfileService,
     private skillsService: SkillsService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +44,8 @@ export class SkillsListComponent implements OnInit {
         }
       });
     });
+
+    this.appService.currentSearchText.subscribe(searchText => this.searchText = searchText);
   }
 
   getSkills(): void {
