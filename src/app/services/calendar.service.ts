@@ -13,6 +13,13 @@ export class CalendarService {
 
   constructor(private http: HttpClient, private profileService: ProfileService) { }
 
+  createEvent(data: any): Observable<any> {
+    return this.http.post(`${this.baseApiUrl}/api/Calendar/createevent`, data);
+}
+
+
+
+
   getCalendars(): Observable<any> {
     return this.http.get(`${this.baseApiUrl}/calendar/GetAllEvents`);
   }

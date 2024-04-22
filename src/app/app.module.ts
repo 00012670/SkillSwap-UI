@@ -30,6 +30,9 @@ import { PaymentFailureComponent } from './components/payment/payment-failure/pa
 import { PaymentSuccessComponent } from './components/payment/payment-success/payment-success.component';
 import { NavbarComponent } from './components/navigation/navbar/navbar.component';
 import { SidebarComponent } from './components/navigation/sidebar/sidebar.component';
+import { ReviewComponent } from './components/swap-request/review/review.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { NotificationModalComponent } from './components/notification/notification.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +54,9 @@ import { SidebarComponent } from './components/navigation/sidebar/sidebar.compon
     PaymentSuccessComponent,
     NavbarComponent,
     SidebarComponent,
+    ReviewComponent,
+    CalendarComponent,
+    NotificationModalComponent
   ],
   imports: [
     BrowserModule,

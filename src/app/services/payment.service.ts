@@ -39,8 +39,8 @@ export class PaymentService {
     this.http
       .post<ISession>(this.baseApiUrl + '/Payment/create-checkout-session', {
         priceId: priceId,
-        // successUrl: environment.successUrl,
-        // failureUrl: environment.cancelUrl,
+        successUrl: environment.successUrl,
+        failureUrl: environment.failureUrl,
       })
       .subscribe((session) => {
         this.redirectToCheckout(session.sessionId);

@@ -1,0 +1,53 @@
+
+<div class="row mt-5">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Reviews and ratings</h2>
+
+        <div *ngIf="reviews.length > 0">
+          <h4>Average rating: {{ averageRating }}</h4>
+        </div>
+
+        <div *ngFor="let review of reviews" class="review-card mb-3">
+          <br>
+          <p class="font-weight-bold mb-1">Username: {{username}}</p>
+          <p class="font-weight-bold mb-1">Rating: {{ review.rating }}</p>
+          <p class="font-weight-bold mb-1">Comment: {{ review.text }}</p>
+        </div>
+        <!-- Display message if no reviews available -->
+        <div *ngIf="reviews.length === 0" class="text-muted">No reviews available.</div>
+
+        <!-- Review Form -->
+        <div *ngIf="hasAcceptedSwapRequest(userProfile.userId) && !isOwnSkill() && !reviewSubmitted">
+          <form (ngSubmit)="submitReview()">
+            <div class="form-group">
+              <label class="form-label detail-label mt-3" for="review">Your Review</label>
+              <textarea [(ngModel)]="newReview.text" name="text" class="form-control" id="review"
+                rows="3"></textarea>
+            </div>
+            <div class="form-group mt-4">
+              <label class="form-label detail-label" for="rating">Your Rating</label>
+              <div class="star-rating">
+                <input [(ngModel)]="newReview.rating" type="radio" id="star5" name="rating" value="5" /><label
+                  for="star5" title="5 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star4" name="rating" value="4" /><label
+                  for="star4" title="4 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star3" name="rating" value="3" /><label
+                  for="star3" title="3 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star2" name="rating" value="2" /><label
+                  for="star2" title="2 stars">★</label>
+                <input [(ngModel)]="newReview.rating" type="radio" id="star1" name="rating" value="1" /><label
+                  for="star1" title="1 star">★</label>
+              </div>
+            </div>
+            <button type="submit" class="btn" [disabled]="isSubmittingReview"
+              style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px;">Submit
+              Review</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

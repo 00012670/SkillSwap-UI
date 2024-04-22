@@ -3,6 +3,6 @@ export const environment = {
   baseApiUrl: 'https://localhost:7222',
   successUrl: 'http://localhost:4200/success',
   failureUrl: 'http://localhost:4200/failure',
-  homeUrl: "http://localhost:4200/home"
+  homeUrl: "http://localhost:4200/payment"
 }
 

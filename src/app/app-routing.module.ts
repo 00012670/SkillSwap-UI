@@ -31,8 +31,8 @@ const routes: Routes = [
   { path: 'payment/:id', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'checkout', component: PaymentCheckoutComponent },
-  { path: 'success', component: PaymentFailureComponent },
-  { path: 'failure', component: PaymentSuccessComponent }
+  { path: 'failure', component: PaymentFailureComponent },
+  { path: 'success', component: PaymentSuccessComponent }
 ];
 
 @NgModule({

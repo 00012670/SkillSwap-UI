@@ -31,5 +31,6 @@ export interface Profile {
   hasImage?: boolean;
   isSuspended?: boolean;
   imageUrl?: SafeUrl;
+  isSubscribed?: boolean;
 }
 

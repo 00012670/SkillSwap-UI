@@ -74,6 +74,5 @@ export class SkillsListComponent implements OnInit {
         return '';
     }
   }
-
 }
 

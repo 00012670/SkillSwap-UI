@@ -16,31 +16,3 @@
 }
 
 
-/* Add this CSS to your existing stylesheet or in a <style> tag in your HTML */
-.star-rating {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row-reverse;
-}
-
-.star-rating input {
-  display: none;
-}
-
-.star-rating label {
-  cursor: pointer;
-  font-size: 24px;
-  color: #777;
-  margin: 0 5px;
-}
-
-.star-rating input:checked ~ label {
-  color: #f8d320; 
-}
-
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  color: #f8d320;
-}
-

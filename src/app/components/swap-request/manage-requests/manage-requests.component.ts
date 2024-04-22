@@ -3,7 +3,6 @@ import { GetSwapRequest, Status, UpdateSwapRequest } from 'src/app/models/reques
 import { RequestService } from 'src/app/services/request.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
-import { UserStoreService } from 'src/app/services/user-store.service';
 import { AppService } from 'src/app/services/app.service';
 
 @Component({
@@ -20,8 +19,6 @@ export class ManageRequestsComponent {
   Status = Status;
   skill: any;
   role!: string;
-
-
 
   constructor(
     private requestService: RequestService,
@@ -60,7 +57,6 @@ export class ManageRequestsComponent {
     this.requestService.updateSwapRequest(request.requestId, updatedRequest).subscribe(
       () => {
         this.toast.success({ detail: "SUCCESS", summary: "Request accepted", duration: 3000 });
-        console.log('Request accepted');
         const index = this.receivedSwapRequests.findIndex(r => r.requestId === request.requestId);
         if (index !== -1) {
           this.receivedSwapRequests[index].statusRequest = Status.Accepted;
@@ -77,7 +73,6 @@ export class ManageRequestsComponent {
     this.requestService.updateSwapRequest(request.requestId, updatedRequest).subscribe(
       () => {
         this.toast.success({ detail: "SUCCESS", summary: "Request rejected", duration: 3000 });
-        console.log('Request rejected');
         const index = this.receivedSwapRequests.findIndex(r => r.requestId === request.requestId);
         if (index !== -1) {
           this.receivedSwapRequests[index].statusRequest = Status.Rejected;
@@ -92,8 +87,7 @@ export class ManageRequestsComponent {
   deleteRequest(request: GetSwapRequest) {
     this.requestService.deleteSwapRequest(request.requestId).subscribe(
       () => {
-        this.toast.success({ detail: "SUCCESS", summary: "Request deleted", duration: 3000 });
-        console.log('Request deleted');
+        this.toast.success({ detail: "SUCCESS", summary: "Request cancelled", duration: 3000 });
         this.receivedSwapRequests = this.receivedSwapRequests.filter(r => r.requestId !== request.requestId);
         this.sentSwapRequests = this.sentSwapRequests.filter(r => r.requestId !== request.requestId);
       },

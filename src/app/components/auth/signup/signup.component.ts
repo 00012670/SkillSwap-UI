@@ -36,24 +36,24 @@ export class SignupComponent {
       password: ['', Validators.required]
     });
 
+    // @ts-ignore
+    window.onGoogleLibraryLoad = () => {
       // @ts-ignore
-      window.onGoogleLibraryLoad = () => {
+      google.accounts.id.initialize({
+        client_id: "970675568173-36ico2ahva4pirl8ge7gpoqp3dv6p130.apps.googleusercontent.com",
+        callback: this.handleCredentialResponse.bind(this),
+        auto_select: false,
+        cancel_on_tap_outside: true
+      });
+      // @ts-ignore
+      google.accounts.id.renderButton(
         // @ts-ignore
-        google.accounts.id.initialize({
-          client_id: "",
-          callback: this.handleCredentialResponse.bind(this),
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
-        // @ts-ignore
-        google.accounts.id.renderButton(
-          // @ts-ignore
-          document.getElementById("buttonDiv"),
-          { theme: "outline", size: "large", text: "continue_with", locale: "en" }
-        );
-        // @ts-ignore
-        google.accounts.id.prompt((notification: PromptMomentNotification) => { });
-      }
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large", text: "continue_with", locale: "en" }
+      );
+      // @ts-ignore
+      google.accounts.id.prompt((notification: PromptMomentNotification) => { });
+    }
   }
 
 
@@ -91,7 +91,7 @@ export class SignupComponent {
             this.router.navigate(['dashboard/', res.userId])
           }),
           error: (err => {
-           // console.error('Error during sign-in:', err);
+            // console.error('Error during sign-in:', err);
             this.toast.error({ detail: "ERROR", summary: err.error.message, duration: 5000 });
           })
         });
