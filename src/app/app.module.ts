@@ -25,7 +25,6 @@ import { ChatComponent } from './components/chat/chat.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MatCardModule } from '@angular/material/card';
-import { PaymentCheckoutComponent } from './components/payment/payment-checkout/payment-checkout.component';
 import { PaymentFailureComponent } from './components/payment/payment-failure/payment-failure.component';
 import { PaymentSuccessComponent } from './components/payment/payment-success/payment-success.component';
 import { NavbarComponent } from './components/navigation/navbar/navbar.component';
@@ -49,7 +48,6 @@ import { NotificationModalComponent } from './components/notification/notificati
     ManageRequestsComponent,
     PaymentComponent,
     ChatComponent,
-    PaymentCheckoutComponent,
     PaymentFailureComponent,
     PaymentSuccessComponent,
     NavbarComponent,

@@ -5,7 +5,7 @@
     <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="py-4 text-center">
-        <h2 class="mb-1">Premium Options</h2>
+        <h2 class="mb-1 mt-4">Premium Options</h2>
       </div>
       <div class="container mb-2">
         <div class="row justify-content-md-center mb-2">
@@ -16,17 +16,18 @@
               <h1 class="h1 font-weight-normal text-primary text-center mb-0" data-pricing-value="15"><span
                   class="price">{{premium.price}}</span><span class="h6 text-muted ml-2"> per month</span></h1>
             </div>
-            <div class="card-body pt-0">
+            <form (ngSubmit)="onSubmit(f)" #f="ngForm" class="card-body pt-0">
               <ul class="list-unstyled mb-2" *ngFor="let feature of premium.features">
                 <li>{{feature}}</li>
               </ul>
-              <button type="button" [routerLink]="['/checkout']" class="btn btn-outline-secondary mb-3">
+              <input type="hidden" class="form-control" name="priceId" [ngModel]="premium.priceId" #premiumId="ngModel">
+              <button type="submit" class="btn button-style mt-2">
                 Order now</button>
-            </div>
+            </form>
           </div>
 
-          <p class="lead" *ngIf="isLoggedIn()">
-            <button class="btn btn-info btn-lg" role="button" (click)="goToBillingPortal()">
+          <p class="lead text-center mt-4" *ngIf="isLoggedIn()">
+            <button class="btn btn-outline-secondary" role="button" (click)="goToBillingPortal()">
               Temporary Billing Portal Button
             </button>
           </p>

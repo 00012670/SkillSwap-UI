@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { ImageResponse } from '../models/profile.model';
 import { Notification } from '../models/notification.model';
 
 @Injectable({

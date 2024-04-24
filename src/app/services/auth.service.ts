@@ -39,7 +39,6 @@ export class AuthService {
       const decodedToken = jwtHelper.decodeToken(token);
       const userId = decodedToken.nameid;
       if (userId) {
-        // console.log('Retrieved userId from token:', userId);
         return userId;
       } else {
         console.log('No userId found in token');
@@ -59,6 +58,7 @@ export class AuthService {
 
   signOut() {
     localStorage.clear();
+    this.userPayload = null;
     this.router.navigate(['login'])
   }
 
@@ -85,7 +85,7 @@ export class AuthService {
   decodedToken() {
     const jwtHelper = new JwtHelperService();
     const token = this.getToken()!;
-    console.log(jwtHelper.decodeToken(token))
+   // console.log(jwtHelper.decodeToken(token))
     return jwtHelper.decodeToken(token)
   }
 

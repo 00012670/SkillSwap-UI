@@ -24,7 +24,7 @@ export class PaymentService {
         'Access to unlimited skill listings',
         'Opportunity to offer paid lessons',
         'Ability to track user interactions',
-        'Enhanced visibility with priority in search results',
+        'Priority visibility in search results',
       ],
     });
   }

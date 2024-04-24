@@ -9,7 +9,8 @@
       <p style="margin-bottom: 0;">{{ notification.content }}</p>
       <p style="margin-top: 5; font-size: 12px;">{{ formatDateInTimeZone(notification.dateCreated ) }}</p>
     </div>
-    <p (click)="viewNotification(notification)" style="color: #ED8C02; cursor: pointer;">View</p>
+    <p (click)="viewNotification(notification)" style=" cursor: pointer;">View</p>
+
   </div>
   <p *ngIf="notificationList.length === 0">You don't have any new notifications.</p>
 </div>

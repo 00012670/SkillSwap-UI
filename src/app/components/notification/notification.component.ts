@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -21,7 +21,8 @@ export class NotificationModalComponent {
     public activeModal: NgbActiveModal,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
@@ -50,7 +51,7 @@ export class NotificationModalComponent {
       this.notificationService.deleteAllNotifications(this.userId)
         .subscribe(() => {
          this.notificationList = [];
-
+         this.changeDetector.detectChanges();
         }, error => {
           console.error('Failed to mark all notifications as read:', error);
         });

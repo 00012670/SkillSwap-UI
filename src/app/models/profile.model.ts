@@ -32,5 +32,7 @@ export interface Profile {
   isSuspended?: boolean;
   imageUrl?: SafeUrl;
   isSubscribed?: boolean;
+  unreadMessageCount: number;
+
 }
 

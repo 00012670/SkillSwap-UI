@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CalendarService } from '../../services/calendar.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-calendar',
@@ -7,13 +8,7 @@ import { CalendarService } from '../../services/calendar.service';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  constructor(private calendarService: CalendarService) { }
+  constructor(private calendarService: CalendarService, public activeModal: NgbActiveModal) { }
 
-  createEvent() {
-    const data = {}; // Replace this with the actual data
-    this.calendarService.createEvent(data).subscribe(response => {
-      console.log('Google Meet link: ', response.htmlLink);
-    });
-  }
 
 }

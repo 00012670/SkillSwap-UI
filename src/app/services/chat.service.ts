@@ -33,4 +33,11 @@ export class ChatService {
     return this.http.delete(`${this.baseApiUrl}/api/Message/DeleteMessage/${id}`);
   }
 
+  getUnreadMessageCount(senderId: number, receiverId: number): Observable<number> {
+    return this.http.get<number>(`${this.baseApiUrl}/api/Message/GetUnreadMessageCount/${senderId}/${receiverId}`);
+  }
+
+  markMessagesAsRead(senderId: number, receiverId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseApiUrl}/api/Message/MarkMessagesAsRead/${senderId}/${receiverId}`, {});
+  }
 }

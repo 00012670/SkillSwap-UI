@@ -19,7 +19,7 @@ import { ImageService } from 'src/app/services/image.service';
   styleUrls: ['./swap-request.component.scss'],
 })
 export class SwapRequestComponent {
-  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [] };
+  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0};
   skillDetails: Skill = { skillId: 0, name: '', description: '', category: '', level: SkillLevel.Competent, prerequisity: '', userId: 0 }
   levelOptions: SkillLevel[] = [SkillLevel.Foundational, SkillLevel.Competent, SkillLevel.Expert, SkillLevel.Master];
   newReview: Review = { reviewId: 0, fromUserId: this.authService.getUserId(), fromUserName: '', toUserId: 0, skillId: 0, requestId: 0, rating: 0, text: '' };

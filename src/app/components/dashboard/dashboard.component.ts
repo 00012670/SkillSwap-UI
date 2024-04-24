@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationModalComponent } from '../notification/notification.component';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification.model';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 
 @Component({
@@ -20,13 +21,14 @@ import { Notification } from 'src/app/models/notification.model';
 
 export class DashboardComponent implements OnInit {
 
-  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [] };
+  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0};
   userId: number | null = null;
   skills: any[] = [];
   skillList: any[] = [];
   userProfiles: any = [];
   role!: string;
   notificationList: Notification[] = [];
+  notifications: any
 
 
   searchText: any;
@@ -38,7 +40,7 @@ export class DashboardComponent implements OnInit {
     private userStore: UserStoreService,
     private appService: AppService,
     private modalService: NgbModal,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -67,9 +69,6 @@ export class DashboardComponent implements OnInit {
       }
 
     });
-
-    //this.appService.changeShowSearch(true);
-
   }
 
   getSkills(): void {
@@ -121,11 +120,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
-
-  open(notifaction: Notification) {
+  openNotification(notifaction: Notification) {
     const modalRef = this.modalService.open(NotificationModalComponent);
     modalRef.componentInstance.notification = notifaction;
     modalRef.componentInstance.receiverId = this.userProfile.userId;
+  }
+
+  openCalendar() {
+    const modalRef = this.modalService.open(CalendarComponent, { size: 'md' });
   }
 }

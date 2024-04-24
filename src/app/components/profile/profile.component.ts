@@ -39,6 +39,7 @@ export class ProfileComponent implements OnInit, AfterViewInit{
       userId: 0,
       user: '',
     }],
+    unreadMessageCount: 0,
   };
 
   userId: number | null = null;

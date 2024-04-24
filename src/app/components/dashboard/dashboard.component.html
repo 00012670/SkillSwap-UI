@@ -15,12 +15,12 @@
       </div>
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2>Dashboard</h2>
+        <h3>Dashboard</h3>
         <div class="btn-toolbar mb-2 mb-md-0">
 
           <!-- Notifications -->
           <div style="position: relative;">
-            <svg (click)="open(notificationList[0])" style="margin-right: 15px; margin-top: 6px; cursor: pointer "
+            <svg (click)="openNotification(notificationList[0])" style="margin-right: 15px; margin-top: 6px; cursor: pointer "
               class="mr-3" fill="grey" width="23" height="25" viewBox="0 0 14 16" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <path
@@ -32,7 +32,7 @@
             </svg>
           </div>
 
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <button (click)="openCalendar()" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="feather feather-calendar align-text-bottom" aria-hidden="true">
@@ -100,7 +100,6 @@
                 <td>{{ skill.category }}</td>
                 <td>{{ getLevel(skill.level) }}</td>
                 <td>{{ skill.prerequisity }}</td>
-                <!-- <td><img src="{{skill.skillImage}}" class="img-responsive img-thumbnail" style="width: 50px; height: 70px"></td> -->
                 <td><a [routerLink]="['/swap', skill.skillId]">Veiw</a></td>
               </tr>
             </tbody>
@@ -108,7 +107,6 @@
         </div>
         <p *ngIf="!skillList || skillList.length <= 0 ">No skills found</p>
       </div>
-      <app-calendar></app-calendar>
     </main>
   </div>
 </div>

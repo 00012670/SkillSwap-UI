@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Profile } from 'src/app/models/profile.model';
 import { ProfileService } from 'src/app/services/profile.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Observable, forkJoin, map, switchMap } from 'rxjs';
+import { Observable, forkJoin, map, switchMap, startWith } from 'rxjs';
 import { of } from 'rxjs';
 import { MessageDto, MessageReadDto, MessageReadDtoWithSafeUrl } from 'src/app/models/message.model';
 import { ActivatedRoute } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -18,6 +19,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ChatComponent implements OnInit {
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
+  @ViewChild('messageContainer') messageContainer: ElementRef | undefined;
+
 
   authenticatedUser: Profile | null = null;
   isImageDeleted: boolean = false;
@@ -30,19 +33,20 @@ export class ChatComponent implements OnInit {
   newMessage = '';
   messages: MessageReadDtoWithSafeUrl[] = [];
   editingMessage: MessageReadDtoWithSafeUrl | null = null;
+  unreadMessagesSubscription: Subscription | undefined;
 
   constructor(
     private profileService: ProfileService,
     private imageService: ImageService,
-    private chatService: ChatService,
     private authService: AuthService,
+    private chatService: ChatService,
+    private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
     this.authenticatedUser = this.authService.getUserFromToken();
-
     this.profileService.getAllProfiles().subscribe(profiles => {
       this.profiles = profiles.filter(profile => profile.userId !== this.authenticatedUser?.userId);
 
@@ -52,14 +56,18 @@ export class ChatComponent implements OnInit {
             profile.imageUrl = imageUrl;
           });
         }
+        this.chatService.getUnreadMessageCount(profile.userId, this.authenticatedUser?.userId ?? 0).subscribe(count => {
+          profile.unreadMessageCount = count;
+          this.cdr.detectChanges();
+        });
       });
       this.selectUserFromRouteParams();
-
     });
 
     this.route.paramMap.subscribe(() => {
       this.selectUserFromRouteParams();
     });
+
   }
 
   selectUserFromRouteParams() {
@@ -75,6 +83,9 @@ export class ChatComponent implements OnInit {
     this.messages = [];
     this.loadMessages(user);
     this.messageInput?.nativeElement.focus();
+    this.chatService.markMessagesAsRead(user.userId, this.authenticatedUser?.userId ?? 0).subscribe(() => {
+      user.unreadMessageCount = 0;
+    });
   }
 
   getImageByUserId(userId: number): Observable<SafeUrl> {
@@ -125,11 +136,11 @@ export class ChatComponent implements OnInit {
         this.newMessage = '';
         if (this.selectedUser) {
           this.loadMessages(this.selectedUser);
+          this.scrollToBottom();
         }
-      }, error => {
-        console.error('Error sending message:', error);
-        // ...
-      });
+        this.cdr.detectChanges();
+      }
+      );
     }
   }
 
@@ -155,6 +166,7 @@ export class ChatComponent implements OnInit {
                 senderImageSafeUrl: imageData ? this.byteArrayToSafeUrl(imageData) : undefined
               }))
             );
+
           } else {
             return of({
               ...message,
@@ -165,6 +177,9 @@ export class ChatComponent implements OnInit {
 
         forkJoin(imageRequests).subscribe((messagesWithImages: MessageReadDtoWithSafeUrl[]) => {
           this.messages = messagesWithImages;
+          this.scrollToBottom();
+          this.cdr.detectChanges();
+          this.scrollToBottom();
         });
       });
     }
@@ -188,7 +203,6 @@ export class ChatComponent implements OnInit {
     };
 
     this.chatService.updateMessage(id, messageDto).subscribe(() => {
-      console.log('Message updated successfully');
       if (this.selectedUser) {
         this.loadMessages(this.selectedUser);
       }
@@ -210,5 +224,11 @@ export class ChatComponent implements OnInit {
     this.editingMessage = message;
     this.newMessage = message.messageText;
     this.messageInput?.nativeElement.focus();
+  }
+
+  scrollToBottom() {
+    if (this.messageContainer) {
+      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    }
   }
 }

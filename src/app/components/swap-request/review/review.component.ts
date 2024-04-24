@@ -17,7 +17,7 @@ import { RequestService } from 'src/app/services/request.service';
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent {
-  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: []};
+  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0};
   skillDetails: Skill = { skillId: 0, name: '', description: '', category: '', level: SkillLevel.Competent, prerequisity: '', userId: 0 }
   newReview: Review = { reviewId: 0, fromUserId: this.authService.getUserId(), fromUserName: '', toUserId: 0, skillId: 0, requestId: 0, rating: 0, text: '' };
   username: string | undefined;

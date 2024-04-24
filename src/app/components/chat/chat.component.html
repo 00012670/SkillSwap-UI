@@ -7,15 +7,22 @@
       <div class="row">
         <div class="col-3 mt-4">
           <div class="list-group">
+
             <ng-container *ngFor="let profile of profiles">
               <a href="#" class="list-group-item list-group-item-action active"
                 *ngIf="profile.userId !== authenticatedUser?.userId"
                 (click)="selectUser(profile); $event.preventDefault()">
-                <img class="profile-image"
-                  [src]="profile.imageUrl ? profile.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'">
-                <span class="username">{{profile.username}}</span>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <img class="profile-image"
+                      [src]="profile.imageUrl ? profile.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'">
+                    <span class="username">{{profile.username}}</span>
+                  </div>
+                  <span class="badge badge-primary badge-pill unread-messages" *ngIf="profile.unreadMessageCount > 0">{{profile.unreadMessageCount}}</span>
+                </div>
               </a>
             </ng-container>
+
           </div>
         </div>
 
@@ -24,16 +31,14 @@
           <div class="header-chat">
             <i class="icon fa fa-user-o" aria-hidden="true"></i>
             <p class="name">{{selectedUser.username}}</p>
-            <!-- <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i> -->
           </div>
-          <div class="messages-chat mt-5">
+          <div class="messages-chat mt-5" #messageContainer>
             <div class="message" *ngFor="let message of messages">
               <div class="profile">
                 <img class="profile-image"
                   [src]="message.senderImageSafeUrl ? message.senderImageSafeUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'"
                   alt="User Image">
-                <p class="username">{{message.senderUsername}}</p>
-                <!-- <div class="online"></div> -->
+                <p class="username-chat">{{message.senderUsername}}</p>
               </div>
               <div>
                 <p class="text">{{message.messageText}}</p>
