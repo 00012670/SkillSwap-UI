@@ -9,7 +9,9 @@ import { Observable, forkJoin, map, switchMap, startWith } from 'rxjs';
 import { of } from 'rxjs';
 import { MessageDto, MessageReadDto, MessageReadDtoWithSafeUrl } from 'src/app/models/message.model';
 import { ActivatedRoute } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import emojiRegex from 'emoji-regex';
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -20,7 +22,6 @@ export class ChatComponent implements OnInit {
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
   @ViewChild('messageContainer') messageContainer: ElementRef | undefined;
-
 
   authenticatedUser: Profile | null = null;
   isImageDeleted: boolean = false;
@@ -34,6 +35,7 @@ export class ChatComponent implements OnInit {
   messages: MessageReadDtoWithSafeUrl[] = [];
   editingMessage: MessageReadDtoWithSafeUrl | null = null;
   unreadMessagesSubscription: Subscription | undefined;
+  showEmojiPicker = false;
 
   constructor(
     private profileService: ProfileService,
@@ -88,31 +90,58 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  getImageByUserId(userId: number): Observable<SafeUrl> {
-    return new Observable<SafeUrl>(observer => {
-      if (!this.isImageDeleted) {
-        this.imageService.getImageByUserId(userId).subscribe(
-          (response: ArrayBuffer) => {
-            const blob = new Blob([response], { type: 'image/jpeg' });
-            const blobUrl = URL.createObjectURL(blob);
-            const safeUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
-            observer.next(safeUrl);
-            observer.complete();
+  getImageByUserId(userId: number): Observable<SafeUrl | undefined> {
+    if (!this.isImageDeleted) {
+      return this.imageService.getImageByUserId(userId).pipe(
+        map((response: ArrayBuffer) => {
+          const blob = new Blob([response], { type: 'image/jpeg' });
+          const blobUrl = URL.createObjectURL(blob);
+          return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+        })
+      );
+    }
+    return of(undefined);
+  }
 
-            // Convert Blob to Uint8Array
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              this.imageArray = new Uint8Array(reader.result as ArrayBuffer);
-            };
-            reader.readAsArrayBuffer(blob);
-          }
-        );
-      }
-      else {
-        observer.next(undefined);
-        observer.complete();
-      }
+  loadMessages(user: Profile) {
+    const senderId = this.authService.getUserId();
+    if (senderId === null) {
+      return;
+    }
+
+    this.chatService.getMessages(senderId, user.userId).subscribe((messages: MessageReadDto[]) => {
+      const imageRequests: Observable<MessageReadDtoWithSafeUrl>[] = messages.map(message => {
+        return this.loadMessageImage(message);
+      });
+
+      forkJoin(imageRequests).subscribe((messagesWithImages: MessageReadDtoWithSafeUrl[]) => {
+        this.messages = messagesWithImages;
+        this.scrollToBottom();
+        this.cdr.detectChanges();
+        this.scrollToBottom();
+      });
     });
+  }
+
+  loadMessageImage(message: MessageReadDto): Observable<MessageReadDtoWithSafeUrl> {
+    if (!message.senderId) {
+      return of({ ...message, senderImageSafeUrl: undefined });
+    }
+
+    return this.profileService.getProfileById(message.senderId).pipe(
+      switchMap(profile => {
+        if (profile.hasImage) {
+          return this.imageService.getImageByUserId(profile.userId).pipe(
+            map(imageData => ({
+              ...message,
+              senderImageSafeUrl: this.byteArrayToSafeUrl(imageData)
+            }))
+          );
+        } else {
+          return of({ ...message, senderImageSafeUrl: undefined });
+        }
+      })
+    );
   }
 
   sendMessage() {
@@ -121,91 +150,37 @@ export class ChatComponent implements OnInit {
     }
     if (this.editingMessage) {
       this.updateMessage(this.editingMessage.messageId, this.newMessage);
-      this.editingMessage.isEdited = true;
-      this.editingMessage = null;
-      this.newMessage = '';
     } else {
-      const messageDto: MessageDto = {
-        senderId: this.authenticatedUser?.userId ?? 0,
-        receiverId: this.selectedUser?.userId ?? 0,
-        messageText: this.newMessage,
-        imageId: 0
-      };
-
-      this.chatService.sendMessage(messageDto).subscribe(() => {
-        this.newMessage = '';
-        if (this.selectedUser) {
-          this.loadMessages(this.selectedUser);
-          this.scrollToBottom();
-        }
-        this.cdr.detectChanges();
-      }
-      );
+      this.sendNewMessage();
     }
   }
 
+  sendNewMessage() {
+    const messageDto: MessageDto = {
+      senderId: this.authenticatedUser!.userId,
+      receiverId: this.selectedUser!.userId,
+      messageText: this.newMessage,
+      imageId: 0
+    };
 
-  loadMessages(user: Profile) {
-    const senderId = this.authService.getUserId();
-    if (senderId !== null) {
-      this.chatService.getMessages(senderId, user.userId).subscribe((messages: MessageReadDto[]) => {
-        const imageRequests = messages.map(message => {
-          var utcDate = new Date(message.timestamp);
-          message.timestamp = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60 * 1000);
-          if (message.senderId) {
-            return this.profileService.getProfileById(message.senderId).pipe(
-              switchMap(profile => {
-                if (profile.hasImage) {
-                  return this.imageService.getImageByUserId(profile.userId);
-                } else {
-                  return of(undefined);
-                }
-              }),
-              map(imageData => ({
-                ...message,
-                senderImageSafeUrl: imageData ? this.byteArrayToSafeUrl(imageData) : undefined
-              }))
-            );
-
-          } else {
-            return of({
-              ...message,
-              senderImageSafeUrl: undefined
-            });
-          }
-        });
-
-        forkJoin(imageRequests).subscribe((messagesWithImages: MessageReadDtoWithSafeUrl[]) => {
-          this.messages = messagesWithImages;
-          this.scrollToBottom();
-          this.cdr.detectChanges();
-          this.scrollToBottom();
-        });
-      });
-    }
-  }
-
-  byteArrayToSafeUrl(byteArray: ArrayBuffer): SafeUrl {
-    const blob = new Blob([byteArray], { type: 'image/jpeg' });
-    const blobUrl = URL.createObjectURL(blob);
-    return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+    this.chatService.sendMessage(messageDto).subscribe(() => {
+      this.newMessage = '';
+      this.loadMessages(this.selectedUser!);
+    });
   }
 
   updateMessage(id: number, newMessageText: string) {
-    if (!this.newMessage.trim()) {
-      return;
-    }
     const messageDto: MessageDto = {
-      senderId: this.authenticatedUser?.userId ?? 0,
-      receiverId: this.selectedUser?.userId ?? 0,
+      senderId: this.authenticatedUser!.userId,
+      receiverId: this.selectedUser!.userId,
       messageText: newMessageText,
       imageId: 0
     };
 
     this.chatService.updateMessage(id, messageDto).subscribe(() => {
-      if (this.selectedUser) {
-        this.loadMessages(this.selectedUser);
-      }
+      this.editingMessage = null;
+      this.newMessage = '';
+      this.loadMessages(this.selectedUser!);
     }, error => {
       console.error('Error updating message:', error);
     });
@@ -214,7 +189,6 @@ export class ChatComponent implements OnInit {
   deleteMessage(id: number) {
     this.chatService.deleteMessage(id).subscribe(() => {
       this.messages = this.messages.filter(message => message.messageId !== id);
-
     }, error => {
       console.error('Error deleting message:', error);
     });
@@ -229,6 +203,56 @@ export class ChatComponent implements OnInit {
   scrollToBottom() {
     if (this.messageContainer) {
       this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    }
+  }
+
+  byteArrayToSafeUrl(byteArray: ArrayBuffer): SafeUrl {
+    const blob = new Blob([byteArray], { type: 'image/jpeg' });
+    const blobUrl = URL.createObjectURL(blob);
+    return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+  }
+
+  toggleEmojiPicker() {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  addEmoji(event: { emoji: { native: any; }; }) {
+    const text = `${this.newMessage}${event.emoji.native}`;
+    this.newMessage = text;
+    this.showEmojiPicker = false;
+    setTimeout(() => this.messageInput?.nativeElement.focus(), 0);
+  }
+
+  isEmoji(str: string) {
+    const regex = emojiRegex();
+    return regex.test(str);
+  }
+
+
+  sendEmoji() {
+    const messageDto: MessageDto = {
+      senderId: this.authenticatedUser!.userId,
+      receiverId: this.selectedUser!.userId,
+      messageText: this.newMessage,
+      imageId: 0
+    };
+
+    this.chatService.sendMessage(messageDto).subscribe(() => {
+      this.newMessage = '';
+      this.loadMessages(this.selectedUser!);
+    });
+  }
+
+  onEnter(event: Event) {
+    event.preventDefault();
+    if (this.isEmoji(this.newMessage)) {
+      if (this.editingMessage) {
+        this.updateMessage(this.editingMessage.messageId, this.newMessage);
+      } else {
+        this.sendEmoji();
+      }
+    } else {
+      this.sendMessage();
     }
   }
 }

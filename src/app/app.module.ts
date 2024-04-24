@@ -32,6 +32,8 @@ import { SidebarComponent } from './components/navigation/sidebar/sidebar.compon
 import { ReviewComponent } from './components/swap-request/review/review.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { NotificationModalComponent } from './components/notification/notification.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,7 +56,7 @@ import { NotificationModalComponent } from './components/notification/notificati
     SidebarComponent,
     ReviewComponent,
     CalendarComponent,
-    NotificationModalComponent
+    NotificationModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,8 @@ import { NotificationModalComponent } from './components/notification/notificati
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    PickerModule,
+
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

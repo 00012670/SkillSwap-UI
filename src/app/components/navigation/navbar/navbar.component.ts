@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
@@ -7,23 +7,19 @@ import { ImageService } from 'src/app/services/image.service';
 import { Profile } from 'src/app/models/profile.model';
 import { AppService } from 'src/app/services/app.service';
 
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-
 export class NavbarComponent implements OnInit {
-
   userId: number | null = null;
   role: string = '';
+  username: string = '';
   userProfiles: Profile[] = [];
   imageUrl: SafeUrl | null = null;
-  username: string = "";
-  searchText: any;
-  isImageDeleted: boolean = false;
   showSearch: boolean | undefined;
+  searchText: any;
 
   constructor(
     private auth: AuthService,
@@ -31,63 +27,60 @@ export class NavbarComponent implements OnInit {
     private userStore: UserStoreService,
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
-    public  appService: AppService
-  ) { }
+    public appService: AppService,
+  ) {}
 
   ngOnInit(): void {
-    this.userStore.getUsernameFromStore().subscribe(val => {
-      const usernameFromToken = this.auth.getUsernameFromToken();
-      this.username = val || usernameFromToken;
-      this.profileService.getAllProfiles().subscribe(profiles => {
-        this.userProfiles = profiles.filter((profile: Profile) => profile.username === this.username);
-        if (this.userProfiles.length > 0) {
-          this.userId = this.userProfiles[0].userId;
-          this.role = this.auth.getRoleFromToken();
-          this.fetchUserProfile();
-        }
-      });
+    this.userStore.getUsernameFromStore().subscribe(username => {
+      this.username = username || this.auth.getUsernameFromToken();
+      this.fetchUserProfile();
     });
 
     this.appService.currentShowSearch.subscribe(showSearch => this.showSearch = showSearch);
   }
 
   fetchUserProfile(): void {
-    if (this.userId !== null) {
-      this.getUserProfile(this.userId);
-    }
-  }
-
-  getUserProfile(userId: number): void {
-    this.profileService.getProfileById(userId).subscribe(
-      (profile) => {
-        if (profile.hasImage) {
-          this.getImageByUserId(profile.userId);
-        } else {
-          this.imageUrl = null;
-        }
-      },
-      (error) => {
-        console.error('Error fetching user profile:', error);
+    this.profileService.getAllProfiles().subscribe(profiles => {
+      this.userProfiles = profiles.filter(profile => profile.username === this.username);
+      if (this.userProfiles.length > 0) {
+        this.userId = this.userProfiles[0].userId;
+        this.role = this.auth.getRoleFromToken();
+        this.getUserProfile();
       }
-    );
+    });
   }
 
-  getImageByUserId(userId: number) {
-    if (!this.isImageDeleted) {
-      this.imageService.getImageByUserId(userId).subscribe(
-        (response: ArrayBuffer) => {
-          const blob = new Blob([response], { type: 'image/jpeg' });
-          const blobUrl = URL.createObjectURL(blob);
-          this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+  getUserProfile(): void {
+    if (this.userId !== null) {
+      this.profileService.getProfileById(this.userId).subscribe(
+        profile => {
+          if (profile.hasImage) {
+            this.getImageByUserId(profile.userId);
+          } else {
+            this.imageUrl = null;
+          }
         },
-        (error) => {
-          console.error('Error fetching user image:', error);
+        error => {
+          console.error('Error fetching user profile:', error);
         }
       );
     }
   }
 
-  logout() {
+  getImageByUserId(userId: number): void {
+    this.imageService.getImageByUserId(userId).subscribe(
+      (response: ArrayBuffer) => {
+        const blob = new Blob([response], { type: 'image/jpeg' });
+        const blobUrl = URL.createObjectURL(blob);
+        this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+      },
+      error => {
+        console.error('Error fetching user image:', error);
+      }
+    );
+  }
+
+  logout(): void {
     this.auth.signOut();
   }
 }

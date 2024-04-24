@@ -18,7 +18,8 @@
                       [src]="profile.imageUrl ? profile.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'">
                     <span class="username">{{profile.username}}</span>
                   </div>
-                  <span class="badge badge-primary badge-pill unread-messages" *ngIf="profile.unreadMessageCount > 0">{{profile.unreadMessageCount}}</span>
+                  <span class="badge badge-primary badge-pill unread-messages"
+                    *ngIf="profile.unreadMessageCount > 0">{{profile.unreadMessageCount}}</span>
                 </div>
               </a>
             </ng-container>
@@ -78,9 +79,17 @@
           </div>
 
           <div class="footer-chat">
-            <!-- <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i> -->
+            <link href="https://unpkg.com/emoji-mart/css/emoji-mart.css" rel="stylesheet">
+
+            <div class="relative-position">
+              <i class="icon fa fa-smile-o clickable" (click)="toggleEmojiPicker()"
+                style="font-size: 38px; color: lightgrey; cursor: pointer; margin-left: 0; padding-right: 5px" aria-hidden="true"></i> <emoji-mart
+                #messageInput *ngIf="showEmojiPicker" #emojiPicker (emojiClick)="addEmoji($event)"
+                class="emoji-mart-style"></emoji-mart>
+            </div>
             <input #messageInput type="text" class="write-message" placeholder="Type your message here..."
-              [(ngModel)]="newMessage" (keyup.enter)="sendMessage()">
+              [(ngModel)]="newMessage" (keydown.enter)="onEnter($event)">
+
             <i class="icon send fa fa-paper-plane-o clickable" (click)="sendMessage()" aria-hidden="true"></i>
           </div>
         </section>

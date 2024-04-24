@@ -1,36 +1,50 @@
-.container-fluid {
+$white: #fff;
+$light-grey: lightgrey;
+$dark-grey: #515151;
+$transparent: transparent;
+$primary-color: #262730;
+$secondary-color: rgba(255, 255, 255, 0.1);
+
+@mixin reset-padding-margin {
   padding: 0;
   margin: 0;
 }
 
-.row {
-  margin: 0;
+@mixin center-flex {
+  display: flex;
+  align-items: center;
 }
 
-.app-sidebar, main {
-  padding: 0;
+.container-fluid, .row, .app-sidebar, main, .container {
+  @include reset-padding-margin;
 }
 
 .container {
-  background-color: #262730;
+  background-color: $primary-color;
   min-height: 100vh;
   min-width: 100vh;
-  padding: 0;
-  margin: 0;
 }
-
 
 .list-group-item {
-  background-color: transparent;
+  background-color: $transparent;
   border: none;
+
+  &:hover {
+    background-color: $secondary-color;
+  }
 }
 
-.list-group-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.profile, .header-chat, .footer-chat {
+  @include center-flex;
 }
 
 
-/* Profile */
+.profile-image, .chat .messages-chat .message .photo {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
 
 .profile {
   display: flex;
@@ -38,181 +52,128 @@
   align-items: center;
 }
 
-.profile-image {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
-/* Username */
-
-.username {
+.username, .username-chat {
   margin-left: 20px;
   margin-top: 5px;
-  color: #fff;
+  color: $white;
   vertical-align: center;
+
+  &:hover {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+  }
 }
 
 .username-chat {
-  margin-top: 10px;
-  color: #fff;
+  margin-left: 5px;
+  margin-top: 5px;
+  color: $white;
   vertical-align: center;
 }
 
 
-.username:hover {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* Styled element */
 .styled-element {
-  color: white;
+  color: $white;
   margin-bottom: 10px;
   margin-right: 15px;
 }
 
-/* Chat section */
 .chat {
-  width: calc(70% - 80px);
+  width: calc(65% - 115px);
+
+  .header-chat, .footer-chat {
+    border-radius: 10px;
+    height: 60px;
+    width: 720px;
+    background-color: $white;
+
+    .icon {
+      margin-left: 12px;
+      color: #535353;
+      font-size: 14pt;
+    }
+
+    .name {
+      margin: 0 0 0 10px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13pt;
+      color: $dark-grey;
+    }
+
+    .right {
+      position: absolute;
+      right: 40px;
+    }
+  }
+
+  .messages-chat {
+    height: 510px;
+    overflow-y: auto;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .message {
+      @include center-flex;
+    }
+
+    .text {
+      margin: 0 20px;
+      background-color: $white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: lightgrey;
+    }
+
+  }
+
+  .footer-chat {
+    bottom: 0;
+    width: 44%;
+    height: 80px;
+    position: fixed;
+    background-color: $transparent;
+    left: 37vw;
+
+    .send {
+      color: #060404;
+      background-color: $white;
+      position: relative;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 20px;
+    }
+  }
 }
 
-/* Header chat */
-.header-chat {
-  border-radius: 10px;
-  background-color: #FFF;
-  height: 60px;
-  box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
-  display: flex;
-  align-items: center;
-  width: 85%;
-}
-
-.chat .header-chat .icon {
-  margin-left: 12px;
-  color: #535353;
-  font-size: 14pt;
-}
-
-.chat .header-chat .name {
-  margin: 0 0 0 10px;
-  text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13pt;
-  color: #515151;
-}
-
-.chat .header-chat .right {
-  position: absolute;
-  right: 40px;
-}
-
-
-/* Chat messages */
-
-.messages-chat {
-  height: 430px;
-  overflow-y: auto;
-  position: relative;
-}
-
-.messages-chat::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-}
-
-.messages-chat::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3); /* Color of the scrollbar thumb */
-  border-radius: 4px; /* Rounded corners of the thumb */
-}
-
-.messages-chat::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.1); /* Color of the scrollbar track */
-}
-
-.chat .messages-chat .message {
-  display: flex;
-  align-items: center;
-}
-
-.chat .messages-chat .message .photo {
-  display: block;
-  width: 45px;
-  height: 45px;
-  background: #E6E7ED;
-  border-radius: 50px;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.chat .messages-chat .text {
-  margin: 0 35px;
-  background-color: #ffff;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
-
-.timestamp {
-  font-size: 12px;
-  color: lightgrey;
-}
-
-
-/* Footer chat */
-
-.footer-chat {
-  bottom: 0;
-  width: 48%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  background-color: transparent;
-  left: 37vw
-}
-
-.chat .footer-chat .icon {
-  margin-left: 10px;
-  color: #C0C0C0;
-  font-size: 14pt;
-}
-
-.chat .footer-chat .send {
-  color: #060404;
-  background-color: white;
-  position: relative;
-  padding: 20px 20px 20px 20px;
-  border-radius: 10px;
-  font-size: 20px;
-}
-
-.chat .footer-chat .name {
-  margin: 0 0 0 20px;
-  text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13pt;
-  color: #515151;
-}
-
-.chat .footer-chat .right {
-  position: absolute;
-}
-
-/* Write message input */
 .write-message {
   border: none !important;
   width: 80%;
   height: 60px;
-  margin-left: 20px;
+  margin-left: 10px;
   padding: 20px;
   border-radius: 10px;
 }
 
 .unread-messages {
-  color: #fff;
+  color: $white;
   background-color: #ED8C02;
   border-radius: 100%;
   font-size: 12px;
@@ -223,4 +184,16 @@
   position: relative;
 }
 
+.relative-position {
+  position: relative;
+}
+
+.emoji-mart-style {
+  position: absolute;
+  bottom: 150%;
+  height: 520px;
+  overflow: auto;
+  background-color: #1b1c22;
+  color: lightgray;
+}
 

@@ -1,14 +1,11 @@
-<div style="margin: 20px;">
-  <iframe src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID" style="border: 0" width="460"
-    height="300" frameborder="0" scrolling="no"></iframe>
+<div class="container">
+  <iframe class="calendar" src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID"></iframe>
 
   <h6 class="mt-2">Google Meet</h6>
-  <a class="btn" href="https://meet.google.com/?pli=1" target="_blank"
-  style="background-color: #ffbb00; border-color: #ffbb00; color: #fff; border-style: none; margin-right: 10px;">
+  <a id="create-meet" class="btn meet-btn" href="https://meet.google.com/?pli=1" target="_blank">
    Create a Google meet
-</a>
-  <button type="button" class="btn" style="background-color: #0048ff94; color: #fff;"
-    (click)="activeModal.close('Close click')">Close</button>
+  </a>
+  <button type="button" class="btn close-btn" (click)="activeModal.close('Close click')">Close</button>
 </div>
 
 <script>

@@ -12,7 +12,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification.model';
 import { CalendarComponent } from '../calendar/calendar.component';
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -44,30 +43,34 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.userStore.getRoleFromStore().subscribe(val => {
-      const roleFromToken = this.authService.getRoleFromToken();
-      this.role = val || roleFromToken;
-
-      if (this.role === 'Admin') {
-        this.profileService.getAllProfiles().subscribe(profiles => {
-          this.userProfiles = profiles;
-        });
-      }
-
-      if (this.role === 'User') {
-        this.skillsService.getAllSkills().subscribe(skills => {
-          this.skillList = skills;
-        });
-      }
-
+      this.role = val || this.authService.getRoleFromToken();
+      this.loadDataBasedOnRole();
       this.appService.currentSearchText.subscribe(searchText => this.searchText = searchText);
-      const userId = this.authService.getUserId();
-      if (userId !== null) {
-        this.userId = userId;
+      this.userId = this.authService.getUserId();
+      if (this.userId !== null) {
         this.getNotifications();
       }
+    });
+  }
 
+  loadDataBasedOnRole(): void {
+    if (this.role === 'Admin') {
+      this.loadAllProfiles();
+    } else if (this.role === 'User') {
+      this.loadAllSkills();
+    }
+  }
+
+  loadAllProfiles(): void {
+    this.profileService.getAllProfiles().subscribe(profiles => {
+      this.userProfiles = profiles;
+    });
+  }
+
+  loadAllSkills(): void {
+    this.skillsService.getAllSkills().subscribe(skills => {
+      this.skillList = skills;
     });
   }
 
@@ -127,6 +130,6 @@ export class DashboardComponent implements OnInit {
   }
 
   openCalendar() {
-    const modalRef = this.modalService.open(CalendarComponent, { size: 'md' });
+    const modalRef = this.modalService.open(CalendarComponent);
   }
 }
