@@ -34,4 +34,9 @@ export class SkillImageService {
   removeImage(skillId: number): Observable<any> {
     return this.http.delete(`${this.baseApiUrl}/api/SkillImage/RemoveSkillImage/${skillId}`);
   }
-}
+
+  uploadVideo(videoFile: File, skillId: number) {
+    const formData = new FormData();
+    formData.append('videoFile', videoFile);
+    return this.http.post(`${this.baseApiUrl}/api/UploadVideo/${skillId}`, formData);
+  }}

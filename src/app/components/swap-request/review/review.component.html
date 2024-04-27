@@ -33,7 +33,7 @@
         <!-- <h2 class="card-title mt-5">Reviews and ratings</h2> -->
 
         <div *ngIf="reviews.length > 0">
-          <h4 class="card-title mt-5">Average rating: {{ averageRating }}</h4>
+          <label class="rating-title  mt-2">Average rating: {{ averageRating }}</label>
         </div>
 
         <div *ngFor="let review of reviews" class="review-card mb-3">

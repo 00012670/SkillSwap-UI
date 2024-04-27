@@ -11,6 +11,7 @@ export interface Skill {
   skillImage?: SkillImageResponse;
   hasImage?: boolean;
   imageUrl?: SafeUrl;
+  Video?: any;
 }
 
 export enum SkillLevel {

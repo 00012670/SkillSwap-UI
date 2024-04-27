@@ -5,33 +5,38 @@
     <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-      <div class="row mt-5">
+      <div class="row mt-4">
         <div class="col-lg-6">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title text">Skill information</h2>
-              <div class="mb-3 detail-item">
-                <label for="name" class="form-label detail-label">Name</label>
+              <label class="card-title form-title mb-2">Skill information</label>
+              <div class="mb-2 detail-item">
+                <label for="name" class="form-label detail-label mt-2">Name</label>
                 <p id="name" class="detail-value">{{ skillDetails.name }}</p>
               </div>
               <div class="mb-3 detail-item">
-                <label for="description" class="form-label detail-label">Description</label>
+                <label for="description" class="form-label detail-label  mt-2">Description</label>
                 <p id="description" class="detail-value">{{ skillDetails.description }}</p>
               </div>
-
               <div class="mb-3 detail-item">
-                <label for="category" class="form-label detail-label">Category</label>
+                <label for="category" class="form-label detail-label mt-2">Category</label>
                 <p id="category" class="detail-value">{{ skillDetails.category }}</p>
               </div>
 
               <div class="mb-3 detail-item">
-                <label for="level" class="form-label detail-label">Level</label>
+                <label for="level" class="form-label detail-label mt-2">Level</label>
                 <p id="level" class="detail-value">{{ getLevel(skillDetails.level) }}</p>
               </div>
 
               <div class="mb-3 detail-item">
-                <label for="prerequisites" class="form-label detail-label">Prerequisity</label>
+                <label for="prerequisites" class="form-label detail-label mt-2">Prerequisity</label>
                 <p id="prerequisites" class="detail-value">{{ skillDetails.prerequisity }}</p>
+              </div>
+              <div class="mb-3 detail-item">
+                  <label for="skillInterested" class="form-label detail-label mt-2">Skill Image</label>
+                <div>
+                  <img *ngIf="imageSkillUrl" class="img-responsive img-thumbnail user-image" [src]="imageSkillUrl" alt="Skill Image">
+                </div>
               </div>
 
             </div>
@@ -41,29 +46,37 @@
         <div class="col-lg-6">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title">User information</h2>
+              <label class="card-title form-title mb-2">User information</label>
 
-              <div class="mb-3 detail-item">
-                <label for="fullName" class="form-label detail-label">Full Name</label>
+              <div class="mb-2 detail-item">
+                <label for="username" class="form-label detail-label mt-2">Username</label>
+                <p id="username" class="detail-value">{{ userProfile.username }}</p>
+              </div>
+
+              <div class="mb-2 detail-item">
+                <label for="fullName" class="form-label detail-label mt-2">Full Name</label>
                 <p id="fullName" class="detail-value">{{ userProfile.fullName }}</p>
               </div>
 
-              <div class="mb-3 detail-item">
-                <label for="bio" class="form-label detail-label">Bio</label>
+              <div class="mb-2 detail-item">
+                <label for="email" class="form-label detail-label mt-2">Email</label>
+                <p id="email" class="detail-value">{{ userProfile.email }}</p>
+              </div>
+
+              <div class="mb-2 detail-item">
+                <label for="bio" class="form-label detail-label mt-2">Bio</label>
                 <p id="bio" class="detail-value">{{ userProfile.bio }}</p>
               </div>
 
-              <div class="mb-3 detail-item">
-                <label for="skillInterested" class="form-label detail-label">Skills Interested</label>
+              <div class="mb-2 detail-item">
+                <label for="skillInterested" class="form-label detail-label mt-2">Skills Interested</label>
                 <p id="skillInterested" class="detail-value">{{ userProfile.skillInterested }}</p>
               </div>
 
-              <div class="mb-3 detail-item">
-                <div class="form-label detail-label">
-                  <label for="skillInterested">User Image</label>
-                </div>
+              <div class="mb-2 detail-item">
+                  <label for="skillInterested"  class="form-label detail-label mt-2">User Image</label>
                 <div>
-                  <img [src]="imageUrl" class="img-responsive img-thumbnail user-image">
+                  <img *ngIf="imageUrl" class="img-responsive img-thumbnail user-image" [src]="imageUrl" alt="User Image">
                 </div>
               </div>
 

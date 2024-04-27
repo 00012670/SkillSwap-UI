@@ -12,6 +12,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { SkillsService } from 'src/app/services/skill.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { ImageService } from 'src/app/services/image.service';
+import { SkillImageService } from 'src/app/services/skill-image.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-swap-request',
@@ -27,6 +29,7 @@ export class SwapRequestComponent {
   editSkillForm!: FormGroup;
   submited = false;
   imageUrl: SafeUrl | undefined;
+  imageSkillUrl: SafeUrl | undefined;
   loggedInUserId: number | null = null;
   acceptedSwapRequests: GetSwapRequest[] = [];
   reviews: Review[] = [];
@@ -44,7 +47,8 @@ export class SwapRequestComponent {
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private skillImageService: SkillImageService,
   ) { }
 
   ngOnInit(): void {
@@ -70,6 +74,25 @@ export class SwapRequestComponent {
       this.userProfile = profile;
       if (this.userProfile.hasImage) {
         this.getImageByUserId(this.userProfile.userId);
+      }
+      if(this.skillDetails.hasImage) {
+        this.getImageBySkillId(this.skillDetails.skillId);
+      }
+    });
+  }
+
+  getImageBySkillId(skillId: number) {
+    this.skillImageService.getImageBySkillId(skillId).subscribe({
+      next: response => {
+        const blob = new Blob([response], { type: 'image/jpeg' });
+        const blobUrl = URL.createObjectURL(blob);
+        this.imageSkillUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+        this.isImageUploaded = true;
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status !== 404) {
+          console.error('Failed to get image', error);
+        }
       }
     });
   }

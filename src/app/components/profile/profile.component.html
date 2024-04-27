@@ -12,6 +12,16 @@
 
           <form #form="ngForm" (ngSubmit)="updateProfile()">
             <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" disabled="true"
+                [(ngModel)]="profileDetails.username">
+            </div>
+            <div class="mb-3">
+              <label for="username" class="form-label">Email</label>
+              <input type="text" class="form-control" id="username" name="username" disabled="true"
+                [(ngModel)]="profileDetails.email">
+            </div>
+            <div class="mb-3">
               <label for="fullName" class="form-label">Full Name</label>
               <input type="text" class="form-control" id="fullName" name="fullName"
                 [(ngModel)]="profileDetails.fullName">
@@ -42,8 +52,8 @@
               <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
           </div>
           <br>
-          <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
-          <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger"
+          <button (click)="uploadImage()" class="btn btn-primary mt-3" [disabled]="!isImageChosen">Upload</button> |
+          <button *ngIf="profileDetails.userId" (click)="removeImage()" class="btn btn-danger mt-3"
             [disabled]="!isImageUploaded">Remove</button>
         </div>
       </div>

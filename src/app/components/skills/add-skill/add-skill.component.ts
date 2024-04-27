@@ -134,6 +134,17 @@ export class AddSkillComponent implements OnInit {
       })
     ).subscribe();
   }
+
+  onFileSelected(event: { target: { files: File[]; }; }) {
+    this.file = event.target.files[0];
+  }
+
+  onUpload() {
+    this.skillImageService.uploadVideo(this.file, this.skillDetails.skillId)
+      .subscribe(response => {
+        console.log(response);
+      });
+  }
 }
 
 
