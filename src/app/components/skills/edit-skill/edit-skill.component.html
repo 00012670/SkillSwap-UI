@@ -38,7 +38,7 @@
           <label for="level" class="form-label">Level</label>
           <select formControlName="level" [ngClass]="{'is-invalid': submited && editSkillForm.get('level')!.errors}"
             class="form-select" id="level" name="level">
-            <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
+            <option *ngFor="let level of levelOptions" [value]="level">{{ getLevel(level) }}</option>
           </select>
         </div>
 
@@ -60,7 +60,23 @@
         <div class="mt-3"> <a [routerLink]="['/skills', userId]"> Go back</a>
         </div>
       </form>
+    </div>
 
+    <!-- Image Section -->
+    <div class="col-md-6">
+      <div class="md-6">
+        <label for="uploadImage" class="form-label">Upload Image</label>
+        <input #uploadImageRef type="file" class="form-control" placeholder="Choose file" (change)="onChange($event)"
+          id="uploadImage" name="upload">
+
+        <br>
+        <label class="image-upload" for="fileupload">
+          <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
+      </div>
+      <br>
+      <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |
+      <button *ngIf="skillDetails.skillId" (click)="removeImage()" class="btn btn-danger"
+        [disabled]="!isImageUploaded">Remove</button>
     </div>
   </div>
 </div>

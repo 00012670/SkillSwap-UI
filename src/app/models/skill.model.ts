@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export interface Skill {
   skillId: number;
   name: string;
@@ -6,6 +8,9 @@ export interface Skill {
   level: SkillLevel;
   prerequisity: string;
   userId: number;
+  skillImage?: SkillImageResponse;
+  hasImage?: boolean;
+  imageUrl?: SafeUrl;
 }
 
 export enum SkillLevel {
@@ -15,4 +20,10 @@ export enum SkillLevel {
   Master = 3,
 }
 
+export interface SkillImageResponse {
+  SkillImageId: number;
+  img: any;
+  skillId: number;
+  Skill: string;
+}
 

@@ -1,21 +1,19 @@
-<div class="modal-header" style="border-bottom: 1px solid #dee2e6;">
-  <h4 class="modal-title" style="color: #495057;">Notifications</h4>
-  <a (click)="deleteAllNotifications()" *ngIf="notificationList.length > 0"
-    style="color: #ED8C02; text-align: right; cursor: pointer">Mark all as read</a>
+<div class="modal-header">
+  <h4 class="modal-title">Notifications</h4>
+  <a (click)="deleteAllNotifications()" *ngIf="notificationList.length > 0" class="mark-read">Mark all as read</a>
 </div>
-<div class="modal-body mt-3" style="margin: 20px;">
-  <div *ngFor="let notification of notificationList" style="display: flex; justify-content: space-between; align-items: start;">
+<div class="modal-body mt-3">
+  <div *ngFor="let notification of notificationList" class="notification-item">
     <div>
-      <p style="margin-bottom: 0;">{{ notification.content }}</p>
-      <p style="margin-top: 5; font-size: 12px;">{{ formatDateInTimeZone(notification.dateCreated ) }}</p>
+      <p class="notification-content">{{ notification.content }}</p>
+      <p class="notification-date">{{ formatDateInTimeZone(notification.dateCreated ) }}</p>
     </div>
-    <p (click)="viewNotification(notification)" style=" cursor: pointer;">View</p>
-
+    <p (click)="viewNotification(notification)" class="view-notification">View</p>
   </div>
   <p *ngIf="notificationList.length === 0">You don't have any new notifications.</p>
 </div>
-<div class="modal-footer mt-3" style="align-items: center; width: 100%;">
-  <div style="display: flex; justify-content: flex-end; width: 100%;">
+<div class="modal-footer mt-3">
+  <div class="footer-content">
     <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
   </div>
 </div>

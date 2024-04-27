@@ -29,20 +29,20 @@ export class NotificationModalComponent {
     const userId = this.authService.getUserId();
     if (userId !== null) {
       this.userId = userId;
-      this.getNotifications();
+      this.fetchNotifications();
     }
   }
 
-  getNotifications(): void {
+  fetchNotifications(): void {
     if (this.userId !== null) {
-      this.notificationService.getNotifications(this.userId).subscribe(notifications => {
-        this.notificationList = notifications;
-      },
-      error => {
-        console.log('Error fetching notification:', error);
-
-      }
-    );
+      this.notificationService.getNotifications(this.userId).subscribe(
+        notifications => {
+          this.notificationList = notifications;
+        },
+        error => {
+          console.error('Error fetching notification:', error);
+        }
+      );
     }
   }
 
@@ -78,7 +78,6 @@ export class NotificationModalComponent {
       this.router.navigate(['/manage-requests', this.userId]);
     }
   }
-
 
   closeModal() {
     this.activeModal.close('Close click');

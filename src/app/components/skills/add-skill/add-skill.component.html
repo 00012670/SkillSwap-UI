@@ -1,67 +1,78 @@
-
 <div class="container my-5">
   <h3 class="mb-3">Create skill</h3>
 
   <div class="row">
-    <div class="col-5">
-      <form [formGroup]="addSkillForm" (ngSubmit)="addSkill()">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input formControlName="name" [ngClass]="{'is-invalid': submited && addSkillForm.get('name')!.errors}" type="text" class="form-control" id="name" name="name">
-          <div *ngIf="submited && addSkillForm.get('name')!.hasError('required')" class="invalid-feedback">
-            *Skill name is required
+    <form [formGroup]="addSkillForm" (ngSubmit)="addSkill()">
+
+      <div class="row">
+        <div class="col-md-6">
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input formControlName="name" [ngClass]="{'is-invalid': submited && addSkillForm.get('name')!.errors}"
+              type="text" class="form-control" id="name" name="name">
+            <div *ngIf="submited && addSkillForm.get('name')!.hasError('required')" class="invalid-feedback">
+              *Skill name is required
+            </div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <input formControlName="description" [ngClass]="{'is-invalid': submited && addSkillForm.get('description')!.errors}" type="text" class="form-control" id="description" name="description">
-          <div *ngIf="submited && addSkillForm.get('description')!.hasError('required')" class="invalid-feedback">
-            *Description is required
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input formControlName="description"
+              [ngClass]="{'is-invalid': submited && addSkillForm.get('description')!.errors}" type="text"
+              class="form-control" id="description" name="description">
+            <div *ngIf="submited && addSkillForm.get('description')!.hasError('required')" class="invalid-feedback">
+              *Description is required
+            </div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="category" class="form-label">Category</label>
-          <input formControlName="category" [ngClass]="{'is-invalid': submited && addSkillForm.get('category')!.errors}" type="text" class="form-control" id="category" name="category">
-          <div *ngIf="submited && addSkillForm.get('category')!.hasError('required')" class="invalid-feedback">
-            *Category is required
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <input formControlName="category"
+              [ngClass]="{'is-invalid': submited && addSkillForm.get('category')!.errors}" type="text"
+              class="form-control" id="category" name="category">
+            <div *ngIf="submited && addSkillForm.get('category')!.hasError('required')" class="invalid-feedback">
+              *Category is required
+            </div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="level" class="form-label">Level</label>
-          <select formControlName="level" [ngClass]="{'is-invalid': submited && addSkillForm.get('level')!.errors}"  class="form-select" id="level" name="level">
-            <option *ngFor="let level of levelOptions" [value]="level">{{ getSkillLevelString(level) }}</option>
-          </select>
-        </div>
-
-
-        <div class="mb-3">
-          <label for="prerequisites" class="form-label">Prerequisity</label>
-          <input formControlName="prerequisity" [ngClass]="{'is-invalid': submited && addSkillForm.get('prerequisity')!.errors}"  name="prerequisity" type="text" class="form-control" id="prerequisites">          <div *ngIf="submited && addSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
-            *Prerequisity is required
+          <div class="mb-3">
+            <label for="level" class="form-label">Level</label>
+            <select formControlName="level" [ngClass]="{'is-invalid': submited && addSkillForm.get('level')!.errors}"
+              class="form-select" id="level" name="level">
+              <option *ngFor="let level of levelOptions" [value]="level">{{ getLevel(level) }}</option>
+            </select>
           </div>
-        </div>
 
-        <div class="md-3">
-          <label for="uploadImage" class="form-label">Upload Image</label>
-          <input type="file" class="form-control" placeholder="Choose file" (change)="onChange($event)" id="uploadImage" name="upload">
+
+          <div class="mb-3">
+            <label for="prerequisites" class="form-label">Prerequisity</label>
+            <input formControlName="prerequisity"
+              [ngClass]="{'is-invalid': submited && addSkillForm.get('prerequisity')!.errors}" name="prerequisity"
+              type="text" class="form-control" id="prerequisites">
+            <div *ngIf="submited && addSkillForm.get('prerequisity')!.hasError('required')" class="invalid-feedback">
+              *Prerequisity is required
+            </div>
+          </div>
           <br>
-          <img class="img-responsive img-thumbnail popupclass" [src]="skillImage">
+          <button type="submit" class="btn btn-primary">Submit</button> |
+          <a [routerLink]="['/skills', userId]"> Go back</a>
         </div>
-        <!-- <div class="md-3">
-          <label for="uploadImage" class="form-label">Upload Image</label>
-          <input type="file" class="form-control" placeholder="Choose file" id="uploadImage" name="upload">
-          <label style="width: 100%" for="fileupload">
-          <br>
-          <img class="img-responsive img-thumbnail popupclass" [src]="EditImageCode"></label>
-        </div> -->
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button> |
-        <a [routerLink]="['/skills', userId]"> Go back</a>
 
-      </form>
-    </div>
+        <!-- Image Section -->
+        <div class="col-md-6">
+          <div class="md-6">
+            <label for="uploadImage" class="form-label">Upload Image</label>
+            <input #uploadImageRef type="file" class="form-control" placeholder="Choose file"
+              (change)="onChange($event)" id="uploadImage" name="upload">
+
+            <br>
+            <label class="image-upload" for="fileupload">
+              <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
+          </div>
+        </div>
+      </div>
+
+    </form>
   </div>
 </div>

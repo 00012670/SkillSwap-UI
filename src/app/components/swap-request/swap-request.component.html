@@ -9,7 +9,7 @@
         <div class="col-lg-6">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title">Skill information</h2>
+              <h2 class="card-title text">Skill information</h2>
               <div class="mb-3 detail-item">
                 <label for="name" class="form-label detail-label">Name</label>
                 <p id="name" class="detail-value">{{ skillDetails.name }}</p>
@@ -26,7 +26,7 @@
 
               <div class="mb-3 detail-item">
                 <label for="level" class="form-label detail-label">Level</label>
-                <p id="level" class="detail-value">{{ getSkillLevelString(skillDetails.level) }}</p>
+                <p id="level" class="detail-value">{{ getLevel(skillDetails.level) }}</p>
               </div>
 
               <div class="mb-3 detail-item">
@@ -63,16 +63,14 @@
                   <label for="skillInterested">User Image</label>
                 </div>
                 <div>
-                  <img [src]="imageUrl" class="img-responsive img-thumbnail" style="width: auto; height: 113px;">
+                  <img [src]="imageUrl" class="img-responsive img-thumbnail user-image">
                 </div>
               </div>
 
-              <button class="btn" *ngIf="!isOwnSkill()"
-                style="background-color: #ED8C02; border-color: #ED8C02; color: #fff; padding: 8px; margin-right: 10px;"
-                (click)="open()">Request for Swap</button>
-              <button *ngIf="!isOwnSkill()" type="submit" class="btn" (click)="navigateToChat(userProfile.userId)"
-                style="background-color: #5171c3; border-color: #5171c3; color: #fff; padding: 8px;">Send
-                Message</button>
+              <button class="btn request-btn" *ngIf="!isOwnSkill()" (click)="open()">Request for Swap</button>
+              <button *ngIf="!isOwnSkill()" type="submit" class="btn message-btn"
+                (click)="navigateToChat(userProfile.userId)">
+                Send Message</button>
             </div>
           </div>
         </div>

@@ -38,9 +38,8 @@
               (change)="onChange($event)" id="uploadImage" name="upload">
 
             <br>
-            <label style="width: 100%" for="fileupload">
-              <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"
-                style="width: auto; height: 150px;"></label>
+            <label class="image-upload" for="fileupload">
+              <img class="img-responsive img-thumbnail popupclass" [src]="imageUrl"></label>
           </div>
           <br>
           <button (click)="uploadImage()" class="btn btn-primary" [disabled]="!isImageChosen">Upload</button> |

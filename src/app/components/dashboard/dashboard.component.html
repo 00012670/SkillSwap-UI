@@ -15,17 +15,17 @@
       </div>
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h3>Dashboard</h3>
+        <h3 class="text-muted">Dashboard</h3>
         <div class="btn-toolbar mb-2 mb-md-0">
 
           <!-- Notifications -->
-          <div style="position: relative;">
+          <div style="position: relative;" class="mt-3">
             <svg (click)="openNotification(notificationList[0])"
-              style="margin-right: 15px; margin-top: 6px; cursor: pointer " class="mr-3" fill="grey" width="23"
+              style="margin-right: 15px; margin-top: 6px; cursor: pointer"  fill="grey" width="23"
               height="25" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M5.27407 14.1754C5.6265 14.6134 6.14404 14.8968 6.71216 14.963C7.28028 15.0292 7.85212 14.8727 8.30113 14.5281C8.43923 14.4261 8.56349 14.3076 8.67095 14.1754M1.00058 9.23794V9.08489C1.02326 8.63209 1.16983 8.19335 1.42519 7.81393C1.85024 7.35816 2.1412 6.79963 2.26756 6.19696C2.26756 5.73116 2.26756 5.25871 2.30865 4.79291C2.52096 2.55044 4.76043 1 6.97251 1H7.0273C9.23938 1 11.4789 2.55044 11.698 4.79291C11.7391 5.25871 11.698 5.73116 11.7322 6.19696C11.8603 6.80103 12.151 7.36129 12.5746 7.82059C12.8319 8.19665 12.9787 8.63378 12.9992 9.08489V9.23129C13.0145 9.83964 12.8029 10.4328 12.4034 10.9015C11.8755 11.4495 11.1591 11.7904 10.3899 11.8597C8.13435 12.0993 5.85861 12.0993 3.60303 11.8597C2.83469 11.7874 2.11936 11.447 1.58956 10.9015C1.19624 10.4325 0.987464 9.84281 1.00058 9.23794Z"
-                stroke="#495057" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="#6C757D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <svg *ngIf="notificationList.length > 0"
               style="position: absolute; top: 2; right: 15px; width: 15px; height: 15px;">
@@ -33,7 +33,7 @@
             </svg>
           </div>
 
-          <button (click)="openCalendar()" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <button (click)="openCalendar()" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle mb-3 mt-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="feather feather-calendar align-text-bottom" aria-hidden="true">
@@ -48,7 +48,7 @@
       </div>
 
       <ng-container *ngIf="role === 'Admin'">
-        <h4 class="mt-4">Users list</h4><br>
+        <h4 class=" mt4">Users list</h4>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>

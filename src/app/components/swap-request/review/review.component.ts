@@ -16,8 +16,9 @@ import { RequestService } from 'src/app/services/request.service';
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
+
 export class ReviewComponent {
-  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0};
+  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0 };
   skillDetails: Skill = { skillId: 0, name: '', description: '', category: '', level: SkillLevel.Competent, prerequisity: '', userId: 0 }
   newReview: Review = { reviewId: 0, fromUserId: this.authService.getUserId(), fromUserName: '', toUserId: 0, skillId: 0, requestId: 0, rating: 0, text: '' };
   username: string | undefined;
@@ -46,6 +47,14 @@ export class ReviewComponent {
     this.getSkillAndUser();
     this.getUsername();
   }
+
+  hasAcceptedSwapRequest(userId: number, skillId: number): boolean {
+    return this.acceptedSwapRequests.some(request =>
+      (request.initiatorId === userId || request.receiverId === userId) &&
+      (request.skillRequestedId === skillId || request.skillOfferedId === skillId)
+    );
+  }
+
 
   getAcceptedSwapRequests(): void {
     this.requestService.getAcceptedSwapRequests(this.loggedInUserId || 0).subscribe(
@@ -101,10 +110,6 @@ export class ReviewComponent {
     return this.skillDetails.userId === Number(this.loggedInUserId);
   }
 
-  hasAcceptedSwapRequest(userId: number): boolean {
-    return this.acceptedSwapRequests.some(request => request.initiatorId === userId || request.receiverId === userId);
-  }
-
   onSwapRequestAccepted(request: GetSwapRequest): void {
     this.newReview.requestId = request.requestId;
     this.newReview.toUserId = request.receiverId;
@@ -153,16 +158,10 @@ export class ReviewComponent {
         this.reviews.push(response);
         this.calculateAverageRating();
       },
-      error: (error) => {
-        this.isSubmittingReview = false;
-        if (error.status === 400) {
-          this.toast.error({ detail: "ERROR", summary: error.error.message, duration: 4000 });
-        } else {
-          this.toast.error({ detail: "ERROR", summary: 'An unexpected error occurred', duration: 4000 });
-        }
-        this.toast.error({ detail: "ERROR", summary: error.error.message, duration: 4000 });
+      error: (err) => {
+        // Handle error
+        this.toast.error({ detail: "ERROR", summary: err.error.message, duration: 5000 });
       }
     });
   }
-
 }

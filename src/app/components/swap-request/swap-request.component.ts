@@ -19,7 +19,7 @@ import { ImageService } from 'src/app/services/image.service';
   styleUrls: ['./swap-request.component.scss'],
 })
 export class SwapRequestComponent {
-  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0};
+  userProfile: Profile = { userId: 0, username: '', email: '', password: '', fullName: '', bio: '', skillInterested: '', token: '', role: '', skills: [], unreadMessageCount: 0 };
   skillDetails: Skill = { skillId: 0, name: '', description: '', category: '', level: SkillLevel.Competent, prerequisity: '', userId: 0 }
   levelOptions: SkillLevel[] = [SkillLevel.Foundational, SkillLevel.Competent, SkillLevel.Expert, SkillLevel.Master];
   newReview: Review = { reviewId: 0, fromUserId: this.authService.getUserId(), fromUserName: '', toUserId: 0, skillId: 0, requestId: 0, rating: 0, text: '' };
@@ -65,7 +65,6 @@ export class SwapRequestComponent {
     });
   }
 
-
   fetchUserProfile(userId: number): void {
     this.profileService.getProfileById(userId).subscribe(profile => {
       this.userProfile = profile;
@@ -95,14 +94,14 @@ export class SwapRequestComponent {
     modalRef.componentInstance.receiverId = this.userProfile.userId;
   }
 
-  getSkillLevelString(level: SkillLevel): string {
-    switch (level) {
-      case SkillLevel.Foundational: return 'Foundational';
-      case SkillLevel.Competent: return 'Competent';
-      case SkillLevel.Expert: return 'Expert';
-      case SkillLevel.Master: return 'Master';
-      default: return '';
-    }
+  getLevel(level: SkillLevel): string {
+    const levels = {
+      [SkillLevel.Foundational]: 'Foundational',
+      [SkillLevel.Competent]: 'Competent',
+      [SkillLevel.Expert]: 'Expert',
+      [SkillLevel.Master]: 'Master'
+    };
+    return levels[level] || '';
   }
 
   isOwnSkill(): boolean {

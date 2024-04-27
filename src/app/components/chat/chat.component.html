@@ -8,7 +8,7 @@
         <div class="col-3 mt-4">
           <div class="list-group">
 
-            <ng-container *ngFor="let profile of profiles">
+            <ng-container *ngFor="let profile of profiles | filter : searchText">
               <a href="#" class="list-group-item list-group-item-action active"
                 *ngIf="profile.userId !== authenticatedUser?.userId"
                 (click)="selectUser(profile); $event.preventDefault()">

@@ -33,6 +33,7 @@ import { ReviewComponent } from './components/swap-request/review/review.compone
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { NotificationModalComponent } from './components/notification/notification.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { ImageComponent } from './image/image.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     ReviewComponent,
     CalendarComponent,
     NotificationModalComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule,

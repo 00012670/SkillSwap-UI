@@ -5,7 +5,7 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ImageService } from 'src/app/services/image.service';
 import { Profile } from 'src/app/models/profile.model';
-import { AppService } from 'src/app/services/app.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-navbar',
@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
     private userStore: UserStoreService,
     private imageService: ImageService,
     private sanitizer: DomSanitizer,
-    public appService: AppService,
+    public searchService: SearchService,
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
       this.fetchUserProfile();
     });
 
-    this.appService.currentShowSearch.subscribe(showSearch => this.showSearch = showSearch);
+    this.searchService.currentShowSearch.subscribe(showSearch => this.showSearch = showSearch);
   }
 
   fetchUserProfile(): void {

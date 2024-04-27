@@ -4,13 +4,12 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AppService {
+export class SearchService {
   private showSearchSource = new BehaviorSubject<boolean>(true);
   currentShowSearch = this.showSearchSource.asObservable();
 
   private searchTextSource = new BehaviorSubject<string>('');
   currentSearchText = this.searchTextSource.asObservable();
-
 
   constructor() { }
 
@@ -19,8 +18,5 @@ export class AppService {
   }
   changeSearchText(searchText: string) {
     this.searchTextSource.next(searchText);
-  }
-  search() {
-    
   }
 }

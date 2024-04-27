@@ -1,0 +1,47 @@
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  color: #495057;
+}
+
+.mark-read {
+  color: #ED8C02;
+  text-align: right;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin: 20px;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.notification-content {
+  margin-bottom: 0;
+}
+
+.notification-date {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.view-notification {
+  cursor: pointer;
+}
+
+.modal-footer {
+  align-items: center;
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}

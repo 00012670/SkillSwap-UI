@@ -5,7 +5,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { SkillsService } from 'src/app/services/skill.service';
 import { SkillLevel } from 'src/app/models/skill.model';
-import { AppService } from 'src/app/services/app.service';
+import { SearchService } from 'src/app/services/search.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationModalComponent } from '../notification/notification.component';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
     private profileService: ProfileService,
     private skillsService: SkillsService,
     private userStore: UserStoreService,
-    private appService: AppService,
+    private searchService: SearchService,
     private modalService: NgbModal,
     private notificationService: NotificationService,
   ) { }
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
     this.userStore.getRoleFromStore().subscribe(val => {
       this.role = val || this.authService.getRoleFromToken();
       this.loadDataBasedOnRole();
-      this.appService.currentSearchText.subscribe(searchText => this.searchText = searchText);
+      this.searchService.currentSearchText.subscribe(searchText => this.searchText = searchText);
       this.userId = this.authService.getUserId();
       if (this.userId !== null) {
         this.getNotifications();
@@ -83,18 +83,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getLevel(level: SkillLevel): string {
-    switch (level) {
-      case SkillLevel.Foundational:
-        return 'Foundational';
-      case SkillLevel.Competent:
-        return 'Competent';
-      case SkillLevel.Expert:
-        return 'Expert';
-      case SkillLevel.Master:
-        return 'Master';
-      default:
-        return '';
-    }
+    const levels = {
+      [SkillLevel.Foundational]: 'Foundational',
+      [SkillLevel.Competent]: 'Competent',
+      [SkillLevel.Expert]: 'Expert',
+      [SkillLevel.Master]: 'Master'
+    };
+    return levels[level] || '';
   }
 
   deleteProfile(userId: number) {

@@ -1,8 +1,13 @@
+import { HttpEventType } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
+import { map } from 'rxjs';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { SkillImageService } from 'src/app/services/skill-image.service';
 import { SkillsService } from 'src/app/services/skill.service';
 
 @Component({
@@ -19,31 +24,39 @@ export class AddSkillComponent implements OnInit {
     SkillLevel.Master
   ];
 
+  @ViewChild('uploadImageRef', { static: false }) uploadImageRef!: ElementRef;
+
+  public skillDetails: Skill = {
+    skillId: 0,
+    name: '',
+    description: '',
+    category: '',
+    level: SkillLevel.Foundational,
+    prerequisity: '',
+    userId: 0,
+    hasImage: false,
+    imageUrl: undefined,
+  }
+
   addSkillForm!: FormGroup
   submited = false;
-
   userId: any;
-  skillImage: any;
   EditSkillCode = '';
   file!: File;
-  progressvalue = 0;
+  imageUrl: SafeUrl | undefined;
+  isImageChosen: boolean = false;
+  isImageUploaded: boolean = false;
+  isImageDeleted: boolean = false;
 
   constructor(
     private authService: AuthService,
     private skillService: SkillsService,
     private router: Router,
     private formBuilder: FormBuilder,
-  ) { }
-
-  ngOnInit(): void {
-
-    const userId = this.authService.getUserId();
-    if (userId !== null) {
-      this.userId = userId;
-    } else {
-      console.error('Error: userId is null');
-    }
-
+    private sanitizer: DomSanitizer,
+    private skillImageService: SkillImageService,
+    private toast: NgToastService
+  ) {
     this.addSkillForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -51,6 +64,13 @@ export class AddSkillComponent implements OnInit {
       level: ['', Validators.required],
       prerequisity: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    const userId = this.authService.getUserId();
+    if (userId !== null) {
+      this.userId = userId;
+    }
   }
 
   addSkill() {
@@ -68,43 +88,51 @@ export class AddSkillComponent implements OnInit {
     };
 
     this.skillService.addSkill(this.userId, requestBody)
-    .subscribe({
-      next: (skill) => {
-        this.router.navigate(['/skills']);
-      },
-      error: (error) => {
-        console.error('Error adding skill:', error);
-      }
-    });
+      .subscribe({
+        next: (skill) => {
+          // After the skill is created, upload the image
+          if (this.file) {
+            this.skillDetails.skillId = skill.skillId; // Assuming the response contains the created skill
+            this.uploadImage();
+          }
+          this.router.navigate(['/skills']);
+          this.toast.success({ detail: 'SUCCESS', summary: 'Skill added successfully', duration: 3000 });
+
+        }
+      });
   }
 
-  getSkillLevelString(level: SkillLevel): string {
-    switch (level) {
-      case SkillLevel.Foundational:
-        return 'Foundational';
-      case SkillLevel.Competent:
-        return 'Competent';
-      case SkillLevel.Expert:
-        return 'Expert';
-      case SkillLevel.Master:
-        return 'Master';
-      default:
-        return '';
-    }
-  }
-
-  UploadImage(code: any, image: any) {
-    this.skillImage = image;
-    this.EditSkillCode = code;
+  getLevel(level: SkillLevel): string {
+    const levels = {
+      [SkillLevel.Foundational]: 'Foundational',
+      [SkillLevel.Competent]: 'Competent',
+      [SkillLevel.Expert]: 'Expert',
+      [SkillLevel.Master]: 'Master'
+    };
+    return levels[level] || '';
   }
 
   onChange(event: any) {
-    let reader = new FileReader();
     this.file = event.target.files[0];
-    reader.readAsDataURL(event.target.files[0]);
+    const reader = new FileReader();
+    reader.readAsDataURL(this.file);
     reader.onload = () => {
-      this.skillImage = reader.result;
+      this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+      this.isImageChosen = true;
     };
+  }
+
+  uploadImage() {
+    this.skillImageService.uploadImage(this.skillDetails.skillId, this.file).pipe(
+      map(event => {
+        if (event.type === HttpEventType.Response) {
+          this.isImageDeleted = false;
+          this.skillDetails.hasImage = true;
+          this.isImageUploaded = true;
+          this.isImageChosen = false;
+        }
+      })
+    ).subscribe();
   }
 }
 

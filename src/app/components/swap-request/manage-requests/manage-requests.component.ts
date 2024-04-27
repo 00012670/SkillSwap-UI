@@ -3,7 +3,7 @@ import { GetSwapRequest, Status, UpdateSwapRequest } from 'src/app/models/reques
 import { RequestService } from 'src/app/services/request.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
-import { AppService } from 'src/app/services/app.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-manage-requests',
@@ -24,7 +24,7 @@ export class ManageRequestsComponent {
     private requestService: RequestService,
     private authService: AuthService,
     private toast: NgToastService,
-    private appService: AppService
+    private searchService: SearchService
 
   ) { }
 
@@ -47,7 +47,7 @@ export class ManageRequestsComponent {
         console.error('Failed to get sent swap requests', error);
       }
     );
-    this.appService.currentSearchText.subscribe(searchText => this.searchText = searchText);
+    this.searchService.currentSearchText.subscribe(searchText => this.searchText = searchText);
 
   }
 

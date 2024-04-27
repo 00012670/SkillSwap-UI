@@ -1,0 +1,32 @@
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title, .close, .modal-body-text, .modal-footer-text {
+  color: #495057;
+}
+
+.modal-select, .modal-input {
+  width: 100%;
+  padding: 10px;
+}
+
+.modal-select {
+  margin-bottom: 20px;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.request-btn {
+  background-color: #ED8C02;
+  border-color: #ED8C02;
+  color: #fff;
+  padding: 6px;
+  border-radius: 6px;
+  margin-right: 10px;
+}

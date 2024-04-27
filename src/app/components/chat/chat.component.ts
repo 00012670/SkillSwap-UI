@@ -11,6 +11,7 @@ import { MessageDto, MessageReadDto, MessageReadDtoWithSafeUrl } from 'src/app/m
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import emojiRegex from 'emoji-regex';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-chat',
@@ -36,6 +37,7 @@ export class ChatComponent implements OnInit {
   editingMessage: MessageReadDtoWithSafeUrl | null = null;
   unreadMessagesSubscription: Subscription | undefined;
   showEmojiPicker = false;
+  searchText: any;
 
   constructor(
     private profileService: ProfileService,
@@ -44,7 +46,8 @@ export class ChatComponent implements OnInit {
     private chatService: ChatService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private searchService: SearchService
   ) { }
 
   ngOnInit() {
@@ -70,7 +73,10 @@ export class ChatComponent implements OnInit {
       this.selectUserFromRouteParams();
     });
 
+    this.searchService.currentSearchText.subscribe(searchText => this.searchText = searchText);
   }
+
+
 
   selectUserFromRouteParams() {
     const userId = Number(this.route.snapshot.paramMap.get('id'));
