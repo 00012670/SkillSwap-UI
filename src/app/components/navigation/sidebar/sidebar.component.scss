@@ -4,7 +4,7 @@
 }
 
 .sidebar-text{
-  color: #11111F;
+  color: #000;
   font-size: 19px;
   font-weight:500;
   padding-left: 1rem !important;
@@ -22,4 +22,8 @@
 
 .svg {
   cursor: pointer;
+}
+
+.dark-mode {
+  background-color: rgb(52 53 64) !important;
 }

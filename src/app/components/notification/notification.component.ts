@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification, NotificationType } from 'src/app/models/notification.model';
 import { Router } from '@angular/router';
+import { ThemeService } from 'src/app/services/theme.service';
+
 
 
 @Component({
@@ -23,6 +25,7 @@ export class NotificationModalComponent {
     private notificationService: NotificationService,
     private router: Router,
     private changeDetector: ChangeDetectorRef,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit() {

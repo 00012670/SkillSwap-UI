@@ -1,4 +1,18 @@
 .button-style {
   background-color: #ED8C02;
   color: white;
+
+  &:hover {
+  background-color: orange;
+  }
+}
+
+
+.side-mode {
+  background-color: rgb(52 53 64) !important;
+}
+
+.premium-mode {
+  background-color: #1b1c22;
+  color: white;
 }

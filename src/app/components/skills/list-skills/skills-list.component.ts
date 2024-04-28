@@ -6,6 +6,7 @@ import { SkillsService } from 'src/app/services/skill.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { SearchService } from 'src/app/services/search.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-skills-list',
@@ -28,7 +29,8 @@ export class SkillsListComponent implements OnInit {
     private userStore: UserStoreService,
     private profileService: ProfileService,
     private skillsService: SkillsService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

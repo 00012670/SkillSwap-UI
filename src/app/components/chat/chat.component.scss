@@ -108,7 +108,7 @@ $secondary-color: rgba(255, 255, 255, 0.1);
   }
 
   .messages-chat {
-    height: 510px;
+    height: 440px;
     overflow-y: auto;
     position: relative;
 
@@ -146,11 +146,10 @@ $secondary-color: rgba(255, 255, 255, 0.1);
 
   .footer-chat {
     bottom: 0;
-    width: 44%;
-    height: 80px;
+    width: 47.3%;
     position: fixed;
     background-color: $transparent;
-    left: 37vw;
+    left: 38.3vw;
 
     .send {
       color: #060404;
@@ -197,3 +196,10 @@ $secondary-color: rgba(255, 255, 255, 0.1);
   color: lightgray;
 }
 
+.side-mode {
+  background-color: rgb(52 53 64) !important;
+}
+
+.dark-mode {
+  color: black
+}

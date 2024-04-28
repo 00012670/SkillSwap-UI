@@ -3,7 +3,7 @@
 }
 
 .modal-title {
-  color: #495057;
+  color: #5e656c;
 }
 
 .mark-read {
@@ -44,4 +44,14 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
+}
+
+//Dark mode
+
+.dark-mode {
+  background-color: #1b1c22;
+}
+
+.btn-mode {
+  background-color: #1b1c22;
 }

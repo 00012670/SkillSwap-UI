@@ -14,6 +14,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { PaymentFailureComponent } from './components/payment/payment-failure/payment-failure.component';
 import { PaymentSuccessComponent } from './components/payment/payment-success/payment-success.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,7 +31,8 @@ const routes: Routes = [
   { path: 'payment/:id', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'failure', component: PaymentFailureComponent },
-  { path: 'success', component: PaymentSuccessComponent }
+  { path: 'success', component: PaymentSuccessComponent },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

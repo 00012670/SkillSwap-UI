@@ -3,6 +3,7 @@ import { catchError, of, switchMap } from 'rxjs';
 import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class SidebarComponent {
     private auth: AuthService,
     private profileService: ProfileService,
     private userStore: UserStoreService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

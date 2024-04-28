@@ -2,14 +2,16 @@
 
 <div class="container-fluid">
   <div class="row">
-    <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
+    <app-sidebar [class.side-mode]="themeService.isDarkMode()"
+      class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="py-4 text-center">
         <h2 class="mb-1 mt-4">Premium Options</h2>
       </div>
       <div class="container mb-2">
         <div class="row justify-content-md-center mb-2">
-          <div class="card card-pricing text-center px-3 mb-1 w-50" *ngIf="$premium|async as premium">
+          <div class="card card-pricing text-center px-3 mb-1 w-50" [class.premium-mode]="themeService.isDarkMode()"
+            *ngIf="$premium|async as premium">
             <span
               class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-primary text-white shadow-sm">{{premium.name}}</span>
             <div class="bg-transparent card-header pt-2 border-0">
@@ -34,6 +36,10 @@
 
         </div>
       </div>
+      <h4>Dark Mode</h4>
+      <app-theme-toggle></app-theme-toggle>
+
     </main>
+
   </div>
 </div>

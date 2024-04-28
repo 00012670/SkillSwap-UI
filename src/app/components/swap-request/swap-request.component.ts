@@ -14,6 +14,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { ImageService } from 'src/app/services/image.service';
 import { SkillImageService } from 'src/app/services/skill-image.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-swap-request',
@@ -49,6 +50,7 @@ export class SwapRequestComponent {
     private modalService: NgbModal,
     private router: Router,
     private skillImageService: SkillImageService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

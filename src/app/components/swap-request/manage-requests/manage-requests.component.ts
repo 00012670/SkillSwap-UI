@@ -4,6 +4,7 @@ import { RequestService } from 'src/app/services/request.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { SearchService } from 'src/app/services/search.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-manage-requests',
@@ -24,8 +25,8 @@ export class ManageRequestsComponent {
     private requestService: RequestService,
     private authService: AuthService,
     private toast: NgToastService,
-    private searchService: SearchService
-
+    private searchService: SearchService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit() {

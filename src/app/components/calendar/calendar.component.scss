@@ -14,9 +14,17 @@
   color: #fff;
   border-style: none;
   margin-right: 10px;
+
+  &:hover {
+    background-color: orange;
+    }
 }
 
 .close-btn {
   background-color: #0048ff94;
   color: #fff;
+}
+
+.dark-mode {
+  background-color: #1b1c22;
 }

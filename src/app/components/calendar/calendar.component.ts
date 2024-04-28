@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-calendar',
@@ -7,5 +8,5 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  constructor(public activeModal: NgbActiveModal) { }
+  constructor(public activeModal: NgbActiveModal, public themeService: ThemeService) { }
 }

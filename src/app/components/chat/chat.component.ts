@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import emojiRegex from 'emoji-regex';
 import { SearchService } from 'src/app/services/search.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-chat',
@@ -47,7 +48,8 @@ export class ChatComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit() {

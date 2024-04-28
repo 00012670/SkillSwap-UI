@@ -33,7 +33,9 @@ import { ReviewComponent } from './components/swap-request/review/review.compone
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { NotificationModalComponent } from './components/notification/notification.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { ImageComponent } from './image/image.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { MatIconModule } from '@angular/material/icon';
+import { ThemeToggleComponent } from './components/settings/theme-toggle/theme-toggle.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import { ImageComponent } from './image/image.component';
     ReviewComponent,
     CalendarComponent,
     NotificationModalComponent,
-    ImageComponent,
+    SettingsComponent,
+    ThemeToggleComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,7 +79,7 @@ import { ImageComponent } from './image/image.component';
       useFactory: adapterFactory,
     }),
     PickerModule,
-
+    MatIconModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

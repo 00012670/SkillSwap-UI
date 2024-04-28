@@ -2,14 +2,14 @@
 
 <div class="container-fluid">
   <div class="row">
-    <app-sidebar class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
+    <app-sidebar [class.side-mode]="themeService.isDarkMode()" class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
       <div class="container my-5">
         <h3>My skills</h3>
         <a class="nav-link active orange-text" aria-current="page" routerLink="/skills/create">Create skill</a>
         <br><br>
-        <table class="table  table-striped" *ngIf="skillList && skillList.length > 0">
+        <table class="table  table-striped" *ngIf="skillList && skillList.length > 0" [class.table-dark]="themeService.isDarkMode()">
           <thead>
             <tr>
               <!-- <th scope="col">Id</th> -->

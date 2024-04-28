@@ -11,6 +11,7 @@ import { NotificationModalComponent } from '../notification/notification.compone
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification.model';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
     private searchService: SearchService,
     private modalService: NgbModal,
     private notificationService: NotificationService,
+    public themeService: ThemeService
   ) { }
 
   ngOnInit(): void {

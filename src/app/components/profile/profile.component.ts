@@ -10,6 +10,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NgToastService } from 'ng-angular-popup';
 import { Profile } from 'src/app/models/profile.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-profile',
@@ -57,7 +58,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toast: NgToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public themeService: ThemeService,
   ) { }
 
   ngOnInit() {
