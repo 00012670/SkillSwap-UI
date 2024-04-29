@@ -115,7 +115,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
   // Check if email is valid
   checkValidEmail(value: string) {
     this.resetPasswordEmail = value;

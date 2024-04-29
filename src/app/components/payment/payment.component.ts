@@ -15,6 +15,8 @@ import { ThemeService } from 'src/app/services/theme.service';
 export class PaymentComponent implements OnInit {
 
   showSearch: boolean = false;
+  isSidebarShrinked: boolean = false;
+
 
   $premium: Observable<IPremiumPlan> = new Observable<IPremiumPlan>();
   constructor(

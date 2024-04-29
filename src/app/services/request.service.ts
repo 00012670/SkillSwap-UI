@@ -40,6 +40,10 @@ export class RequestService {
   deleteSwapRequest(requestId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseApiUrl}/api/SwapRequest/DeleteSwapRequest/${requestId}`);
   }
+
+  getAllSwapRequests(): Observable<GetSwapRequest[]> {
+    return this.http.get<GetSwapRequest[]>(`${this.baseApiUrl}/api/SwapRequest/GetAllSwapRequests`);
+  }
 }
 
 

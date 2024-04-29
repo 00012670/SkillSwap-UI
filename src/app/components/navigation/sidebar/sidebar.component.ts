@@ -1,29 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { catchError, of, switchMap } from 'rxjs';
 import { Profile } from 'src/app/models/profile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   userId: number | null = null;
   role: string = '';
   userProfiles: Profile[] = [];
   username: string = "";
+  isSidebarShrinked: boolean = false;
+  private sidebarSubscription: Subscription | undefined
+
 
   constructor(
     private auth: AuthService,
     private profileService: ProfileService,
     private userStore: UserStoreService,
-    public themeService: ThemeService
-  ) { }
+    public themeService: ThemeService,
+  ) {
+    this.themeService.isSidebarShrinked$.subscribe(value => {
+      this.isSidebarShrinked = value;
+    });
+  }
 
   ngOnInit(): void {
     this.userStore.getUsernameFromStore().pipe(
@@ -48,6 +56,16 @@ export class SidebarComponent {
         this.role = this.auth.getRoleFromToken();
       }
     });
+    this.sidebarSubscription = this.themeService.isSidebarShrinked$.subscribe(
+      (isShrinked) => {
+        this.isSidebarShrinked = isShrinked;
+      }
+    );
   }
 
+  ngOnDestroy() {
+    if (this.sidebarSubscription) {
+      this.sidebarSubscription.unsubscribe();
+    }
+  }
 }

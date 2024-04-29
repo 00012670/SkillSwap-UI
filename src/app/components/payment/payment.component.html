@@ -2,8 +2,8 @@
 
 <div class="container-fluid">
   <div class="row">
-    <app-sidebar [class.side-mode]="themeService.isDarkMode()"
-      class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
+    <app-sidebar [class.side-mode]="themeService.isDarkMode()" [class.sidebar-shrinked]="isSidebarShrinked"
+    class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="py-4 text-center">
         <h2 class="mb-1 mt-4">Premium Options</h2>
@@ -36,7 +36,7 @@
 
         </div>
       </div>
-      <h4>Dark Mode</h4>
+      <h5>Dark Mode</h5>
       <app-theme-toggle></app-theme-toggle>
 
     </main>

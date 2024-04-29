@@ -88,18 +88,18 @@
             [class.table-dark]="themeService.isDarkMode()">
             <thead>
               <tr>
-                <!-- <th scope="col">Id</th> -->
+                <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Category</th>
                 <th scope="col">Level</th>
                 <th scope="col">Prerequisity</th>
-                <!-- <th scope="col">Image</th> -->
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let skill of skillList | filter :searchText">
+                <td><img [src]="skill.imageSkillUrl" width="100"></td>
                 <td>{{ skill.name }}</td>
                 <td>{{ skill.description }}</td>
                 <td>{{ skill.category }}</td>

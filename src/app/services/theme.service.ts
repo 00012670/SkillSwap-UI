@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -33,4 +34,11 @@ export class ThemeService {
     }
   }
 
+  //Side bar shrink
+  private _isSidebarShrinked = new BehaviorSubject(false);
+  isSidebarShrinked$ = this._isSidebarShrinked.asObservable();
+
+  toggleSidebar() {
+    this._isSidebarShrinked.next(!this._isSidebarShrinked.value);
+  }
 }

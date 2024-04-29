@@ -55,7 +55,7 @@
 
         <div class="mt-4"> <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
           <button type="button" class="btn btn-danger"
-            (click)="checkSKillBeforeDeleting(skillDetails.skillId)">Delete</button>
+            (click)="deleteSkill(skillDetails.skillId)">Delete</button>
         </div>
         <div class="mt-3"> <a [routerLink]="['/skills', userId]"> Go back</a>
         </div>

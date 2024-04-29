@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -24,7 +25,28 @@ export class SkillImageService {
   }
 
   getImageBySkillId(skillId: number): Observable<ArrayBuffer> {
-    return this.http.get<ArrayBuffer>(`${this.baseApiUrl}/api/SkillImage/GetSkillImageBySkillId/${skillId}`, {responseType: 'arraybuffer' as 'json'});
+    return this.http.get<ArrayBuffer>(`${this.baseApiUrl}/api/SkillImage/GetSkillImageBySkillId/${skillId}`, { responseType: 'arraybuffer' as 'json' });
+  }
+
+  getImageBySkillIdAsSafeUrl(skillId: number, skillImageService: SkillImageService, sanitizer: DomSanitizer): Promise<SafeUrl | undefined> {
+    return new Promise((resolve, reject) => {
+      skillImageService.getImageBySkillId(skillId).subscribe({
+        next: response => {
+          const blob = new Blob([response], { type: 'image/jpeg' });
+          const blobUrl = URL.createObjectURL(blob);
+          const imageSkillUrl = sanitizer.bypassSecurityTrustUrl(blobUrl);
+          resolve(imageSkillUrl);
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            resolve(undefined);
+          } else {
+            console.error('Failed to get image', error);
+            reject(error);
+          }
+        }
+      });
+    });
   }
 
   getImageById(skillId: number): Observable<ArrayBuffer> {
@@ -39,4 +61,5 @@ export class SkillImageService {
     const formData = new FormData();
     formData.append('videoFile', videoFile);
     return this.http.post(`${this.baseApiUrl}/api/UploadVideo/${skillId}`, formData);
-  }}
+  }
+}

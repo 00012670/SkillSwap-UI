@@ -6,8 +6,9 @@
       class="col-md-3 col-lg-2 d-md-block bg-light sidebar"></app-sidebar>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="container my-5">
-        <h4>Received requests</h4>
-        <ng-container *ngIf="receivedSwapRequests && receivedSwapRequests.length > 0; else noReceivedRequests">
+        <h4>{{ role === 'Admin' ? 'All requests' : 'Received requests' }}</h4>
+        <ng-container
+          *ngIf="role === 'Admin' || (receivedSwapRequests && receivedSwapRequests.length > 0); else noReceivedRequests">
           <table class="table table-striped mt-5" [class.table-dark]="themeService.isDarkMode()">
             <thead>
               <tr>
@@ -30,8 +31,9 @@
                 <td><a [routerLink]="['/swap', request.skillOfferedId]"
                     [class.view-dark]="themeService.isDarkMode()">View</a></td>
                 <td>
-                  <button (click)="acceptRequest(request)">Accept</button> |
-                  <button (click)="rejectRequest(request)">Reject</button>
+                  <button *ngIf="role !== 'Admin'" (click)="acceptRequest(request)">Accept</button> 
+                  <button *ngIf="role !== 'Admin'" (click)="rejectRequest(request)">Reject</button>
+                  <button *ngIf="role === 'Admin'" (click)="deleteRequest(request)">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -46,7 +48,8 @@
 
       <div class="container my-5">
         <h4>Sent requests</h4>
-        <ng-container *ngIf="sentSwapRequests && sentSwapRequests.length > 0; else noSentRequests">
+        <ng-container
+          *ngIf="role === 'Admin' || (sentSwapRequests && sentSwapRequests.length > 0); else noSentRequests">
           <table class="table table-striped mt-5" [class.table-dark]="themeService.isDarkMode()">
             <thead>
               <tr>

@@ -35,7 +35,7 @@ export class AddSkillComponent implements OnInit {
     prerequisity: '',
     userId: 0,
     hasImage: false,
-    imageUrl: undefined,
+    imageSkillUrl: undefined,
   }
 
   addSkillForm!: FormGroup

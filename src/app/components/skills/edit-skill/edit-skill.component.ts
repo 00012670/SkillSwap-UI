@@ -3,12 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Skill, SkillLevel } from 'src/app/models/skill.model';
 import { SkillsService } from 'src/app/services/skill.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RequestService } from 'src/app/services/request.service';
 import { NgToastService } from 'ng-angular-popup';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { SkillImageService } from 'src/app/services/skill-image.service';
 import { map } from 'rxjs';
-import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 
 
 @Component({
@@ -19,6 +18,7 @@ import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 
 export class EditSkillComponent implements OnInit {
 
+  // Reference to upload image element
   @ViewChild('uploadImageRef', { static: false }) uploadImageRef!: ElementRef;
 
   levelOptions: SkillLevel[] = [
@@ -28,6 +28,7 @@ export class EditSkillComponent implements OnInit {
     SkillLevel.Master
   ];
 
+  // Object to store skill details
   skillDetails: Skill = {
     skillId: 0,
     name: '',
@@ -38,25 +39,25 @@ export class EditSkillComponent implements OnInit {
     userId: 0
   }
 
-  userId: any;
-  editSkillForm: FormGroup;
-  submited = false;
-  file!: File;
-  imageUrl: SafeUrl | undefined;
-  isImageChosen: boolean = false;
-  isImageUploaded: boolean = false;
-  isImageDeleted: boolean = false;
+  userId: any; // User ID
+  editSkillForm: FormGroup; // Form group for editing skill
+  submited = false; // Flag to indicate form submission status
+  file!: File; // Selected file for upload
+  imageUrl: SafeUrl | undefined; // URL of the uploaded image
+  isImageChosen: boolean = false; // Flag to indicate if an image is chosen for upload
+  isImageUploaded: boolean = false; // Flag to indicate if an image is successfully uploaded
+  isImageDeleted: boolean = false; // Flag to indicate if an image is deleted
 
   constructor(
     private route: ActivatedRoute,
     private skillService: SkillsService,
-    private requestService: RequestService,
     private router: Router,
     private formBuilder: FormBuilder,
     private toast: NgToastService,
     private sanitizer: DomSanitizer,
     private skillImageService: SkillImageService,
   ) {
+    // Initialize form with validators
     this.editSkillForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -72,12 +73,14 @@ export class EditSkillComponent implements OnInit {
         const id = params.get('id');
 
         if (id) {
+          // Fetch skill details by ID
           this.skillService.getSKillbyId(+id)
             .subscribe({
               next: (response) => {
                 this.skillDetails = response;
                 this.editSkillForm.patchValue(this.skillDetails);
                 if (this.skillDetails.hasImage && !this.isImageDeleted) {
+                  // Load image if exists
                   this.getImageBySkillId(this.skillDetails.skillId);
                 }
               }
@@ -87,13 +90,9 @@ export class EditSkillComponent implements OnInit {
     });
   }
 
-  updateSkill() {
-    this.submited = true;
-    if (this.editSkillForm.invalid) {
-      return
-    }
-
-    const requestBody = {
+  // Create request body for updating skill
+  createRequestBody() {
+    return {
       skillId: this.skillDetails.skillId,
       userId: this.skillDetails.userId,
       name: this.editSkillForm.get('name')?.value,
@@ -102,6 +101,15 @@ export class EditSkillComponent implements OnInit {
       level: +this.editSkillForm.get('level')?.value,
       prerequisity: this.editSkillForm.get('prerequisity')?.value
     };
+  }
+
+  updateSkill() {
+    this.submited = true;
+    if (this.editSkillForm.invalid) {
+      return
+    }
+    // Create a request body based on the form data
+    const requestBody = this.createRequestBody();
 
     this.skillService.updateSkill(this.skillDetails.skillId, requestBody)
       .subscribe({
@@ -115,21 +123,6 @@ export class EditSkillComponent implements OnInit {
       });
   }
 
-  checkSKillBeforeDeleting(skillId: number) {
-    this.requestService.getSwapRequestsBySkillId(skillId).subscribe({
-      next: (swapRequests) => {
-        if (swapRequests && swapRequests.length > 0) {
-          this.toast.error({ detail: "ERROR", summary: 'This skill cannot be deleted because it is associated with existing swap requests.', duration: 5000 });
-        } else {
-          this.deleteSkill(skillId);
-        }
-      },
-      error: (error) => {
-        console.error('Error checking swap requests:', error);
-      }
-    });
-  }
-
   deleteSkill(skillId: number) {
     if (this.skillDetails.skillId && confirm('Are you sure you want to remove the skill?')) {
       this.skillService.removeSkill(skillId).subscribe({
@@ -137,7 +130,7 @@ export class EditSkillComponent implements OnInit {
           this.router.navigate(['skills']);
         },
         error: (error) => {
-          console.error('Error deleting skill:', error);
+          this.toast.error({ detail: "ERROR", summary: 'This skill cannot be deleted because it is associated with existing swap requests.', duration: 5000 });
         }
       });
     }
@@ -155,30 +148,27 @@ export class EditSkillComponent implements OnInit {
   }
 
   getImageBySkillId(skillId: number) {
-    this.skillImageService.getImageBySkillId(skillId).subscribe({
-      next: response => {
-        const blob = new Blob([response], { type: 'image/jpeg' });
-        const blobUrl = URL.createObjectURL(blob);
-        this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+    this.skillImageService.getImageBySkillIdAsSafeUrl(skillId, this.skillImageService, this.sanitizer)
+      .then(imageUrl => {
+        this.imageUrl = imageUrl;
         this.isImageUploaded = true;
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status !== 404) {
-          console.error('Failed to get image', error);
-        }
-      }
-    });
+      })
+      .catch(error => console.error('Failed to get image', error));
   }
 
+  // Handles file input change event
   onChange(event: any) {
+    // Set the selected file and read its contents
     this.file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(this.file);
+    // Once the file is read, update the image URL and flag indicating file selection
     reader.onload = () => {
       this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
       this.isImageChosen = true;
     };
   }
+
 
   uploadImage() {
     this.skillImageService.uploadImage(this.skillDetails.skillId, this.file).pipe(
@@ -200,6 +190,7 @@ export class EditSkillComponent implements OnInit {
       this.skillImageService.removeImage(this.skillDetails.skillId).subscribe({
         next: () => {
           this.toast.success({ detail: 'SUCCESS', summary: 'Image removed successfully', duration: 3000 });
+          // Reset image-related properties and clear file input value
           this.imageUrl = undefined;
           this.skillDetails.skillImage = undefined;
           this.isImageUploaded = false;
@@ -216,16 +207,5 @@ export class EditSkillComponent implements OnInit {
         }
       });
     }
-  }
-
-  onFileSelected(event: { target: { files: File[]; }; }) {
-    this.file = event.target.files[0];
-  }
-
-  onUpload() {
-    this.skillImageService.uploadVideo(this.file, this.skillDetails.skillId)
-      .subscribe(response => {
-        console.log(response);
-      });
   }
 }

@@ -10,7 +10,7 @@ export interface Skill {
   userId: number;
   skillImage?: SkillImageResponse;
   hasImage?: boolean;
-  imageUrl?: SafeUrl;
+  imageSkillUrl?: SafeUrl;
   Video?: any;
 }
 

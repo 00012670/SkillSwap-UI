@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { SearchService } from 'src/app/services/search.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-manage-requests',
@@ -26,32 +27,46 @@ export class ManageRequestsComponent {
     private authService: AuthService,
     private toast: NgToastService,
     private searchService: SearchService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private userStore: UserStoreService
   ) { }
 
   ngOnInit() {
-    const userId = this.authService.getUserId();
-    this.requestService.getSwapRequests(userId).subscribe(
-      (requests) => {
-        this.receivedSwapRequests = requests;
-      },
-      (error) => {
-        console.error('Failed to get swap requests', error);
-      }
-    );
-
-    this.requestService.getSentSwapRequests(userId).subscribe(
-      (requests) => {
-        this.sentSwapRequests = requests;
-      },
-      (error) => {
-        console.error('Failed to get sent swap requests', error);
-      }
-    );
+    this.userStore.getRoleFromStore().subscribe(val => {
+      this.role = val || this.authService.getRoleFromToken();
+      this.loadDataBasedOnRole();
+    });
     this.searchService.currentSearchText.subscribe(searchText => this.searchText = searchText);
-
   }
 
+  loadDataBasedOnRole(): void {
+    if (this.role === 'Admin') {
+      this.loadAllRequests();
+    } else if (this.role === 'User') {
+      this.loadRequests();
+      this.loadSentRequests();
+    }
+  }
+
+  loadRequests(): void {
+    const userId = this.authService.getUserId();
+    this.requestService.getSwapRequests(userId).subscribe(requests => {
+      this.receivedSwapRequests = requests;
+    });
+  }
+
+  loadSentRequests(): void {
+    const userId = this.authService.getUserId();
+    this.requestService.getSentSwapRequests(userId).subscribe(requests => {
+      this.sentSwapRequests = requests;
+    });
+  }
+
+  loadAllRequests(): void {
+    this.requestService.getAllSwapRequests().subscribe(requests => {
+      this.receivedSwapRequests = requests;
+    });
+  }
 
   acceptRequest(request: GetSwapRequest) {
     const updatedRequest: UpdateSwapRequest = { statusRequest: Status.Accepted };
@@ -92,8 +107,8 @@ export class ManageRequestsComponent {
         this.receivedSwapRequests = this.receivedSwapRequests.filter(r => r.requestId !== request.requestId);
         this.sentSwapRequests = this.sentSwapRequests.filter(r => r.requestId !== request.requestId);
       },
-      (error) => {
-        console.error('Failed to delete request', error);
+      (err) => {
+        this.toast.error({ detail: "ERROR", summary: err.error.message, duration: 5000 });
       }
     );
   }

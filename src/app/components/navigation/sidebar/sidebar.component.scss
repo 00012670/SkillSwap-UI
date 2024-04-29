@@ -27,3 +27,14 @@
 .dark-mode {
   background-color: rgb(52 53 64) !important;
 }
+
+.sidebar-shrinked {
+  width: 70px;
+  overflow: hidden;
+  transition: width 1s ease;
+
+   .sidebar-text {
+      display: none;
+  }
+}
+
